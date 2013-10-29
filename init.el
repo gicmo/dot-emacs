@@ -165,10 +165,6 @@ Emacs buffer are those starting with “*”."
 
 (require 'powerline)
 (require 'cl)
-(powerline-default-theme)
-;(load "~/.emacs.d/powerline")
-;(setq powerline-color1 "grey22")
-;(setq powerline-color2 "grey40")
 
 ;; Python
 ;; pymacs
