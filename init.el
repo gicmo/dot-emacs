@@ -21,6 +21,8 @@
 (column-number-mode 1)
 (show-paren-mode 1)
 (setq visible-bell t)
+(delete-selection-mode t)
+
 
 (global-linum-mode t)
 (setq linum-format "%d ")

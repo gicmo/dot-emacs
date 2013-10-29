@@ -2,6 +2,8 @@
 (source "gnu" "http://elpa.gnu.org/packages/")
 (source "marmalade" "http://marmalade-repo.org/packages/")
 
+(depends-on "magit")
+(depends-on "magit-filenotify")
 (depends-on "auctex")
 (depends-on "auto-async-byte-compile")
 (depends-on "auto-complete")
