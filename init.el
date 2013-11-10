@@ -50,6 +50,13 @@
 (require 'yasnippet)
 (yas-global-mode 1)
 
+; === cmake mode
+(require 'cmake-mode)
+(setq auto-mode-alist
+      (append '(("CMakeLists\\.txt\\'" . cmake-mode)
+		("\\.cmake\\'" . cmake-mode))
+	      auto-mode-alist))
+
 ; === autocomplete
 (require 'auto-complete-config)
 (add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
