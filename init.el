@@ -177,15 +177,17 @@ Emacs buffer are those starting with “*”."
 
 ;; Python
 ;; pymacs
-(autoload 'pymacs-apply "pymacs")
-(autoload 'pymacs-call "pymacs")
-(autoload 'pymacs-eval "pymacs" nil t)
-(autoload 'pymacs-exec "pymacs" nil t)
-(autoload 'pymacs-load "pymacs" nil t)
+(defun pymacs-on-demand()
+     (interactive)
+     (require 'pymacs)
+     (autoload 'pymacs-apply "pymacs")
+     (autoload 'pymacs-call "pymacs")
+     (autoload 'pymacs-eval "pymacs" nil t)
+     (autoload 'pymacs-exec "pymacs" nil t)
+     (autoload 'pymacs-load "pymacs" nil t)
+     (pymacs-load "ropemacs" "rope-"))
 
-(require 'pymacs)
- (pymacs-load "ropemacs" "rope-")
-
+(add-hook 'python-mode-hook 'pymacs-on-demand)
 
 ;; multiple cursors
 (require 'multiple-cursors)
