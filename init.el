@@ -192,7 +192,7 @@ Emacs buffer are those starting with “*”."
 ;; OS X stuff
 (defun set-osx-stuff()
     (setq x-select-enable-clipboard t)
-    (global-set-key (kbd "C-c C-d") 'dash-at-point))
+    (global-set-key (kbd "C-c d") 'dash-at-point))
 
 (if (eq system-type 'darwin) (set-osx-stuff))
 
