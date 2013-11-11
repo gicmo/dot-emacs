@@ -78,6 +78,8 @@
    (concat backups-dir "."  (file-name-nondirectory filename) "~")
    (file-name-directory filename)))
 
+
+;; == group tabs ==
 (defun tabbar-buffer-groups ()
   "Return the list of group names the current buffer belongs to.
 This function is a custom function for tabbar-mode's tabbar-buffer-groups.
@@ -98,9 +100,11 @@ Emacs buffer are those starting with “*”."
      )
     )))
 
+; == recent files ==
 (recentf-mode 1)
 (global-set-key (kbd "C-c r") 'recentf-open-files)
 
+; == uniquify ==
 (require 'uniquify)
 (setq uniquify-after-kill-buffer-p t)
 (setq uniquify-buffer-name-style 'post-forward-angle-brackets)
@@ -118,6 +122,7 @@ Emacs buffer are those starting with “*”."
 
 ; C
 (setq c-hungry-delete-key t)
+
 (add-hook 'c-mode-hook
 	  (lambda ()
 	    (font-lock-add-keywords nil
