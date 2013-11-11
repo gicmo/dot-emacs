@@ -158,6 +158,9 @@ Emacs buffer are those starting with “*”."
                 (setq indent-tabs-mode nil)
                 (setq c-indent-level 4))))
 
+;; == CUDA mode ==
+(require 'cuda-mode)
+
 ; Tex Mode
 (setq tex-command "xelatex")
 
