@@ -23,9 +23,13 @@
 (setq visible-bell t)
 (delete-selection-mode t)
 
-
 (global-linum-mode t)
 (setq linum-format "%d ")
+
+;; == elisp path ==
+(add-to-list 'load-path
+	     (concat user-emacs-directory
+		     (convert-standard-filename "opt/")))
 
 ;; Title bar shows name of current buffer.
 (setq frame-title-format '("emacs: %*%+ %b"))
