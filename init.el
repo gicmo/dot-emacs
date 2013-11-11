@@ -50,10 +50,6 @@
 (setq git-gutter-fr:side 'right-fringe)
 ;(setq-default right-fringe-width 22)
 
-; === yasnippet
-(require 'yasnippet)
-(yas-global-mode 1)
-
 ; === cmake mode
 (require 'cmake-mode)
 (setq auto-mode-alist
@@ -61,35 +57,18 @@
 		("\\.cmake\\'" . cmake-mode))
 	      auto-mode-alist))
 
+; === yasnippet
+(require 'yasnippet)
+(yas-global-mode 1)
+
 ; === autocomplete
 (require 'auto-complete-config)
 (add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
-;(ac-config-default)
-
-; == autocomplete-clang
-(require 'auto-complete-clang)
-(global-set-key (kbd "C-`") 'ac-complete-clang)
+(ac-config-default)
 
 ; == autocomplete config
-(setq ac-auto-start nil)
-(setq ac-quick-help-delay 0.5)
-
-(defun my-ac-config ()
-  (setq-default ac-sources '(ac-source-abbrev ac-source-dictionary ac-source-words-in-same-mode-buffers))
-  (add-hook 'emacs-lisp-mode-hook 'ac-emacs-lisp-mode-setup)
-  ;; (add-hook 'c-mode-common-hook 'ac-cc-mode-setup)
-  (add-hook 'ruby-mode-hook 'ac-ruby-mode-setup)
-  (add-hook 'css-mode-hook 'ac-css-mode-setup)
-  (add-hook 'auto-complete-mode-hook 'ac-common-setup)
-  (global-auto-complete-mode t))
-(defun my-ac-cc-mode-setup ()
-  (setq ac-sources (append '(ac-source-clang ac-source-yasnippet) ac-sources)))
-
-(add-hook 'c-mode-common-hook 'my-ac-cc-mode-setup)
-(my-ac-config)
-
-(ac-set-trigger-key "TAB")
-(ac-set-trigger-key "<tab>")
+; (setq ac-auto-start nil)
+(setq ac-quick-help-delay 0.3)
 
 ;; == backup ==
 (defun make-backup-file-name (filename)
