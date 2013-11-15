@@ -137,18 +137,20 @@ Emacs buffer are those starting with “*”."
 				    '(("\\<\\(FIXME\\):" 1 font-lock-warning-face t)))))
 
 ; spaces, not tabs
-(setq c-mode-hook
-    (function (lambda ()
-                (setq indent-tabs-mode nil)
-                (setq c-indent-level 4))))
-(setq objc-mode-hook
-    (function (lambda ()
-                (setq indent-tabs-mode nil)
-                (setq c-indent-level 4))))
-(setq c++-mode-hook
-    (function (lambda ()
-                (setq indent-tabs-mode nil)
-                (setq c-indent-level 4))))
+(add-hook 'c-mode-hook
+	  (lambda ()
+	    (setq indent-tabs-mode nil)
+	    (setq c-indent-level 4)))
+
+(add-hook 'objc-mode-hook
+	  (lambda ()
+	    (setq indent-tabs-mode nil)
+	    (setq c-indent-level 4)))
+
+(add-hook 'c++-mode-hook
+	  (lambda ()
+	    (setq indent-tabs-mode nil)
+	    (setq c-indent-level 4)))
 
 ;; == CUDA mode ==
 (require 'cuda-mode)
