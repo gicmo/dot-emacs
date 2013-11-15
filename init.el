@@ -1,4 +1,4 @@
-;; .emacs by Christian Kellner <ck@xatom.net>
+;; .emacs by Christian Kellner <christian@kellner.me>
 
 ; === pallet package manager
 (require 'cask "~/.cask/cask.el")
