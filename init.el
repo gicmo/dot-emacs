@@ -169,7 +169,8 @@ Emacs buffer are those starting with “*”."
 ;  (load-theme 'solarized-dark t))
 
 ;(load-theme 'solarized-dark t)
-(color-theme-molokai)
+;(color-theme-molokai)
+(load-theme 'flatland 1)
 
 ;; resize the initial emacs window
 (setq initial-frame-alist '((width . 160)
