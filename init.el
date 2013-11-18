@@ -156,6 +156,15 @@ Emacs buffer are those starting with “*”."
 	    (setq indent-tabs-mode nil)
 	    (setq c-indent-level 4)))
 
+; objc mode for header files
+(add-to-list 'magic-mode-alist
+	     `(,(lambda ()
+		  (and (string= (file-name-extension buffer-file-name) "h")
+		       (re-search-forward "@\\<interface\\>"
+					  magic-mode-regexp-match-limit t)))
+	       . objc-mode))
+
+
 ;; == CUDA mode ==
 (require 'cuda-mode)
 
