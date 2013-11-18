@@ -164,6 +164,10 @@ Emacs buffer are those starting with “*”."
 					  magic-mode-regexp-match-limit t)))
 	       . objc-mode))
 
+; switch between header and implementation
+(add-hook 'c-mode-common-hook
+         (lambda ()
+           (define-key c-mode-base-map (kbd "C-c o") 'ff-find-other-file)))
 
 ;; == CUDA mode ==
 (require 'cuda-mode)
