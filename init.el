@@ -195,8 +195,8 @@ Emacs buffer are those starting with “*”."
 (require 'cl)
 
 ;; Python
-;; pymacs
-(defun pymacs-on-demand()
+;; pymacs - load manually for now
+(defun load-ropemacs()
      (interactive)
      (require 'pymacs)
      (autoload 'pymacs-apply "pymacs")
@@ -204,9 +204,10 @@ Emacs buffer are those starting with “*”."
      (autoload 'pymacs-eval "pymacs" nil t)
      (autoload 'pymacs-exec "pymacs" nil t)
      (autoload 'pymacs-load "pymacs" nil t)
-     (pymacs-load "ropemacs" "rope-"))
+     (pymacs-load "ropemacs" "rope-")
+     (setq ropemacs-enable-autoimport t)
+     (setq ropemacs-confirm-saving 'nil))
 
-(add-hook 'python-mode-hook 'pymacs-on-demand)
 
 ;; multiple cursors
 (require 'multiple-cursors)
