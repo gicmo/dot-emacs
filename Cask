@@ -2,7 +2,6 @@
 (source "gnu" "http://elpa.gnu.org/packages/")
 (source "marmalade" "http://marmalade-repo.org/packages/")
 
-
 (depends-on "auctex")
 (depends-on "auto-async-byte-compile")
 (depends-on "auto-complete")
@@ -27,6 +26,7 @@
 (depends-on "git-gutter-fringe")
 (depends-on "magit")
 (depends-on "magit-filenotify")
+(depends-on "markdown-mode")
 (depends-on "minimap")
 (depends-on "multiple-cursors")
 (depends-on "pallet")
