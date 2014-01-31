@@ -169,6 +169,17 @@ Emacs buffer are those starting with “*”."
          (lambda ()
            (define-key c-mode-base-map (kbd "C-c o") 'ff-find-other-file)))
 
+(defconst cc-style-nix
+  '("cc-mode"
+    (c-offsets-alist . ((innamespace . [0])))))
+
+(c-add-style "cc-style-nix" cc-style-nix)
+(setq safe-local-variable-values
+    '((c-set-style . "cc-style-nix")
+     (c-offsets-alist
+      (quote innamespace)
+      [0])))
+
 ;; == CUDA mode ==
 (require 'cuda-mode)
 
@@ -230,4 +241,3 @@ Emacs buffer are those starting with “*”."
 (display-time)
 ;;(put 'downcase-region 'disabled nil)
 ;;(put 'upcase-region 'disabled nil)
-
