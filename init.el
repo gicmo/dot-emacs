@@ -31,6 +31,8 @@
 (global-linum-mode t)
 (setq linum-format "%d ")
 
+(setq use-dialog-box nil)
+
 ;; == elisp path ==
 (add-to-list 'load-path
 	     (concat user-emacs-directory
