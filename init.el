@@ -75,18 +75,6 @@
 ; (setq ac-auto-start nil)
 (setq ac-quick-help-delay 0.3)
 
-; == irony mode ==
-;    C/C++ clang based auto-completion
-(defun irony-mode-hook ()
-  (irony-mode 1))
-
-(when (expand-file-name "~/.emacs.d/irony-mode/bin")
-    (add-to-list 'load-path (expand-file-name "~/.emacs.d/irony-mode/elisp/"))
-    (require 'irony) ; NB:`C-c C-b' to open build menu
-    (irony-enable 'ac)
-    (add-hook 'c++-mode-hook 'irony-mode-hook)
-    (add-hook 'c-mode-hook 'irony-mode-hook))
-
 ;; == backup ==
 (defun make-backup-file-name (filename)
   (defvar backups-dir "~/.backups/")
