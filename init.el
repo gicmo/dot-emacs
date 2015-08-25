@@ -1,12 +1,12 @@
 ;; .emacs by Christian Kellner <christian@kellner.me>
 
-; === pallet package manager
-(require 'cask "~/.cask/cask.el")
 ; === osx: load path for homebrew  ===
 (when (memq window-system '(mac ns))
   (let ((default-directory "/usr/local/share/emacs/site-lisp/"))
     (normal-top-level-add-subdirs-to-load-path)))
 
+; === casl+pallet package manager
+(require 'cask)
 (cask-initialize)
 (require 'pallet)
 
