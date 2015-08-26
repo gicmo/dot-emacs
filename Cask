@@ -8,6 +8,8 @@
 (depends-on "auto-complete-clang")
 (depends-on "cask")
 (depends-on "cider")
+(depends-on "clojure-mode")
+(depends-on "clojure-mode-extra-font-locking")
 (depends-on "cmake-mode")
 (depends-on "cmake-project")
 (depends-on "color-theme")
