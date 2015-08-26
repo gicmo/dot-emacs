@@ -234,6 +234,7 @@ Emacs buffer are those starting with “*”."
 
 
 ;; (require 'load-dir)
+(setq load-dirs "~/.emacs.d/load.d")
 (load-dirs)
 
 ;; all done, pheww
