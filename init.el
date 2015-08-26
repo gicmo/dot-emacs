@@ -232,6 +232,10 @@ Emacs buffer are those starting with “*”."
 (if (eq system-type 'darwin) (set-osx-stuff))
 
 
+;; (require 'load-dir)
+(load-dirs)
+
+;; all done, pheww
 (load "time" t t)
 (display-time)
 ;;(put 'downcase-region 'disabled nil)

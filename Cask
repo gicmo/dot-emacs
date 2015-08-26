@@ -24,6 +24,7 @@
 (depends-on "fringe-helper")
 (depends-on "git-gutter")
 (depends-on "git-gutter-fringe")
+(depends-on "load-dir")
 (depends-on "magit")
 (depends-on "magit-filenotify")
 (depends-on "markdown-mode")
