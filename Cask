@@ -39,6 +39,7 @@
 (depends-on "pymacs")
 (depends-on "python-mode")
 (depends-on "python-pylint")
+(depends-on "projectile")
 (depends-on "rainbow-delimiters")
 (depends-on "rainbow-mode")
 (depends-on "s")
