@@ -14,6 +14,7 @@
 (when (memq window-system '(mac ns))
   (exec-path-from-shell-initialize))
 
+(blink-cursor-mode 0)
 (setq inhibit-splash-screen t)
 (setq inhibit-startup-message t)
 (setq make-backup-files nil)
