@@ -201,6 +201,8 @@ Emacs buffer are those starting with “*”."
 (require 'powerline)
 (require 'cl)
 
+(powerline-default-theme)
+
 ;; Python
 ;; pymacs - load manually for now
 (defun load-ropemacs()
