@@ -16,7 +16,8 @@
   (or (apply 'font-existsp (car lst))
       (ck-first-font (cdr lst))))
 
-(let ((foo-font (ck-first-font ck-fonts)))
+(when (display-graphic-p)
+ (let ((foo-font (ck-first-font ck-fonts)))
   (set-face-attribute 'default nil :font foo-font)
   (message (concat "Setting font to: " foo-font))
-  )
+  ))
