@@ -13,6 +13,7 @@
 
 ; === set the path from shell on osx ===
 (when (memq window-system '(mac ns))
+  (customize-set-variable 'exec-path-from-shell-arguments nil)
   (exec-path-from-shell-initialize))
 
 (blink-cursor-mode 0)
