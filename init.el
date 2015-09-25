@@ -66,7 +66,7 @@
 ;(setq-default right-fringe-width 22)
 
 ; === cmake mode
-(require 'cmake-mode)
+(autoload 'cmake-mode "cmake-mode" "CMake Mode." t)
 (setq auto-mode-alist
       (append '(("CMakeLists\\.txt\\'" . cmake-mode)
 		("\\.cmake\\'" . cmake-mode))
