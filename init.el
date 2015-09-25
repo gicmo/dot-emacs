@@ -184,7 +184,8 @@ Emacs buffer are those starting with “*”."
       [0])))
 
 ;; == CUDA mode ==
-(require 'cuda-mode)
+(autoload 'cuda-mode "cuda-mode" "Cuda Mode." t)
+(add-to-list 'auto-mode-alist '("\\.cu\\'" . cuda-mode))
 
 ; Tex Mode
 (setq tex-command "xelatex")
