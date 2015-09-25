@@ -26,7 +26,7 @@
 
 ; === set the path from shell on osx ===
 (use-package exec-path-from-shell
-  :if (memq window-system '(mac ns))
+  :if (eq system-type 'darwin)
   :init
   (customize-set-variable 'exec-path-from-shell-arguments nil)
   :config
