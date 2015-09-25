@@ -247,7 +247,4 @@ Emacs buffer are those starting with “*”."
 (load-dirs)
 
 ;; all done, pheww
-(load "time" t t)
-(display-time)
-;;(put 'downcase-region 'disabled nil)
-;;(put 'upcase-region 'disabled nil)
+
