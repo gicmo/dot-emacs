@@ -48,5 +48,6 @@
 (depends-on "s")
 (depends-on "shut-up")
 (depends-on "tabbar")
+(depends-on "use-package")
 (depends-on "yasnippet")
 (depends-on "zenburn-theme")

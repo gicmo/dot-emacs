@@ -9,6 +9,7 @@
 (require 'cask)
 (cask-initialize)
 (require 'pallet)
+(require 'use-package)
 
 ; === set the path from shell on osx ===
 (when (memq window-system '(mac ns))
