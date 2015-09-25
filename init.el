@@ -74,8 +74,10 @@
 	      auto-mode-alist))
 
 ; === yasnippet
-(require 'yasnippet)
-(yas-global-mode 1)
+(use-package yasnippet
+	     :ensure t
+	     :config
+	     (add-hook 'prog-mode-hook #'yas-minor-mode))
 
 ; === autocomplete
 (require 'auto-complete-config)
@@ -228,13 +230,11 @@ Emacs buffer are those starting with “*”."
 
 
 ;; multiple cursors
-(require 'multiple-cursors)
 
-
-(global-set-key (kbd "C->") 'mc/mark-next-like-this)
-(global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
-(global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
-
+(use-package multiple-cursors
+  :bind (("C->" . mc/mark-next-like-this)
+         ("C-<" . mc/mark-previous-like-this)
+         ("C-c C-<" . mc/mark-all-like-this)))
 
 ;; OS X stuff
 (defun set-osx-stuff()
