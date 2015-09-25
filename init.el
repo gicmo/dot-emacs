@@ -48,7 +48,7 @@
 (delete-selection-mode t)
 
 (global-linum-mode t)
-(setq linum-format "%d ")
+(setq linum-format "%4d ")
 
 (setq use-dialog-box nil)
 
