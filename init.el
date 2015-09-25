@@ -5,15 +5,31 @@
   (let ((default-directory "/usr/local/share/emacs/site-lisp/"))
     (normal-top-level-add-subdirs-to-load-path)))
 
-; === casl+pallet package manager
-(require 'cask)
-(cask-initialize)
-(require 'pallet)
+;; === package management
+(require 'package)
+(add-to-list 'package-archives
+             '("melpa" . "http://melpa.org/packages/") t)
+(add-to-list 'package-archives
+	     '("marmalade" . "http://marmalade-repo.org/packages/") t)
+
+;; no auto package loading,
+;; loading is handled via use-package
+(setq package-enable-at-startup nil)
+(package-initialize)
+
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+
 (require 'use-package)
+(setq use-package-always-ensure t)
 
 ; === set the path from shell on osx ===
-(when (memq window-system '(mac ns))
+(use-package exec-path-from-shell
+  :if (memq window-system '(mac ns))
+  :init
   (customize-set-variable 'exec-path-from-shell-arguments nil)
+  :config
   (exec-path-from-shell-initialize))
 
 (blink-cursor-mode 0)
@@ -45,27 +61,30 @@
 (setq frame-title-format '("emacs: %*%+ %b"))
 
 ; === tabbar ===
-(require 'tabbar)
-(tabbar-mode)
+(use-package tabbar
+  :config
+  (tabbar-mode))
 
 ; === ido ====
 (ido-mode)
-
-; prevent ido to globally search for files automatically
+;; prevent ido to globally search for files automatically
 (setq ido-auto-merge-work-directories-length -1)
 (define-key ido-file-dir-completion-map (kbd "C-c C-s")
-      (lambda()
-        (interactive)
-        (ido-initiate-auto-merge (current-buffer))))
+  (lambda()
+    (interactive)
+    (ido-initiate-auto-merge (current-buffer))))
 
 ; === minimap ==
-(require 'minimap)
-(setq minimap-window-location (quote right))
+(use-package minimap
+  :config
+  (setq minimap-window-location (quote right)))
 
 ; === git gutter ===
-(require 'git-gutter-fringe)
-(setq git-gutter-fr:side 'right-fringe)
-;(setq-default right-fringe-width 22)
+(use-package git-gutter-fringe
+  :config
+  (setq git-gutter-fr:side 'right-fringe)
+  ;;(setq-default right-fringe-width 22)
+  )
 
 ; === cmake mode
 (autoload 'cmake-mode "cmake-mode" "CMake Mode." t)
@@ -81,13 +100,15 @@
 	     (add-hook 'prog-mode-hook #'yas-minor-mode))
 
 ; === autocomplete
-(require 'auto-complete-config)
-(add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
-(ac-config-default)
+(use-package auto-complete
+  :config
+  (add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
+  (ac-config-default)
 
-; == autocomplete config
-; (setq ac-auto-start nil)
-(setq ac-quick-help-delay 0.3)
+  ;; == autocomplete config
+  ;; (setq ac-auto-start nil)
+  (setq ac-quick-help-delay 0.3)
+  )
 
 ;; == backup ==
 (defun make-backup-file-name (filename)
@@ -127,6 +148,7 @@ Emacs buffer are those starting with “*”."
 (require 'uniquify)
 (setq uniquify-after-kill-buffer-p t)
 (setq uniquify-buffer-name-style 'post-forward-angle-brackets)
+
 
 ;; Disable Ctrl-Z minimization/suspension of emacs.
 (global-set-key [C-z] nil)
@@ -202,7 +224,9 @@ Emacs buffer are those starting with “*”."
 
 ;(load-theme 'solarized-dark t)
 ;(color-theme-molokai)
-(load-theme 'flatland 1)
+(use-package flatland-theme
+  :config
+  (load-theme 'flatland 1))
 
 ;; resize the initial emacs window
 (setq initial-frame-alist '((width . 160)
@@ -210,10 +234,10 @@ Emacs buffer are those starting with “*”."
 (setq default-frame-alist '((width . 160)
                             (height . 47)))
 
-(require 'powerline)
-(require 'cl)
-
-(powerline-default-theme)
+(use-package powerline
+  :config
+  (powerline-default-theme))
+(use-package cl)
 
 ;; Python
 ;; pymacs - load manually for now
@@ -246,8 +270,12 @@ Emacs buffer are those starting with “*”."
 
 
 ;; (require 'load-dir)
-(setq load-dirs "~/.emacs.d/load.d")
-(load-dirs)
+(use-package load-dir
+  :init
+  (setq load-dirs "~/.emacs.d/load.d")
+  :config
+  (load-dirs)
+  )
 
 ;; all done, pheww
 
