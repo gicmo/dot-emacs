@@ -49,6 +49,13 @@
 ; === ido ====
 (ido-mode)
 
+; prevent ido to globally search for files automatically
+(setq ido-auto-merge-work-directories-length -1)
+(define-key ido-file-dir-completion-map (kbd "C-c C-s")
+      (lambda()
+        (interactive)
+        (ido-initiate-auto-merge (current-buffer))))
+
 ; === minimap ==
 (require 'minimap)
 (setq minimap-window-location (quote right))
