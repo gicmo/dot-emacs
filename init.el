@@ -127,15 +127,10 @@ Emacs buffer are those starting with “*”."
   (list
    (cond
     ((string-equal "*" (substring (buffer-name) 0 1))
-     "Emacs Buffer"
-     )
+     "Emacs Buffer")
     ((eq major-mode 'dired-mode)
-     "Dired"
-     )
-    (t
-
-     "User Buffer"
-     )
+     "Dired")
+    (t "User Buffer" )
     )))
 
 ; == recent files ==
