@@ -251,15 +251,8 @@ Emacs buffer are those starting with “*”."
          ("C-<" . mc/mark-previous-like-this)
          ("C-c C-<" . mc/mark-all-like-this)))
 
-;; OS X stuff
-(defun set-osx-stuff()
-    (setq x-select-enable-clipboard t))
-
 (use-package dash-at-point
   :bind (("C-c d" . dash-at-point)))
-
-(if (eq system-type 'darwin) (set-osx-stuff))
-
 
 ;; (require 'load-dir)
 (use-package load-dir
