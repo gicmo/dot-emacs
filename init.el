@@ -86,12 +86,10 @@
   ;;(setq-default right-fringe-width 22)
   )
 
-; === cmake mode
-(autoload 'cmake-mode "cmake-mode" "CMake Mode." t)
-(setq auto-mode-alist
-      (append '(("CMakeLists\\.txt\\'" . cmake-mode)
-		("\\.cmake\\'" . cmake-mode))
-	      auto-mode-alist))
+;; === cmake mode
+(use-package cmake-mode
+  :mode (("CMakeLists\\.txt\\'" . cmake-mode)
+	 ("\\.cmake\\'" . cmake-mode)))
 
 ; === yasnippet
 (use-package yasnippet
