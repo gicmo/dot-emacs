@@ -229,10 +229,8 @@ Emacs buffer are those starting with “*”."
   (load-theme 'flatland 1))
 
 ;; resize the initial emacs window
-(setq initial-frame-alist '((width . 160)
-                            (height . 47)))
-(setq default-frame-alist '((width . 160)
-                            (height . 47)))
+(add-to-list 'default-frame-alist '(height . 40))
+(add-to-list 'default-frame-alist '(width . 150))
 
 (use-package powerline
   :config
