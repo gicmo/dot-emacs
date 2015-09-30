@@ -208,6 +208,21 @@ Emacs buffer are those starting with “*”."
 ; Tex Mode
 (setq tex-command "xelatex")
 
+;; === I will never learn how to spell ===
+
+(use-package langtool
+  :bind (("C-x c w" . langtool-check)
+         ("C-x c W" . langtool-check-done)
+         ("C-x c l" . langtool-switch-default-language)
+         ("C-x c 4" . langtool-show-message-at-point)
+         ("C-x c c" . langtool-correct-buffer))
+  :init
+  (setq langtool-language-tool-jar "/usr/local/Cellar/languagetool/2.8/libexec/languagetool-commandline.jar"
+	langtool-disabled-rules '("WHITESPACE_RULE"
+				  "EN_UNPAIRED_BRACKETS"
+				  "COMMA_PARENTHESIS_WHITESPACE"
+				  "EN_QUOTES")))
+
 (when (executable-find "hunspell")
   (setq-default ispell-program-name "hunspell")
   (setq ispell-really-hunspell t))
