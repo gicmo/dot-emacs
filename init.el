@@ -208,6 +208,11 @@ Emacs buffer are those starting with “*”."
 ; Tex Mode
 (setq tex-command "xelatex")
 
+(when (executable-find "hunspell")
+  (setq-default ispell-program-name "hunspell")
+  (setq ispell-really-hunspell t))
+
+
 ; color theme
 
 ;(if window-system
