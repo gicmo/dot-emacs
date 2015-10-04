@@ -227,6 +227,9 @@ Emacs buffer are those starting with “*”."
   (setq-default ispell-program-name "hunspell")
   (setq ispell-really-hunspell t))
 
+(use-package synosaurus
+  :bind ("C-c s l" . synosaurus-lookup)
+  :config (setq synosaurus-backend 'synosaurus-backend-wordnet))
 
 ; color theme
 
