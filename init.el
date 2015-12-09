@@ -60,27 +60,6 @@
 ;; Title bar shows name of current buffer.
 (setq frame-title-format '("emacs: %*%+ %b"))
 
-; === tabbar ===
-(use-package tabbar
-  :config
-  (tabbar-mode))
-
-;; == group tabs ==
-(defun tabbar-buffer-groups ()
-  "Return the list of group names the current buffer belongs to.
-This function is a custom function for tabbar-mode's tabbar-buffer-groups.
-This function group all buffers into 3 groups:
-Those Dired, those user buffer, and those emacs buffer.
-Emacs buffer are those starting with “*”."
-  (list
-   (cond
-    ((string-equal "*" (substring (buffer-name) 0 1))
-     "Emacs Buffer")
-    ((eq major-mode 'dired-mode)
-     "Dired")
-    (t "User Buffer" )
-    )))
-
 ; === ido ====
 (ido-mode)
 ;; prevent ido to globally search for files automatically
@@ -180,7 +159,7 @@ Emacs buffer are those starting with “*”."
 ; objc mode for header files
 (add-to-list 'magic-mode-alist
 	     `(,(lambda ()
-		  (and (string= (file-name-extension buffer-file-name) "h")
+		  (and (string= (file-name-extension (or buffer-file-name "DEF-NAME")) "h")
 		       (re-search-forward "@\\<interface\\>"
 					  magic-mode-regexp-match-limit t)))
 	       . objc-mode))
@@ -217,7 +196,8 @@ Emacs buffer are those starting with “*”."
          ("C-x c 4" . langtool-show-message-at-point)
          ("C-x c c" . langtool-correct-buffer))
   :init
-  (setq langtool-language-tool-jar "/usr/local/Cellar/languagetool/2.8/libexec/languagetool-commandline.jar"
+  (setq langtool-language-tool-jar "/usr/local/Cellar/languagetool/3.0/libexec/languagetool-commandline.jar"
+	langtool-default-language "en-US"
 	langtool-disabled-rules '("WHITESPACE_RULE"
 				  "EN_UNPAIRED_BRACKETS"
 				  "COMMA_PARENTHESIS_WHITESPACE"
