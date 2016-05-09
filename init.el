@@ -70,6 +70,11 @@
     (interactive)
     (ido-initiate-auto-merge (current-buffer))))
 
+; -=[ flycheck
+(use-package flycheck
+  :ensure t
+  :init (global-flycheck-mode))
+
 ; === minimap ==
 (use-package minimap
   :config
