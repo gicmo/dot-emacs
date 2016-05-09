@@ -2,7 +2,8 @@
 ;; set font
 
 (setq ck-fonts
-      '(("Source Code Pro" 12)
+      '(("Hasklig" 12)
+	("Source Code Pro" 12)
 	("Inconsolata" 12)
 	("Menlo" 12)))
 
