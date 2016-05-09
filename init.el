@@ -45,13 +45,23 @@
 (line-number-mode 1)
 (column-number-mode 1)
 (show-paren-mode 1)
-(setq visible-bell t)
 (delete-selection-mode t)
 
 (global-linum-mode t)
 (setq linum-format "%4d ")
 
 (setq use-dialog-box nil)
+
+;; visual bell causes rendering errors
+;; use custom function from 'stack-exchange'
+
+(setq ring-bell-function
+      (lambda ()
+	(unless (memq this-command
+		      '(isearch-abort abort-recursive-edit
+				      exit-minibuffer keyboard-quit))
+	  (invert-face 'mode-line)
+	  (run-with-timer 0.1 nil 'invert-face 'mode-line))))
 
 ;; == elisp path ==
 (add-to-list 'load-path
