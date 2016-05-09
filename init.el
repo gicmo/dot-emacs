@@ -37,7 +37,6 @@
 (setq inhibit-splash-screen t)
 (setq inhibit-startup-message t)
 (setq make-backup-files nil)
-(set-fringe-style -1)
 (fset 'yes-or-no-p 'y-or-n-p)
 (set-scroll-bar-mode (quote right))
 (tooltip-mode -1)
