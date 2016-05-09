@@ -70,6 +70,13 @@
 ;; Title bar shows name of current buffer.
 (setq frame-title-format '("emacs: %*%+ %b"))
 
+; -=[ EditorConfig
+
+(use-package editorconfig
+    :ensure t
+    :init
+    (editorconfig-mode 1))
+
 ; === ido ====
 (ido-mode)
 ;; prevent ido to globally search for files automatically
