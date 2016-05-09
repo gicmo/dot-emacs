@@ -30,7 +30,8 @@
   :init
   (customize-set-variable 'exec-path-from-shell-arguments nil)
   :config
-  (exec-path-from-shell-initialize))
+  (exec-path-from-shell-initialize)
+  (exec-path-from-shell-copy-env "GOPATH"))
 
 (blink-cursor-mode 0)
 (setq inhibit-splash-screen t)
