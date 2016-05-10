@@ -1,4 +1,12 @@
-;; -=[ Go mode
+;;; lang-go.el -- Go language configuration
+
+;;; Commentary:
+;;; golang setup
+
+;;; Code:
+
+(require 'use-package)
+
 (use-package go-mode
   :mode "\\.go\\'"
   :bind (:map go-mode-map
@@ -16,4 +24,6 @@
 
 (use-package go-rename
   :commands (go-rename))
+
+;;; lang-go.el ends here
 
