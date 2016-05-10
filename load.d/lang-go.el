@@ -1,10 +1,10 @@
 ;; -=[ Go mode
 (use-package go-mode
   :mode "\\.go\\'"
+  :bind (:map go-mode-map
+	      ("M-." . godef-jump))
   :config
   (add-hook 'before-save-hook 'gofmt-before-save)
-  (add-hook 'go-mode-hook (lambda ()
-			    (local-set-key (kbd "M-.") 'godef-jump)))
   (setq gofmt-command "goreturns")
   (use-package go-guru)
   (use-package go-stacktracer)
