@@ -2,7 +2,8 @@
 (use-package go-mode
   :mode "\\.go\\'"
   :bind (:map go-mode-map
-	      ("M-." . godef-jump))
+	      ("M-." . godef-jump)
+	      ("C-c C-r" . go-rename))
   :config
   (add-hook 'before-save-hook 'gofmt-before-save)
   (setq gofmt-command "goreturns")
@@ -12,3 +13,7 @@
   (use-package go-dlv)
   (use-package go-autocomplete)
   )
+
+(use-package go-rename
+  :commands (go-rename))
+
