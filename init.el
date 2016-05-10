@@ -242,8 +242,11 @@
 ;(load-theme 'solarized-dark t)
 ;(color-theme-molokai)
 (use-package flatland-theme
+  :defer t
   :config
   (load-theme 'flatland 1))
+
+(use-package leuven-theme)
 
 ;; resize the initial emacs window
 (add-to-list 'default-frame-alist '(height . 40))
