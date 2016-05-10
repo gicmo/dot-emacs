@@ -45,7 +45,7 @@
 (column-number-mode 1)
 (show-paren-mode 1)
 (delete-selection-mode t)
-
+(global-auto-revert-mode t)
 (global-linum-mode t)
 (setq linum-format "%4d ")
 
