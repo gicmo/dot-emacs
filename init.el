@@ -33,6 +33,10 @@
   (exec-path-from-shell-initialize)
   (exec-path-from-shell-copy-env "GOPATH"))
 
+;; -=[ custom - write custom's settings to separate file
+(setq custom-file "~/.emacs.d/custom.el")
+(load custom-file)
+
 (blink-cursor-mode 0)
 (setq inhibit-splash-screen t)
 (setq inhibit-startup-message t)
