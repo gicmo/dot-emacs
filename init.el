@@ -96,12 +96,12 @@
   :config
   (setq minimap-window-location (quote right)))
 
-; === git gutter ===
+;; -=[ git gutter
 (use-package git-gutter-fringe
   :config
   (setq git-gutter-fr:side 'right-fringe)
   ;;(setq-default right-fringe-width 22)
-  )
+  (add-hook 'prog-mode-hook #'git-gutter-mode))
 
 ;; === cmake mode
 (use-package cmake-mode
