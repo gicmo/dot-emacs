@@ -1,5 +1,9 @@
-;; .emacs by Christian Kellner <christian@kellner.me>
+;;; init.el --- main Emacs initialization
+;;; Commentary:
+;;; Setup Emacs, make it homely and cosy
+;; Author: Christian Kellner <christian@kellner.me>
 
+;;; Code:
 ; === osx: load path for homebrew  ===
 (when (memq window-system '(mac ns))
   (let ((default-directory "/usr/local/share/emacs/site-lisp/"))
@@ -234,4 +238,4 @@
   )
 
 ;; all done, pheww
-
+;;; init.el ends here
