@@ -108,6 +108,13 @@
   :mode (("CMakeLists\\.txt\\'" . cmake-mode)
 	 ("\\.cmake\\'" . cmake-mode)))
 
+;; -=[ docker
+(use-package dockerfile-mode
+  :mode "Dockerfile\\'")
+
+(use-package docker
+  :defer t)
+
 ;; -=[ yasnippet
 (use-package yasnippet
   :config
