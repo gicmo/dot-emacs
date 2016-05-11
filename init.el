@@ -108,11 +108,10 @@
   :mode (("CMakeLists\\.txt\\'" . cmake-mode)
 	 ("\\.cmake\\'" . cmake-mode)))
 
-; === yasnippet
+;; -=[ yasnippet
 (use-package yasnippet
-	     :ensure t
-	     :config
-	     (add-hook 'prog-mode-hook #'yas-minor-mode))
+  :config
+  (add-hook 'prog-mode-hook #'yas-minor-mode))
 
 ; === autocomplete
 (use-package auto-complete
@@ -233,7 +232,7 @@
   :bind ("C-c s l" . synosaurus-lookup)
   :config (setq synosaurus-backend 'synosaurus-backend-wordnet))
 
-; color theme
+;; -=[ color theme
 
 ;(if window-system
 ;    (load-theme 'solarized-light t)
