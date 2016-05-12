@@ -58,6 +58,7 @@
 (setq linum-format "%4d ")
 
 (setq use-dialog-box nil)
+(prefer-coding-system 'utf-8)
 
 ;; visual bell causes rendering errors
 ;; use custom function from 'stack-exchange'
