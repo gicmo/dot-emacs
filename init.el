@@ -140,6 +140,9 @@
   (setq ac-quick-help-delay 0.3)
   )
 
+(use-package restclient
+  :mode ("\\.http\\'" . restclient-mode))
+
 ;; == backup ==
 (defun make-backup-file-name (filename)
   (defvar backups-dir "~/.backups/")
