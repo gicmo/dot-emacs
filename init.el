@@ -5,15 +5,14 @@
 
 ;;; Code:
 
+(add-to-list 'load-path "~/.emacs.d/init.d/")
+
 ;; === package management
 (require 'package)
 (add-to-list 'package-archives
              '("melpa" . "http://melpa.org/packages/") t)
 (add-to-list 'package-archives
 	     '("marmalade" . "http://marmalade-repo.org/packages/") t)
-
-;; we want use-package to our custom init pkgs
-(add-to-list 'load-path "~/.emacs.d/init.d/")
 
 ;; no auto package loading,
 ;; loading is handled via use-package
