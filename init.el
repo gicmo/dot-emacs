@@ -16,6 +16,9 @@
 (add-to-list 'package-archives
 	     '("marmalade" . "http://marmalade-repo.org/packages/") t)
 
+;; we want use-package to our custom init pkgs
+(add-to-list 'load-path "~/.emacs.d/init.d/")
+
 ;; no auto package loading,
 ;; loading is handled via use-package
 (setq package-enable-at-startup nil)
@@ -27,6 +30,10 @@
 
 (require 'use-package)
 (setq use-package-always-ensure t)
+
+;; -=[ OSX
+(when (eq system-type 'darwin)
+  (require 'init-osx))
 
 ; === set the path from shell on osx ===
 (use-package exec-path-from-shell
