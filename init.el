@@ -100,12 +100,20 @@
   :ensure t
   :init (global-flycheck-mode))
 
-;; -=[ git gutter
+;; -=[ git
 (use-package git-gutter-fringe
   :config
   (setq git-gutter-fr:side 'right-fringe)
   ;;(setq-default right-fringe-width 22)
   (add-hook 'prog-mode-hook #'git-gutter-mode))
+
+(use-package gitconfig-mode
+  :mode (("\\.gitconfig\\'" . gitconfig-mode)
+	 ("\\.git/config\\'" . gitconfig-mode)
+	 ("\\.gitmodules\\'" . gitconfig-mode)))
+
+(use-package gitignore-mode
+  :mode ("\\.gitignore\\'" . gitignore-mode))
 
 ;; === cmake mode
 (use-package cmake-mode
