@@ -24,6 +24,9 @@
   (exec-path-from-shell-initialize)
   (exec-path-from-shell-copy-env "GOPATH"))
 
+(use-package reveal-in-osx-finder
+  :commands (reveal-in-osx-finder))
+
 (provide 'init-osx)
 ;;; init-osx.el ends here
 
