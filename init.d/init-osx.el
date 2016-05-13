@@ -27,6 +27,8 @@
 (use-package reveal-in-osx-finder
   :commands (reveal-in-osx-finder))
 
+(setq-default locate-command "mdfind")
+
 (provide 'init-osx)
 ;;; init-osx.el ends here
 
