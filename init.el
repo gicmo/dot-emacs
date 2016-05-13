@@ -4,10 +4,6 @@
 ;; Author: Christian Kellner <christian@kellner.me>
 
 ;;; Code:
-; === osx: load path for homebrew  ===
-(when (memq window-system '(mac ns))
-  (let ((default-directory "/usr/local/share/emacs/site-lisp/"))
-    (normal-top-level-add-subdirs-to-load-path)))
 
 ;; === package management
 (require 'package)
@@ -34,15 +30,6 @@
 ;; -=[ OSX
 (when (eq system-type 'darwin)
   (require 'init-osx))
-
-; === set the path from shell on osx ===
-(use-package exec-path-from-shell
-  :if (eq system-type 'darwin)
-  :init
-  (customize-set-variable 'exec-path-from-shell-arguments nil)
-  :config
-  (exec-path-from-shell-initialize)
-  (exec-path-from-shell-copy-env "GOPATH"))
 
 ;; -=[ custom - write custom's settings to separate file
 (setq custom-file "~/.emacs.d/custom.el")

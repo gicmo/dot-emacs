@@ -6,9 +6,23 @@
 
 ;;; Code:
 
+; === load path for homebrew  ===
+(when (memq window-system '(mac ns))
+  (let ((default-directory "/usr/local/share/emacs/site-lisp/"))
+    (normal-top-level-add-subdirs-to-load-path)))
+
 (setq mac-option-modifier 'meta)
 (if (boundp 'mac-auto-operator-composition-mode)
     (mac-auto-operator-composition-mode))
+
+;; pick up the correct path from a login shell
+(use-package exec-path-from-shell
+  :if (eq system-type 'darwin)
+  :init
+  (customize-set-variable 'exec-path-from-shell-arguments nil)
+  :config
+  (exec-path-from-shell-initialize)
+  (exec-path-from-shell-copy-env "GOPATH"))
 
 (provide 'init-osx)
 ;;; init-osx.el ends here
