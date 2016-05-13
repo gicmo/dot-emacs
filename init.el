@@ -94,11 +94,6 @@
   :ensure t
   :init (global-flycheck-mode))
 
-; === minimap ==
-(use-package minimap
-  :config
-  (setq minimap-window-location (quote right)))
-
 ;; -=[ git gutter
 (use-package git-gutter-fringe
   :config
