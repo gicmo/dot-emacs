@@ -65,6 +65,9 @@
 	  (invert-face 'mode-line)
 	  (run-with-timer 0.1 nil 'invert-face 'mode-line))))
 
+;; Disable Ctrl-Z minimization/suspension of emacs.
+(global-set-key [C-z] nil)
+
 ;; == elisp path ==
 (add-to-list 'load-path
 	     (concat user-emacs-directory
@@ -148,10 +151,6 @@
 (require 'uniquify)
 (setq uniquify-after-kill-buffer-p t)
 (setq uniquify-buffer-name-style 'post-forward-angle-brackets)
-
-
-;; Disable Ctrl-Z minimization/suspension of emacs.
-(global-set-key [C-z] nil)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Programming mode customizations
