@@ -2,3 +2,6 @@
 elpa/*
 auto-save-list
 *~
+.DS_Store
+ido.last
+recentf
