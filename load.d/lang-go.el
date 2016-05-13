@@ -27,5 +27,10 @@
 (use-package go-rename
   :commands (go-rename))
 
+(use-package go-eldoc
+  :commands (go-eldoc-setup)
+  :init
+  (add-hook 'go-mode-hook 'go-eldoc-setup))
+
 ;;; lang-go.el ends here
 
