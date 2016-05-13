@@ -121,16 +121,10 @@
   :config
   (add-hook 'prog-mode-hook #'yas-minor-mode))
 
-; === autocomplete
-(use-package auto-complete
-  :config
-  (add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
-  (ac-config-default)
-
-  ;; == autocomplete config
-  ;; (setq ac-auto-start nil)
-  (setq ac-quick-help-delay 0.3)
-  )
+; === autocompletion
+(use-package company
+  :init
+  (add-hook 'after-init-hook 'global-company-mode))
 
 (use-package restclient
   :mode ("\\.http\\'" . restclient-mode))

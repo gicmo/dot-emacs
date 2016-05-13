@@ -19,7 +19,9 @@
   (use-package go-stacktracer)
   (use-package go-playground)
   (use-package go-dlv)
-  (use-package go-autocomplete)
+  (use-package company-go
+    :config
+    (add-to-list 'company-backends 'company-go))
   )
 
 (use-package go-rename
