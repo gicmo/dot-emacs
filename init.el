@@ -97,11 +97,13 @@
 
 ; -=[ flycheck
 (use-package flycheck
+  :diminish " ⓕ"
   :ensure t
   :init (global-flycheck-mode))
 
 ;; -=[ git
 (use-package git-gutter-fringe
+  :diminish (git-gutter-mode . "")
   :config
   (setq git-gutter-fr:side 'right-fringe)
   ;;(setq-default right-fringe-width 22)
@@ -129,11 +131,13 @@
 
 ;; -=[ yasnippet
 (use-package yasnippet
+  :diminish (yas-minor-mode . " ⓨ")
   :config
   (add-hook 'prog-mode-hook #'yas-minor-mode))
 
 ; === autocompletion
 (use-package company
+  :diminish " ⓒ"
   :init
   (add-hook 'after-init-hook 'global-company-mode))
 
@@ -225,6 +229,11 @@
 
 (use-package dash-at-point
   :bind (("C-c d" . dash-at-point)))
+
+(use-package eldoc
+  :commands eldoc-mode
+  :diminish eldoc-mode)
+
 
 ;; (require 'load-dir)
 (use-package load-dir
