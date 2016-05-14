@@ -166,6 +166,13 @@
 (setq uniquify-after-kill-buffer-p t)
 (setq uniquify-buffer-name-style 'post-forward-angle-brackets)
 
+;; -=[ text formats
+(use-package markdown-mode
+  :mode (("README\\.md\\'" . gfm-mode)
+         ("\\.md\\'" . markdown-mode)
+         ("\\.markdown\\'" . markdown-mode))
+  :init (setq markdown-command "multimarkdown"))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Programming mode customizations
 (setq-default show-trailing-whitespace t)
