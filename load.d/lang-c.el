@@ -55,6 +55,26 @@
       (quote innamespace)
       [0])))
 
+(use-package irony
+  :commands irony-mode
+  :diminish " ⓘ"
+  :init
+  (add-hook 'c-mode-common-hook 'irony-mode)
+  :config
+  (custom-set-variables '(irony-additional-clang-options '("-std=c++11")))
+  (add-to-list 'company-backends 'company-irony)
+  (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
+  (use-package company-irony
+    :config
+    (company-irony-setup-begin-commands))
+  (use-package flycheck-irony
+    :init
+    (require 'flycheck)
+    :config
+    (flycheck-irony-setup))
+  )
+
+
 ;; -=[ CUDA mode
 (use-package cuda-mode
   :mode "\\.cu\\'")
