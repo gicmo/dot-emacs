@@ -177,6 +177,18 @@
 ; Tex Mode
 (setq tex-command "xelatex")
 
+;; -=[ Python
+
+(use-package elpy
+  :commands elpy-enable
+  :init
+  (with-eval-after-load 'python
+    (elpy-enable))
+  :config
+  (setq-default flycheck-flake8-maximum-line-length 100)
+  (setq elpy-rpc-backend "jedi")
+  (setq elpy-modules (delq 'elpy-module-flymake elpy-modules)))
+
 ;; === I will never learn how to spell ===
 
 (use-package langtool
