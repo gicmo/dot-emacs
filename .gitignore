@@ -3,6 +3,15 @@ elpa/*
 auto-save-list
 *~
 .DS_Store
+
+# mode related temp files
 ido.last
 recentf
 irony/
+
+#multiple cursors
+.mc-lists.el
+
+#README.md preview
+README.html
+
