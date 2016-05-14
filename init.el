@@ -117,6 +117,11 @@
 (use-package gitignore-mode
   :mode ("\\.gitignore\\'" . gitignore-mode))
 
+(use-package git-timemachine
+  :commands git-timemachine
+  :config
+  (setq git-timemachine-abbreviation-length 6))
+
 ;; === cmake mode
 (use-package cmake-mode
   :mode (("CMakeLists\\.txt\\'" . cmake-mode)
