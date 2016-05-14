@@ -68,10 +68,13 @@
     :config
     (company-irony-setup-begin-commands))
   (use-package flycheck-irony
-    :init
-    (require 'flycheck)
+    :after flycheck
     :config
     (flycheck-irony-setup))
+  (use-package irony-eldoc
+     :init
+     (add-hook 'irony-mode-hook 'irony-eldoc)
+    )
   )
 
 
