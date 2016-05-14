@@ -181,9 +181,6 @@
 (add-to-list 'auto-mode-alist
              '("\\.[fF]\\(03\\|08\\)\\'" . f90-mode))
 
-; Tex Mode
-(setq tex-command "xelatex")
-
 ;; -=[ Python
 
 (use-package elpy
@@ -220,14 +217,8 @@
   :bind ("C-c s l" . synosaurus-lookup)
   :config (setq synosaurus-backend 'synosaurus-backend-wordnet))
 
-;; -=[ color theme
+;; -=[ color themes
 
-;(if window-system
-;    (load-theme 'solarized-light t)
-;  (load-theme 'solarized-dark t))
-
-;(load-theme 'solarized-dark t)
-;(color-theme-molokai)
 (use-package flatland-theme
   :defer t
   :config
