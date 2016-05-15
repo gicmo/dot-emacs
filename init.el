@@ -197,9 +197,33 @@
 (use-package f90
   :mode ("\\.[fF]\\(03\\|08\\)\\'" . f90-mode))
 
+; -=[ Go
+(use-package go-mode
+  :mode "\\.go\\'"
+  :bind (:map go-mode-map
+	      ("M-." . godef-jump)
+	      ("C-c C-r" . go-rename))
+  :config
+  (add-hook 'before-save-hook 'gofmt-before-save)
+  (setq gofmt-command "goreturns")
+  (use-package go-guru)
+  (use-package go-stacktracer)
+  (use-package go-playground)
+  (use-package go-dlv)
+  (use-package company-go
+    :config
+    (add-to-list 'company-backends 'company-go))
+  )
+
+(use-package go-rename
+  :commands (go-rename))
+
+(use-package go-eldoc
+  :commands (go-eldoc-setup)
+  :init
+  (add-hook 'go-mode-hook 'go-eldoc-setup))
 
 ;; -=[ Python
-
 (use-package elpy
   :commands elpy-enable
   :init
