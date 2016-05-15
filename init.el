@@ -371,19 +371,13 @@
   (message (concat "Setting font to: " foo-font))
   ))
 
-;; -=[ color themes
-
-(use-package flatland-theme
-  :defer t
-  :config
-  (load-theme 'flatland 1))
-
-(use-package leuven-theme)
-
 (use-package powerline
   :config
   (powerline-default-theme))
 
+;; -=[ color themes
+
+(use-package leuven-theme)
 
 ;; all done, pheww
 ;;; init.el ends here
