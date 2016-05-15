@@ -244,8 +244,6 @@
      :init
      (add-hook 'irony-mode-hook 'irony-eldoc)))
 
-(use-package cuda-mode
-  :mode "\\.cu\\'")
 (use-package rtags
   :bind (:map c-mode-base-map
 	      ("M-." . rtags-find-symbol-at-point)))
@@ -261,6 +259,9 @@
 (use-package cmake-mode
   :mode (("CMakeLists\\.txt\\'" . cmake-mode)
 	 ("\\.cmake\\'" . cmake-mode)))
+
+(use-package cuda-mode
+  :mode "\\.cu\\'")
 
 ;; -=[ docker
 (use-package dockerfile-mode
