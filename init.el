@@ -24,7 +24,9 @@
   (package-install 'use-package))
 
 (eval-when-compile
-  (require 'use-package))
+  (require 'use-package)
+  (use-package cl))
+
 (require 'diminish)
 (require 'bind-key)
 
@@ -79,6 +81,14 @@
 ;; Title bar shows name of current buffer.
 (setq frame-title-format '("emacs: %*%+ %b"))
 
+;; -=[ Editing
+
+;; multiple cursors
+(use-package multiple-cursors
+  :bind (("C->" . mc/mark-next-like-this)
+         ("C-<" . mc/mark-previous-like-this)
+         ("C-c C-<" . mc/mark-all-like-this)))
+
 ; -=[ EditorConfig
 
 (use-package editorconfig
@@ -122,17 +132,6 @@
   :config
   (setq git-timemachine-abbreviation-length 6))
 
-;; === cmake mode
-(use-package cmake-mode
-  :mode (("CMakeLists\\.txt\\'" . cmake-mode)
-	 ("\\.cmake\\'" . cmake-mode)))
-
-;; -=[ docker
-(use-package dockerfile-mode
-  :mode "Dockerfile\\'")
-
-(use-package docker
-  :defer t)
 
 ;; -=[ yasnippet
 (use-package yasnippet
@@ -251,12 +250,21 @@
     (flycheck-irony-setup))
   (use-package irony-eldoc
      :init
-     (add-hook 'irony-mode-hook 'irony-eldoc)
-    )
-  )
+     (add-hook 'irony-mode-hook 'irony-eldoc)))
 
 (use-package cuda-mode
   :mode "\\.cu\\'")
+
+(use-package cmake-mode
+  :mode (("CMakeLists\\.txt\\'" . cmake-mode)
+	 ("\\.cmake\\'" . cmake-mode)))
+
+;; -=[ docker
+(use-package dockerfile-mode
+  :mode "Dockerfile\\'")
+
+(use-package docker
+  :defer t)
 
 ; -=[ clojure
 (use-package clojure-mode
@@ -308,6 +316,14 @@
   (setq elpy-rpc-backend "jedi")
   (setq elpy-modules (delq 'elpy-module-flymake elpy-modules)))
 
+;; -=[ documentation
+(use-package dash-at-point
+  :bind (("C-c d" . dash-at-point)))
+
+(use-package eldoc
+  :commands eldoc-mode
+  :diminish eldoc-mode)
+
 ;; === I will never learn how to spell ===
 
 (use-package langtool
@@ -333,6 +349,10 @@
   :config (setq synosaurus-backend 'synosaurus-backend-wordnet))
 
 ;; -=[ UI
+;; resize the initial emacs window
+(add-to-list 'default-frame-alist '(height . 40))
+(add-to-list 'default-frame-alist '(width . 150))
+
 
 ;; -=[ fonts
 (defconst ck-fonts
@@ -368,28 +388,10 @@
 
 (use-package leuven-theme)
 
-;; resize the initial emacs window
-(add-to-list 'default-frame-alist '(height . 40))
-(add-to-list 'default-frame-alist '(width . 150))
-
 (use-package powerline
   :config
   (powerline-default-theme))
-(use-package cl)
 
-;; multiple cursors
-
-(use-package multiple-cursors
-  :bind (("C->" . mc/mark-next-like-this)
-         ("C-<" . mc/mark-previous-like-this)
-         ("C-c C-<" . mc/mark-all-like-this)))
-
-(use-package dash-at-point
-  :bind (("C-c d" . dash-at-point)))
-
-(use-package eldoc
-  :commands eldoc-mode
-  :diminish eldoc-mode)
 
 ;; all done, pheww
 ;;; init.el ends here
