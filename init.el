@@ -193,9 +193,10 @@
   (add-hook 'clojure-mode-hook 'rainbow-delimiters-mode)
   (use-package clojure-mode-extra-font-locking))
 
-; Fortran
-(add-to-list 'auto-mode-alist
-             '("\\.[fF]\\(03\\|08\\)\\'" . f90-mode))
+; -=[ Fortran
+(use-package f90
+  :mode ("\\.[fF]\\(03\\|08\\)\\'" . f90-mode))
+
 
 ;; -=[ Python
 
