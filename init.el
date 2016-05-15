@@ -335,19 +335,21 @@
 ;; -=[ UI
 
 ;; -=[ fonts
-(setq ck-fonts
+(defconst ck-fonts
       '(("Hasklig" 12)
 	("Source Code Pro" 12)
 	("Inconsolata" 12)
 	("Menlo" 12)))
 
 (defun font-existsp (name size)
+  "Check if a font with a given NAME (or is Powerline version) and SIZE exists."
   (cond ((find-font (font-spec :name (concat name " for Powerline")))
 	 (format "%s for Powerline-%d" name size))
 	((find-font (font-spec :name name))
 	 (format "%s-%d" name size))))
 
 (defun ck-first-font (lst)
+  "Return the first valid font from LST."
   (or (apply 'font-existsp (car lst))
       (ck-first-font (cdr lst))))
 
