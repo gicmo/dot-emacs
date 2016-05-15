@@ -246,6 +246,17 @@
 
 (use-package cuda-mode
   :mode "\\.cu\\'")
+(use-package rtags
+  :bind (:map c-mode-base-map
+	      ("M-." . rtags-find-symbol-at-point)))
+
+(use-package cmake-ide
+  :commands cmake-ide-setup
+  :init
+  (add-hook 'c-mode-common-hook 'cmake-ide-setup)
+  :config
+  (message "cmake ide starting")
+  (require 'rtags))
 
 (use-package cmake-mode
   :mode (("CMakeLists\\.txt\\'" . cmake-mode)
