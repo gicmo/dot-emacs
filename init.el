@@ -5,8 +5,6 @@
 
 ;;; Code:
 
-(add-to-list 'load-path "~/.emacs.d/init.d/")
-
 ;; === package management
 (require 'package)
 (add-to-list 'package-archives
@@ -34,7 +32,24 @@
 
 ;; -=[ OSX
 (when (eq system-type 'darwin)
-  (require 'init-osx))
+  (let ((default-directory "/usr/local/share/emacs/site-lisp/"))
+    (normal-top-level-add-subdirs-to-load-path))
+  (setq mac-option-modifier 'meta)
+  (if (boundp 'mac-auto-operator-composition-mode)
+      (mac-auto-operator-composition-mode))
+  (setq-default locate-command "mdfind"))
+
+;; pick up the correct path from a login shell
+(use-package exec-path-from-shell
+  :if (eq system-type 'darwin)
+  :init
+  (customize-set-variable 'exec-path-from-shell-arguments nil)
+  :config
+  (exec-path-from-shell-initialize)
+  (exec-path-from-shell-copy-env "GOPATH"))
+
+(use-package reveal-in-osx-finder
+  :commands (reveal-in-osx-finder))
 
 ;; -=[ custom - write custom's settings to separate file
 (setq custom-file "~/.emacs.d/custom.el")
