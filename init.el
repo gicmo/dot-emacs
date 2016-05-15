@@ -177,6 +177,13 @@
 ;; Programming mode customizations
 (setq-default show-trailing-whitespace t)
 
+; -=[ common packages
+(use-package rainbow-delimiters
+  :commands rainbow-delimiters-mode)
+
+(use-package paredit
+  :commands enable-paredit-mode)
+
 ; Fortran
 (add-to-list 'auto-mode-alist
              '("\\.[fF]\\(03\\|08\\)\\'" . f90-mode))
