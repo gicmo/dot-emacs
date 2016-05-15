@@ -335,7 +335,6 @@
 ;; -=[ UI
 
 ;; -=[ fonts
-
 (setq ck-fonts
       '(("Hasklig" 12)
 	("Source Code Pro" 12)
@@ -389,15 +388,6 @@
 (use-package eldoc
   :commands eldoc-mode
   :diminish eldoc-mode)
-
-
-;; (require 'load-dir)
-(use-package load-dir
-  :init
-  (setq load-dirs "~/.emacs.d/load.d")
-  :config
-  (load-dirs)
-  )
 
 ;; all done, pheww
 ;;; init.el ends here
