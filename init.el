@@ -184,6 +184,15 @@
 (use-package paredit
   :commands enable-paredit-mode)
 
+; -=[ clojure
+(use-package clojure-mode
+  :mode "\\.clj"
+  :config
+  (add-hook 'clojure-mode-hook 'enable-paredit-mode)
+  (add-hook 'clojure-mode-hook 'subword-mode)
+  (add-hook 'clojure-mode-hook 'rainbow-delimiters-mode)
+  (use-package clojure-mode-extra-font-locking))
+
 ; Fortran
 (add-to-list 'auto-mode-alist
              '("\\.[fF]\\(03\\|08\\)\\'" . f90-mode))
