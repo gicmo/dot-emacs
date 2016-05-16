@@ -323,6 +323,23 @@
   :diminish eldoc-mode)
 
 ;; === I will never learn how to spell ===
+(defun ck-find-langtool ()
+  "Find the locations of all available langtool jar (sorted) or nil."
+  (let ((basedir '"/usr/local/Cellar/languagetool")
+	(suffix '"/libexec/languagetool-commandline.jar"))
+    (if (file-exists-p basedir)
+	(mapcar (lambda (d) (concat d suffix))
+		(reverse (sort
+			  (directory-files basedir t "[0-9].*" t)
+			  'string<))))))
+
+(let ((jars (ck-find-langtool)))
+  (defcustom langtool-language-tool-jar (car jars)
+    "Langauge tool jar file location"
+    :type 'string
+    :options '(jars)
+    :group 'ck-local
+    ))
 
 (use-package langtool
   :bind (("C-x c w" . langtool-check)
@@ -330,9 +347,8 @@
          ("C-x c l" . langtool-switch-default-language)
          ("C-x c 4" . langtool-show-message-at-point)
          ("C-x c c" . langtool-correct-buffer))
-  :init
-  (setq langtool-language-tool-jar "/usr/local/Cellar/languagetool/3.0/libexec/languagetool-commandline.jar"
-	langtool-default-language "en-US"
+  :config
+  (setq langtool-default-language "en-US"
 	langtool-disabled-rules '("WHITESPACE_RULE"
 				  "EN_UNPAIRED_BRACKETS"
 				  "COMMA_PARENTHESIS_WHITESPACE"
