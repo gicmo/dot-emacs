@@ -20,7 +20,7 @@
 (delete-selection-mode t)
 (global-auto-revert-mode t)
 (global-linum-mode t)
-(custom-set-variables '(linum-format "%4d "))
+(setq-default linum-format "%4d ")
 (setq use-dialog-box nil)
 (prefer-coding-system 'utf-8)
 
@@ -364,8 +364,8 @@
 
 ;; -=[ UI
 ;; resize the initial emacs window
-(add-to-list 'default-frame-alist '(height . 40))
-(add-to-list 'default-frame-alist '(width . 150))
+;;(add-to-list 'default-frame-alist '(height . 40))
+;;(add-to-list 'default-frame-alist '(width . 150))
 
 
 ;; -=[ fonts
