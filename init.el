@@ -333,14 +333,6 @@
 			  (directory-files basedir t "[0-9].*" t)
 			  'string<))))))
 
-(let ((jars (ck-find-langtool)))
-  (defcustom langtool-language-tool-jar (car jars)
-    "Langauge tool jar file location"
-    :type 'string
-    :options '(jars)
-    :group 'ck-local
-    ))
-
 (use-package langtool
   :bind (("C-x c w" . langtool-check)
          ("C-x c W" . langtool-check-done)
@@ -348,7 +340,8 @@
          ("C-x c 4" . langtool-show-message-at-point)
          ("C-x c c" . langtool-correct-buffer))
   :config
-  (setq langtool-default-language "en-US"
+  (setq langtool-language-tool-jar (car (ck-find-langtool))
+	langtool-default-language "en-US"
 	langtool-disabled-rules '("WHITESPACE_RULE"
 				  "EN_UNPAIRED_BRACKETS"
 				  "COMMA_PARENTHESIS_WHITESPACE"
