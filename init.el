@@ -5,6 +5,45 @@
 
 ;;; Code:
 
+; -=[ sane defaults
+(blink-cursor-mode 0)
+(setq inhibit-splash-screen t)
+(setq inhibit-startup-message t)
+(setq make-backup-files nil)
+(fset 'yes-or-no-p 'y-or-n-p)
+(set-scroll-bar-mode (quote right))
+(tooltip-mode -1)
+(tool-bar-mode -1)
+(line-number-mode 1)
+(column-number-mode 1)
+(show-paren-mode 1)
+(delete-selection-mode t)
+(global-auto-revert-mode t)
+(global-linum-mode t)
+(custom-set-variables '(linum-format "%4d "))
+(setq use-dialog-box nil)
+(prefer-coding-system 'utf-8)
+
+;; Disable Ctrl-Z minimization/suspension of emacs.
+(global-set-key [C-z] nil)
+
+;; visual bell causes rendering errors
+;; use custom function from 'stack-exchange'
+(setq ring-bell-function
+      (lambda ()
+	(unless (memq this-command
+		      '(isearch-abort abort-recursive-edit
+				      exit-minibuffer keyboard-quit))
+	  (invert-face 'mode-line)
+	  (run-with-timer 0.1 nil 'invert-face 'mode-line))))
+
+;; Title bar shows name of current buffer.
+(setq frame-title-format '("emacs: %*%+ %b"))
+
+;; -=[ custom - write custom's settings to separate file
+(setq custom-file "~/.emacs.d/custom.el")
+(load custom-file)
+
 ;; === package management
 (require 'package)
 (add-to-list 'package-archives
@@ -50,51 +89,6 @@
 
 (use-package reveal-in-osx-finder
   :commands (reveal-in-osx-finder))
-
-;; -=[ custom - write custom's settings to separate file
-(setq custom-file "~/.emacs.d/custom.el")
-(load custom-file)
-
-(blink-cursor-mode 0)
-(setq inhibit-splash-screen t)
-(setq inhibit-startup-message t)
-(setq make-backup-files nil)
-(fset 'yes-or-no-p 'y-or-n-p)
-(set-scroll-bar-mode (quote right))
-(tooltip-mode -1)
-(tool-bar-mode -1)
-(line-number-mode 1)
-(column-number-mode 1)
-(show-paren-mode 1)
-(delete-selection-mode t)
-(global-auto-revert-mode t)
-(global-linum-mode t)
-(setq linum-format "%4d ")
-
-(setq use-dialog-box nil)
-(prefer-coding-system 'utf-8)
-
-;; visual bell causes rendering errors
-;; use custom function from 'stack-exchange'
-
-(setq ring-bell-function
-      (lambda ()
-	(unless (memq this-command
-		      '(isearch-abort abort-recursive-edit
-				      exit-minibuffer keyboard-quit))
-	  (invert-face 'mode-line)
-	  (run-with-timer 0.1 nil 'invert-face 'mode-line))))
-
-;; Disable Ctrl-Z minimization/suspension of emacs.
-(global-set-key [C-z] nil)
-
-;; == elisp path ==
-(add-to-list 'load-path
-	     (concat user-emacs-directory
-		     (convert-standard-filename "opt/")))
-
-;; Title bar shows name of current buffer.
-(setq frame-title-format '("emacs: %*%+ %b"))
 
 ;; -=[ Editing
 
