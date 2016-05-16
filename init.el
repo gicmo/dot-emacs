@@ -101,7 +101,6 @@
 ; -=[ EditorConfig
 
 (use-package editorconfig
-    :ensure t
     :init
     (editorconfig-mode 1))
 
@@ -117,7 +116,6 @@
 ; -=[ flycheck
 (use-package flycheck
   :diminish " ⓕ"
-  :ensure t
   :init (global-flycheck-mode))
 
 ;; -=[ git
