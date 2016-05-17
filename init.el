@@ -76,7 +76,10 @@
   (setq mac-option-modifier 'meta)
   (if (boundp 'mac-auto-operator-composition-mode)
       (mac-auto-operator-composition-mode))
-  (setq-default locate-command "mdfind"))
+  (setq-default locate-command "mdfind")
+  (when (display-graphic-p)
+    (setq-default mac-emulate-three-button-mouse t))
+  )
 
 ;; pick up the correct path from a login shell
 (use-package exec-path-from-shell
