@@ -30,3 +30,6 @@ Python packages:
 + `importmagic`
 + `yapf`
 
+### Writing
+Synosaurus uses wordnet (`brew install wordnet`) and langtool needs the jar (`brew install langtool`).
+
