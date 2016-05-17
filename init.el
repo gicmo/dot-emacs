@@ -348,14 +348,17 @@
 				  "EN_UNPAIRED_BRACKETS"
 				  "COMMA_PARENTHESIS_WHITESPACE"
 				  "EN_QUOTES")))
-
-(when (executable-find "hunspell")
-  (setq-default ispell-program-name "hunspell")
-  (setq ispell-really-hunspell t))
-
 (use-package synosaurus
   :bind ("C-c s l" . synosaurus-lookup)
   :config (setq synosaurus-backend 'synosaurus-backend-wordnet))
+
+(use-package flyspell
+  :commands (flyspell-prog-mode flyspell-mode flyspell-buffer)
+  :diminish (flyspell-mode flyspell-prog-mode)
+  :init
+  (add-hook 'prog-mode-hook #'flyspell-prog-mode)
+  :config
+  (setq flyspell-issue-message-flag nil))
 
 ;; -=[ UI
 ;; resize the initial emacs window
