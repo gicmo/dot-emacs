@@ -115,8 +115,12 @@
 
 ; -=[ flycheck
 (use-package flycheck
+  :commands global-flycheck-mode
   :diminish " ⓕ"
-  :init (global-flycheck-mode))
+  :init
+  (add-hook 'after-init-hook #'global-flycheck-mode)
+  :config
+  (use-package flycheck-pos-tip))
 
 ;; -=[ git
 (use-package git-gutter-fringe
