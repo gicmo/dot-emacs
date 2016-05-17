@@ -78,7 +78,8 @@
       (mac-auto-operator-composition-mode))
   (setq-default locate-command "mdfind")
   (when (display-graphic-p)
-    (setq-default mac-emulate-three-button-mouse t))
+    (setq-default mac-emulate-three-button-mouse t)
+    (global-set-key (kbd "M-`") 'other-frame))
   )
 
 ;; pick up the correct path from a login shell
