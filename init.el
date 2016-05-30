@@ -323,6 +323,30 @@
   (setq elpy-rpc-backend "jedi")
   (setq elpy-modules (delq 'elpy-module-flymake elpy-modules)))
 
+;; -=[ Rust
+(use-package rust-mode
+  :mode "\\.rs\\'"
+  :config
+  (add-hook 'rust-mode-hock 'rustfmt-enable-on-save)
+  (use-package flycheck-rust
+    :after flycheck
+    :config
+    (flycheck-rust-setup)))
+
+(use-package racer
+  :commands racer-mode
+  :init
+  (add-hook 'rust-mode-hook 'racer-mode)
+  :bind (:map rust-mode-map
+	 ("M-." . racer-find-definition)
+	 ("TAB" . racer-complete-or-indent))
+  :config
+  (racer-turn-on-eldoc)
+  (use-package company-racer
+    :config
+    (add-to-list 'company-backends 'company-racer)))
+
+
 ;; -=[ documentation
 (use-package dash-at-point
   :bind (("C-c d" . dash-at-point)))
