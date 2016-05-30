@@ -158,7 +158,9 @@
 (use-package company
   :diminish " ⓒ"
   :init
-  (add-hook 'after-init-hook 'global-company-mode))
+  (add-hook 'after-init-hook 'global-company-mode)
+  :config
+  (setq company-tooltip-align-annotations t))
 
 (use-package restclient
   :mode ("\\.http\\'" . restclient-mode))
