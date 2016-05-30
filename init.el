@@ -288,6 +288,7 @@
   :mode "\\.go\\'"
   :bind (:map go-mode-map
 	      ("M-." . godef-jump)
+	      ("M-," . godef-jump-back)
 	      ("C-c C-r" . go-rename))
   :config
   (add-hook 'before-save-hook 'gofmt-before-save)
