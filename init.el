@@ -323,6 +323,9 @@
   (setq elpy-rpc-backend "jedi")
   (setq elpy-modules (delq 'elpy-module-flymake elpy-modules)))
 
+(use-package ein
+  :defer t)
+
 ;; -=[ Rust
 (use-package rust-mode
   :mode "\\.rs\\'"
