@@ -117,6 +117,12 @@
     (interactive)
     (ido-initiate-auto-merge (current-buffer))))
 
+; -=[ Projects via projectile
+(use-package projectile
+  :config
+  (projectile-global-mode t)
+  (setq projectile-mode-line '(:eval (format " Ⓟ〔%s〕" (projectile-project-name)))))
+
 ; -=[ flycheck
 (use-package flycheck
   :commands global-flycheck-mode
