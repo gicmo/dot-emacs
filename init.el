@@ -119,7 +119,10 @@
   (define-key ido-file-dir-completion-map (kbd "C-c C-s")
     (lambda()
       (interactive)
-      (ido-initiate-auto-merge (current-buffer)))))
+      (ido-initiate-auto-merge (current-buffer))))
+  (use-package flx-ido
+    :init
+    (flx-ido-mode t)))
 
 ; -=[ Projects via projectile
 (use-package projectile
