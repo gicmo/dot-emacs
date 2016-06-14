@@ -463,7 +463,14 @@
 
 ;; -=[ color themes
 
-(use-package leuven-theme)
+;;(use-package leuven-theme)
+
+(let ((default-directory "~/.emacs.d/themes/"))
+  (normal-top-level-add-subdirs-to-load-path))
+(add-to-list 'custom-theme-load-path "~/.emacs.d/themes/doom/")
+(load-theme 'doom-one t)
+
+
 
 ;; all done, pheww
 ;;; init.el ends here
