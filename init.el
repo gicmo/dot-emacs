@@ -108,14 +108,18 @@
     :init
     (editorconfig-mode 1))
 
-; === ido ====
-(ido-mode)
-;; prevent ido to globally search for files automatically
-(setq ido-auto-merge-work-directories-length -1)
-(define-key ido-file-dir-completion-map (kbd "C-c C-s")
-  (lambda()
-    (interactive)
-    (ido-initiate-auto-merge (current-buffer))))
+; -=[ interactively do things
+
+(use-package ido
+  :init
+  (ido-mode t)
+  :config
+  ;; prevent ido to globally search for files automatically
+  (setq ido-auto-merge-work-directories-length -1)
+  (define-key ido-file-dir-completion-map (kbd "C-c C-s")
+    (lambda()
+      (interactive)
+      (ido-initiate-auto-merge (current-buffer)))))
 
 ; -=[ Projects via projectile
 (use-package projectile
