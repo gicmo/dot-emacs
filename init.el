@@ -430,7 +430,8 @@
   (add-hook 'LaTeX-mode-hook #'flyspell-mode)
   (add-hook 'LaTeX-mode-hook #'turn-on-reftex)
   (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
-  (add-hook 'TeX-mode-hook '(lambda () (setq TeX-command-default "latexmk")))
+  (add-hook 'TeX-mode-hook '(lambda () (setq TeX-command-default "LatexMk")))
+  (setq-default TeX-master nil)
   (setq TeX-auto-save t
 	TeX-parse-self t
 	TeX-save-query nil
@@ -438,6 +439,9 @@
 	reftex-plug-into-AUCTeX t
 	font-latex-fontify-sectioning 'color)
   :config
+  (use-package company-auctex
+    :config
+    (company-auctex-init))
   (use-package auctex-latexmk
     :init
     (auctex-latexmk-setup)
