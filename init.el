@@ -206,6 +206,16 @@
          ("\\.markdown\\'" . markdown-mode))
   :init (setq markdown-command "multimarkdown"))
 
+;; -=[ pdf viewing
+(use-package doc-view
+  :ensure t
+  :config
+  (setq doc-view-continuous t)
+  (add-hook 'doc-view-mode-hook
+            (lambda ()
+              (linum-mode -1)
+              )))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Programming mode customizations
 (setq-default show-trailing-whitespace t)
