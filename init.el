@@ -160,6 +160,10 @@
   :config
   (setq git-timemachine-abbreviation-length 6))
 
+(use-package magit
+  :bind (("C-x g" . magit-status))
+  :config
+  (setq magit-diff-refine-hunk t))
 
 ;; -=[ yasnippet
 (use-package yasnippet
