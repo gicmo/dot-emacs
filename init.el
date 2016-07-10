@@ -6,6 +6,7 @@
 ;;; Code:
 
 ; -=[ sane defaults
+(setq gc-cons-threshold (* 128 1024 1024))
 (blink-cursor-mode 0)
 (setq inhibit-splash-screen t)
 (setq inhibit-startup-message t)
