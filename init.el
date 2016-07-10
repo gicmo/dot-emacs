@@ -208,7 +208,7 @@
 
 ;; -=[ pdf viewing
 (use-package doc-view
-  :ensure t
+  :defer t
   :config
   (setq doc-view-continuous t)
   (add-hook 'doc-view-mode-hook
