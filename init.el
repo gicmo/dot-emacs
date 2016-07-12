@@ -378,6 +378,13 @@
     (add-to-list 'company-backends 'company-racer)))
 
 
+;; -=[ web stuff
+(use-package web-mode
+  :mode (("\\.html?\\'" . web-mode)
+	 ("\\.xhtml$"   . web-mode)
+	 ("\\.vue\\'"   . web-mode)))
+
+
 ;; -=[ documentation
 (use-package dash-at-point
   :bind (("C-c d" . dash-at-point)))
