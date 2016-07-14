@@ -474,11 +474,23 @@
   (or (apply 'font-existsp (car lst))
       (ck-first-font (cdr lst))))
 
-(when (display-graphic-p)
- (let ((foo-font (ck-first-font ck-fonts)))
-  (set-face-attribute 'default nil :font foo-font)
-  (message (concat "Setting font to: " foo-font))
-  ))
+(defun ck-set-font ()
+  "Set the default font from the ck-fonts list."
+  (set-face-attribute 'default nil :font (ck-first-font ck-fonts)))
+
+(defun daemon-new-frames (frame)
+  "Called for each new FRAME in daemon mode."
+  (let ((have-gui (memq (framep frame) '(x w32 ns mac))))
+    (set-frame-parameter frame 'menu-bar-lines (if have-gui 1 0))
+    (when have-gui
+      (with-selected-frame frame
+	(ck-set-font))
+      )))
+
+(if (daemonp)
+    (add-hook 'after-make-frame-functions 'daemon-new-frames)
+    (when (display-graphic-p)
+      (ck-set-font)))
 
 (use-package powerline
   :config
