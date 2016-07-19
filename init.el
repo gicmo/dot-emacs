@@ -24,6 +24,7 @@
 (setq-default linum-format "%4d ")
 (setq use-dialog-box nil)
 (prefer-coding-system 'utf-8)
+(setq mouse-wheel-scroll-amount '(1 ((shift) . 5)))
 
 ;; Disable Ctrl-Z minimization/suspension of emacs.
 (global-set-key [C-z] nil)
