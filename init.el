@@ -332,6 +332,7 @@
   (use-package company-go
     :config
     (add-to-list 'company-backends 'company-go))
+  (use-package go-projectile)
   )
 
 (use-package go-rename
