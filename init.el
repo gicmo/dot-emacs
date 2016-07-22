@@ -132,7 +132,7 @@
 (use-package projectile
   :config
   (projectile-global-mode t)
-  (setq projectile-mode-line '(:eval (format " Ⓟ〔%s〕" (projectile-project-name)))))
+  (setq projectile-mode-line '(:eval (format " 〔%s〕" (projectile-project-name)))))
 
 ; -=[ flycheck
 (use-package flycheck
@@ -504,7 +504,7 @@
 
 ;; -=[ color themes
 
-;;(use-package leuven-theme)
+;(use-package leuven-theme)
 
 (let ((default-directory "~/.emacs.d/themes/"))
   (normal-top-level-add-subdirs-to-load-path))
