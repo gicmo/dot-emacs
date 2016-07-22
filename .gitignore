@@ -8,9 +8,14 @@ auto-save-list
 ido.last
 recentf
 irony/
+request/
 
 #multiple cursors
 .mc-lists.el
+
+# projectile
+projectile.cache
+projectile-bookmarks.eld
 
 #README.md preview
 README.html
