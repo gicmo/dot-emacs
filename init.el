@@ -46,6 +46,8 @@
 (setq custom-file "~/.emacs.d/custom.el")
 (load custom-file)
 
+(add-to-list 'load-path "~/.emacs.d/elisp/")
+
 ;; === package management
 (require 'package)
 (add-to-list 'package-archives
@@ -494,9 +496,11 @@
     (when (display-graphic-p)
       (ck-set-font)))
 
-(use-package powerline
-  :config
-  (powerline-default-theme))
+;; -=[ mode-line
+(eval-when-compile
+  (progn
+    (require 'ck-modeline)
+    (setq-default mode-line-format (ck/mode-line))))
 
 ;; -=[ color themes
 
