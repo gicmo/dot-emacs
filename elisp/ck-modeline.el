@@ -106,7 +106,7 @@
   "The line ending convention used in the buffer."
   (if (memq buffer-file-coding-system '(utf-8 utf-8-unix))
       ""
-    (symbol-name buffer-file-coding-system)))
+    (concat (symbol-name buffer-file-coding-system) " ")))
 
 (defun *vc ()
   "Displays the current branch, colored based on its state."
