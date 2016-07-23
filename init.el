@@ -493,8 +493,7 @@
 
 (if (daemonp)
     (add-hook 'after-make-frame-functions 'daemon-new-frames)
-    (when (display-graphic-p)
-      (ck-set-font)))
+    (daemon-new-frames (selected-frame)))
 
 ;; -=[ mode-line
 (eval-when-compile
