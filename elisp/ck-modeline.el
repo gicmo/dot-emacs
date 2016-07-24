@@ -24,43 +24,65 @@
 (defface mode-line-vcs-info nil '((t (:inherit warning))))
 (defface mode-line-vcs-warning nil '((t (:inherit warning))))
 
-(defun *shorten-directory (dir max-length)
+(defun *shorten-directory (dir &optional max-length)
   "Show directory name of `DIR', reduced to `MAX-LENGTH' characters."
-  (let ((path (reverse (split-string (abbreviate-file-name dir) "/")))
-        (output ""))
-    (when (and path (equal "" (car path)))
-      (setq path (cdr path)))
-    (while (and path (< (length output) (- max-length 4)))
-      (setq output (concat (car path) "/" output))
-      (setq path (cdr path)))
-    (when path
-      (setq output (concat ".../" output)))
-    output))
+  (unless max-length (setq max-length (truncate (/ (window-body-width) 1.75))))
+  (if (> (length dir) max-length)
+      (let ((path (reverse (split-string dir "/")))
+	    (output ""))
+	(when (and path (equal "" (car path)))
+	  (setq path (cdr path)))
+	(while (and path (< (length output) (- max-length 4)))
+	  (setq output (concat (car path) "/" output))
+	  (setq path (cdr path)))
+	(when path
+	  (setq output (concat "…/" output)))
+	output)
+    dir))
 
-(defun *buffer-path ()
-  (when buffer-file-name
+(defun *f-dirname (path)
+  "Return the dirname of PATH, but return empty string for /, ./, ../."
+  (let ((dirname (f-dirname path)))
+    (cond ((string= dirname "./") "")
+	  ((string= dirname "../") "")
+	  ((string= dirname "/") "")
+	  ((eq dirname nil) "")
+	  (t dirname))))
+
+(defun *project-root-safe ()
+  "Return the root of the project or nil."
+    (condition-case nil
+	(projectile-project-root)
+      (error nil)))
+
+(defun *project-name ()
+  "Return the formatted name of an active project."
+  (when (*project-root-safe)
     (propertize
-     (f-dirname
-      (let ((buffer-path (file-relative-name buffer-file-name (projectile-project-root)))
-            (max-length (truncate (/ (window-body-width) 1.75))))
-        (concat (projectile-project-name) "/"
-                (if (> (length buffer-path) max-length)
-                    (let ((path (reverse (split-string buffer-path "/" t)))
-                          (output ""))
-                      (when (and path (equal "" (car path)))
-                        (setq path (cdr path)))
-                      (while (and path (<= (length output) (- max-length 4)))
-                        (setq output (concat (car path) "/" output))
-                        (setq path (cdr path)))
-                      (when path
-                        (setq output (concat "../" output)))
-                      (when (string-suffix-p "/" output)
-                        (setq output (substring output 0 -1)))
-                      output)
-                  buffer-path))))
-     'face (if active 'mode-line-buffer-path))))
+     (format "%s" (projectile-project-name))
+     'mouse-face 'mode-line-highlight
+     'face (if active 'mode-line-buffer-path)
+     'help-echo (format "@ %s" (*project-root-safe)))))
+
+(defun *project-buffer-path (project-root filename)
+  "Return the directory relative to the PROJECT-ROOT of FILENAME (shortened)."
+  (let ((relative-fn (*shorten-directory
+		      (file-relative-name (file-truename filename)
+					  (file-truename project-root)))))
+    (concat (propertize
+	     (*f-dirname relative-fn)
+	     'face (if active 'mode-line-buffer-path)
+	     'help-echo filename))))
+
+(defun *project-id (project-root project-name filename)
+  "Generate a project id based on PROJECT-ROOT, PROJECT-NAME and FILENAME."
+  (let* ((attached (and project-root filename))
+	 (sep (if attached ":" " • "))
+	 (path (if attached (*project-buffer-path project-root filename) "")))
+    (concat project-name sep path (*buffer-name))))
 
 (defun *buffer-state ()
+  "The state of the buffer (read-only, modified, new-file)."
   (when buffer-file-name
     (propertize
      (concat (if (not (file-exists-p buffer-file-name))
@@ -76,31 +98,8 @@
 (defun *buffer-cwd ()
   "Displays `default-directory'."
   (propertize
-   (concat "[" (*shorten-directory default-directory 20) "]")
-   'face 'mode-line-2))
-
-(defun *major-mode ()
-  "The major mode, including process, environment."
-  (propertize (format-mode-line mode-name)
-              'mouse-face 'mode-line-highlight
-              'help-echo "Major mode\n\ mouse-1: Display major mode menu\n\ mouse-2: Show help for major mode\n\ mouse-3: Toggle minor modes"
-              'local-map (let ((map (make-sparse-keymap)))
-                           (define-key map [mode-line down-mouse-1]
-                             `(menu-item ,(purecopy "Menu Bar") ignore
-                                         :filter (lambda (_) (mouse-menu-major-mode-map))))
-                           (define-key map [mode-line mouse-2] 'describe-mode)
-                           (define-key map [mode-line down-mouse-3] mode-line-mode-menu)
-                           map)))
-
-(defun *minor-modes ()
-  "The minor modes."
-  (format-mode-line minor-mode-alist)
-  )
-
-(defun *major-mode ()
-  "The major mode, including process, environment and text-scale info."
-  (concat (format-mode-line mode-name)
-          (if (stringp mode-line-process) mode-line-process)))
+   (concat "[" (*shorten-directory (abbreviate-file-name default-directory)) "]")
+   'face (if active 'mode-line-2)))
 
 (defun *buffer-encoding-abbrev ()
   "The line ending convention used in the buffer."
@@ -137,18 +136,27 @@
   "Our custom mode line."
   '(:eval
     (let* ((active (powerline-selected-window-active))
-           (lhs (list (propertize " " 'display (if active mode-line-bar mode-line-inactive-bar))
+	   (project-root (*project-root-safe))
+	   (project-name (and project-root (*project-name)))
+	   (filename buffer-file-name)
+	   (process (powerline-process))
+	   ;; now build the mode line
+           (lhs (list (propertize " " 'display (if active
+						   mode-line-bar
+						 mode-line-inactive-bar))
                       " "
-                      (*buffer-path)
-                      (*buffer-name)
+		      (cond (project-name
+			     (*project-id project-root project-name filename))
+			    (filename filename)
+			    (t (*buffer-name)))
                       " "
                       (*buffer-state)
-		      (if (eq nil (buffer-file-name)) (*buffer-cwd))
-		      "  "
+		      (unless (or project-name filename)
+			(concat (*buffer-cwd) " "))
+		      (if process (concat process " "))
+		      " "
 		      (powerline-major-mode)
-		      " "
-		      (powerline-process)
-		      " "
+		      "  "
 		      (powerline-minor-modes)
 		      "  "
 		      ))
