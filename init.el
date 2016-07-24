@@ -130,9 +130,9 @@
 
 ; -=[ Projects via projectile
 (use-package projectile
+  :diminish ""
   :config
-  (projectile-global-mode t)
-  (setq projectile-mode-line '(:eval (format " 〔%s〕" (projectile-project-name)))))
+  (projectile-global-mode t))
 
 ; -=[ flycheck
 (use-package flycheck
