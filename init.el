@@ -130,10 +130,20 @@
     (flx-ido-mode t)))
 
 ; -=[ Projects via projectile
+
+(defun ck/projectile-commander-setup ()
+  "Setup projectile commander shortcuts."
+  (require 'projectile)
+  (def-projectile-commander-method ?d
+    "Open project root in dired."
+    (projectile-dired)))
+
 (use-package projectile
   :diminish ""
   :config
-  (projectile-global-mode t))
+  (projectile-global-mode t)
+  (setq projectile-switch-project-action 'projectile-commander)
+  (ck/projectile-commander-setup))
 
 ; -=[ flycheck
 (use-package flycheck
