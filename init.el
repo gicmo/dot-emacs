@@ -176,9 +176,11 @@
 
 (use-package magit
   :bind (("C-x g" . magit-status))
+  :init
+  (add-hook 'git-gutter:update-hooks 'magit-after-revert-hook)
+  (add-hook 'git-gutter:update-hooks 'magit-not-reverted-hook)
   :config
-  (setq magit-diff-refine-hunk t)
-  (add-hook 'magit-post-refresh-hook 'git-gutter:update-all-windows))
+  (setq magit-diff-refine-hunk t))
 
 ;; -=[ yasnippet
 (use-package yasnippet
