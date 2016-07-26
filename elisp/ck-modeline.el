@@ -64,22 +64,65 @@
      'face (if active 'mode-line-buffer-path)
      'help-echo (format "@ %s" (*project-root-safe)))))
 
-(defun *project-buffer-path (project-root filename)
-  "Return the directory relative to the PROJECT-ROOT of FILENAME (shortened)."
-  (let ((relative-fn (*shorten-directory
-		      (file-relative-name (file-truename filename)
-					  (file-truename project-root)))))
-    (concat (propertize
-	     (*f-dirname relative-fn)
-	     'face (if active 'mode-line-buffer-path)
-	     'help-echo filename))))
+
+(defun non-empty? (str)
+  "Return STR if non empty, nil otherwise."
+  (not (or (null str) (string= "" str))))
+
+(defun split-filename (filename)
+  "Split FILENAME into (list dirname basename); dirname will be nil if no slash in path."
+  (if (not (string-match "/" filename))
+      (list filename nil)
+    (let ((basename (file-name-nondirectory filename))
+	  (dirname  (file-name-directory filename)))
+      (list dirname basename))))
+
+(defun remove-trailing-slash (name)
+  "Remove a single trailing slash from NAME."
+  (when (and (non-empty? name)
+	     (string= "/" (substring name -1 nil)))
+    (substring name 0 -1)))
+
+(defun file-relpath (target dir)
+  "Like `file-relative-name' with `file-truename' called on both TARGET and DIR."
+  (file-relative-name (file-truename target)
+		      (and (non-empty? dir) (file-truename dir))))
+
+(defun *shorten-path (dir &optional max-length)
+  "Show directory name of `DIR', reduced to `MAX-LENGTH' characters."
+  (unless max-length (setq max-length (truncate (/ (window-body-width) 1.75))))
+  (if (> (length dir) max-length)
+      (let ((path (reverse (split-string dir "/")))
+	    (output ""))
+	(when (and path (equal "" (car path)))
+	  (setq path (cdr path)))
+	(while (and path (< (length output) (- max-length 4)))
+	  (setq output (concat (car path) "/" output))
+	  (setq path (cdr path)))
+	(when path
+	  (setq output (concat "…/" output)))
+	output)
+    dir))
+
+
+(defun *ml-path (path &optional colorize)
+  "Prepare PATH for mode-line: shorten, COLORIZE and add help text."
+  (let ((short (*shorten-path path)))
+    (propertize short
+		'mouse-face 'mode-line-highlight
+		'face (if colorize 'mode-line-buffer-path)
+		'help-echo path)))
 
 (defun *project-id (project-root project-name filename)
   "Generate a project id based on PROJECT-ROOT, PROJECT-NAME and FILENAME."
-  (let* ((attached (and project-root filename))
-	 (sep (if attached ":" " • "))
-	 (path (if attached (*project-buffer-path project-root filename) "")))
-    (concat project-name sep path (*buffer-name))))
+  (let* ((sep (if filename ":" " • "))
+	 (filepath (or filename default-directory))
+	 (relname (file-relpath filepath project-root))
+	 (path-filename (split-filename relname))
+	 (path (first path-filename))
+	 (name (second path-filename))
+	 )
+    (concat project-name sep (*ml-path path active) name)))
 
 (defun *buffer-state ()
   "The state of the buffer (read-only, modified, new-file)."
