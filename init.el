@@ -15,6 +15,7 @@
 (set-scroll-bar-mode (quote right))
 (tooltip-mode -1)
 (tool-bar-mode -1)
+(scroll-bar-mode -1)
 (line-number-mode 1)
 (column-number-mode 1)
 (show-paren-mode 1)
