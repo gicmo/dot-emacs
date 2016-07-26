@@ -227,7 +227,9 @@
 
 ; -=[ common packages
 (use-package rainbow-delimiters
-  :commands rainbow-delimiters-mode)
+  :commands rainbow-delimiters-mode
+  :init
+  (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode))
 
 (use-package paredit
   :commands enable-paredit-mode)
