@@ -24,6 +24,9 @@
 (defface mode-line-vcs-info nil '((t (:inherit warning))))
 (defface mode-line-vcs-warning nil '((t (:inherit warning))))
 
+; use for anzu-mode
+(defface mode-line-count-face nil "")
+
 (defun *shorten-directory (dir &optional max-length)
   "Show directory name of `DIR', reduced to `MAX-LENGTH' characters."
   (unless max-length (setq max-length (truncate (/ (window-body-width) 1.75))))
@@ -175,6 +178,16 @@
             ((= end pend) ":Bot")
             (t (format ":%d%%%%" (/ end 0.01 pend)))))))
 
+(make-variable-buffer-local 'anzu--state)
+(defun *anzu ()
+  "Show the current match and the total number."
+  (when (and (featurep 'anzu) anzu--state)
+    (propertize
+     (format " %s/%d%s "
+             anzu--current-position anzu--total-matched
+             (if anzu--overflow-p "+" ""))
+     'face (if active 'mode-line-count-face))))
+
 (defun ck/mode-line ()
   "Our custom mode line."
   '(:eval
@@ -202,6 +215,7 @@
 		      "  "
 		      (powerline-minor-modes)
 		      "  "
+		      (*anzu)
 		      ))
 	   (rhs (list (*buffer-encoding-abbrev)
                       (*vc)
