@@ -128,6 +128,19 @@
     :init
     (flx-ido-mode t)))
 
+(use-package anzu
+  :diminish ""
+  :bind
+  (([remap query-replace] . anzu-query-replace)
+   ([remap query-replace-regexp] . anzu-query-replace-regexp)
+   :map isearch-mode-map
+   ([remap isearch-query-replace] . anzu-isearch-query-replace)
+   ([remap isearch-query-replace-regexp] . anzu-isearch-query-replace-regexp))
+  :init
+  (global-anzu-mode 1)
+  :config
+  (setq anzu-cons-mode-line-p nil))
+
 ; -=[ Projects via projectile
 
 (defun ck/projectile-commander-setup ()
