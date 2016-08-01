@@ -260,6 +260,10 @@
 (use-package paredit
   :commands enable-paredit-mode)
 
+; -=[ Assembler modes
+
+(use-package nasm-mode
+  :mode "\\.\\(nasm\\|s\\)$")
 
 ; -=[ C/C++/ObjC and friends
 (setq c-hungry-delete-key t)
