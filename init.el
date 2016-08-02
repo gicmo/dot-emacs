@@ -496,7 +496,8 @@
       '(("Hasklig" 12)
 	("Source Code Pro" 12)
 	("Inconsolata" 12)
-	("Menlo" 12)))
+	("Menlo" 12)
+	("Monospace" 12)))
 
 (defun font-existsp (name size)
   "Check if a font with a given NAME (or is Powerline version) and SIZE exists."
@@ -516,8 +517,9 @@
 
 (defun daemon-new-frames (frame)
   "Called for each new FRAME in daemon mode."
-  (let ((have-gui (memq (framep frame) '(x w32 ns mac))))
-    (set-frame-parameter frame 'menu-bar-lines (if have-gui 1 0))
+  (let ((have-gui (memq (framep frame) '(x w32 ns mac)))
+	(is-mac (eq system-type 'darwin)))
+    (set-frame-parameter frame 'menu-bar-lines (if (and have-gui is-mac) 1 0))
     (when have-gui
       (with-selected-frame frame
 	(ck-set-font))
