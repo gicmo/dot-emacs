@@ -464,7 +464,8 @@
   :init
   (add-hook 'prog-mode-hook #'flyspell-prog-mode)
   :config
-  (setq flyspell-issue-message-flag nil))
+  (setq flyspell-issue-message-flag nil
+	flyspell-issue-welcome-flag nil))
 
 ;; -=[ UI
 ;; resize the initial emacs window
