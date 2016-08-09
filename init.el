@@ -99,6 +99,11 @@
 (use-package reveal-in-osx-finder
   :commands (reveal-in-osx-finder))
 
+
+(use-package dired-x
+  :ensure nil
+  :bind (("C-x C-j" . dired-jump)))
+
 ;; -=[ Editing
 
 ;; multiple cursors
