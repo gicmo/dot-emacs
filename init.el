@@ -25,6 +25,9 @@
 (setq use-dialog-box nil)
 (prefer-coding-system 'utf-8)
 (setq mouse-wheel-scroll-amount '(1 ((shift) . 5)))
+(global-set-key (kbd "<mouse-6>") 'scroll-right)
+(global-set-key (kbd "<mouse-7>") 'scroll-left)
+(put 'scroll-left 'disabled nil)
 (fset 'display-startup-echo-area-message #'ignore)
 
 ;; Disable Ctrl-Z minimization/suspension of emacs.
