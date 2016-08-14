@@ -30,6 +30,7 @@
 (defvar dashboard-mode-map
    (let ((map (make-sparse-keymap)))
      (define-key map "r" 'recentf-open-files)
+     (define-key map "p" 'projectile-switch-project)
      map)
    "Keymap for `dashboard-mode'.")
 
@@ -47,6 +48,10 @@
 (defun dashboard-make ()
   "Create the content of the dashboard."
   (let ((head (make-string 3 ? )))
+    (insert "\n\n")
+    (insert head "[r] Recently opened files\n")
+    (insert head "[p] Switch to project\n")
+    (insert "\n")
     (insert head "Loaded in " (emacs-init-time) ".\n"))
   )
 
