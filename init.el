@@ -537,6 +537,9 @@
     (add-hook 'after-make-frame-functions 'daemon-new-frames)
     (daemon-new-frames (selected-frame)))
 
+(require 'dashboard)
+(setq initial-buffer-choice 'dashboard-show)
+
 ;; -=[ mode-line
 (eval-when-compile
   (progn
