@@ -92,7 +92,6 @@
 
 ;; pick up the correct path from a login shell
 (use-package exec-path-from-shell
-  :if (eq system-type 'darwin)
   :init
   (customize-set-variable 'exec-path-from-shell-arguments nil)
   :config
