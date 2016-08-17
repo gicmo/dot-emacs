@@ -45,9 +45,23 @@
    ;(use-local-map dashboard-mode-map)
    )
 
+(defun dashboard-banner (head)
+  "Insert a cool banner with a left pad of size HEAD."
+  (insert head "███████╗███╗***███╗*█████╗**██████╗███████╗\n")
+  (insert head "██╔════╝████╗*████║██╔══██╗██╔════╝██╔════╝\n")
+  (insert head "█████╗**██╔████╔██║███████║██║*****███████╗\n")
+  (insert head "██╔══╝**██║╚██╔╝██║██╔══██║██║*****╚════██║\n")
+  (insert head "███████╗██║*╚═╝*██║██║**██║╚██████╗███████║\n")
+  (insert head "╚══════╝╚═╝*****╚═╝╚═╝**╚═╝*╚═════╝╚══════╝\n")
+  (insert (format "%s %s %d.%d"
+		  head (make-string 35 ? )
+		  emacs-major-version emacs-minor-version)))
+
 (defun dashboard-make ()
   "Create the content of the dashboard."
   (let ((head (make-string 3 ? )))
+    (insert "\n\n")
+    (dashboard-banner head)
     (insert "\n\n")
     (insert head "[r] Recently opened files\n")
     (insert head "[p] Switch to project\n")
