@@ -80,6 +80,8 @@
     (insert "\n\n")
     (dashboard--insert-mnemonic head "r" "Recently opened files")
     (dashboard--insert-mnemonic head "p" "Switch to project")
+    (dashboard--insert-mnemonic head "m" "*Messages* buffer")
+    (dashboard--insert-mnemonic head "s" "*scratch* buffer")
     (insert "\n")))
 
 
