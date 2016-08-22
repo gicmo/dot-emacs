@@ -52,6 +52,12 @@
 
 (add-to-list 'load-path "~/.emacs.d/elisp/")
 
+(eval-when-compile
+  (progn
+    (require 'dashboard)
+    (dashboard-show)))
+
+
 ;; === package management
 (require 'package)
 (add-to-list 'package-archives
@@ -536,9 +542,6 @@
 (if (daemonp)
     (add-hook 'after-make-frame-functions 'daemon-new-frames)
     (daemon-new-frames (selected-frame)))
-
-(require 'dashboard)
-(setq initial-buffer-choice 'dashboard-show)
 
 ;; -=[ mode-line
 (eval-when-compile
