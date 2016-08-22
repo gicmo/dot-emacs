@@ -428,6 +428,8 @@
 	 ("\\.xhtml$"   . web-mode)
 	 ("\\.vue\\'"   . web-mode)))
 
+(use-package yaml-mode
+  :mode (("\\.yml\\'" . yaml-mode)))
 
 ;; -=[ documentation
 (use-package dash-at-point
