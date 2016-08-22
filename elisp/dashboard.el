@@ -47,15 +47,23 @@
 
 (defun dashboard-banner (head)
   "Insert a cool banner with a left pad of size HEAD."
-  (insert head "███████╗███╗***███╗*█████╗**██████╗███████╗\n")
-  (insert head "██╔════╝████╗*████║██╔══██╗██╔════╝██╔════╝\n")
-  (insert head "█████╗**██╔████╔██║███████║██║*****███████╗\n")
-  (insert head "██╔══╝**██║╚██╔╝██║██╔══██║██║*****╚════██║\n")
-  (insert head "███████╗██║*╚═╝*██║██║**██║╚██████╗███████║\n")
-  (insert head "╚══════╝╚═╝*****╚═╝╚═╝**╚═╝*╚═════╝╚══════╝\n")
-  (insert (format "%s %s %d.%d"
-		  head (make-string 35 ? )
-		  emacs-major-version emacs-minor-version)))
+  (insert
+   (propertize
+    (concat
+     head "███████╗███╗***███╗*█████╗**██████╗███████╗\n"
+     head "██╔════╝████╗*████║██╔══██╗██╔════╝██╔════╝\n"
+     head "█████╗**██╔████╔██║███████║██║*****███████╗\n"
+     head "██╔══╝**██║╚██╔╝██║██╔══██║██║*****╚════██║\n"
+     head "███████╗██║*╚═╝*██║██║**██║╚██████╗███████║\n"
+     head "╚══════╝╚═╝*****╚═╝╚═╝**╚═╝*╚═════╝╚══════╝\n")
+    'face 'font-lock-comment-face))
+   (insert
+    (propertize
+     (format "%s %s %d.%d"
+	     head (make-string 35 ? )
+	     emacs-major-version emacs-minor-version)
+     'face 'font-lock-comment-face)))
+
 
 (defun dashboard-make ()
   "Create the content of the dashboard."
