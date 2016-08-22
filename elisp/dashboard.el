@@ -25,12 +25,12 @@
 
 ;;; Code:
 
-(require 'recentf)
-
 (defvar dashboard-mode-map
    (let ((map (make-sparse-keymap)))
      (define-key map "r" 'recentf-open-files)
      (define-key map "p" 'projectile-switch-project)
+     (define-key map "s" (lambda () (interactive) (switch-to-buffer (get-buffer "*scratch*"))))
+     (define-key map "m" (lambda () (interactive) (switch-to-buffer (get-buffer "*Messages*"))))
      map)
    "Keymap for `dashboard-mode'.")
 
