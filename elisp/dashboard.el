@@ -64,6 +64,13 @@
 	     emacs-major-version emacs-minor-version)
      'face 'font-lock-comment-face)))
 
+(defun dashboard--insert-mnemonic (head key help)
+  "Insert a line a la: HEAD [KEY] HELP."
+  (insert
+   (concat
+    head "[" (propertize key 'face 'font-lock-keyword-face)
+    "] " (propertize help 'face 'font-lock-comment-face)
+    "\n")))
 
 (defun dashboard-make ()
   "Create the content of the dashboard."
@@ -71,11 +78,10 @@
     (insert "\n\n")
     (dashboard-banner head)
     (insert "\n\n")
-    (insert head "[r] Recently opened files\n")
-    (insert head "[p] Switch to project\n")
-    (insert "\n")
-    (insert head "Loaded in " (emacs-init-time) ".\n"))
-  )
+    (dashboard--insert-mnemonic head "r" "Recently opened files")
+    (dashboard--insert-mnemonic head "p" "Switch to project")
+    (insert "\n")))
+
 
 (defun dashboard-show ()
   "Show the dashboard."
