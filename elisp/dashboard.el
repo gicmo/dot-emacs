@@ -84,16 +84,32 @@
     (dashboard--insert-mnemonic head "s" "*scratch* buffer")
     (insert "\n")))
 
+(defun dashboard--startup-hook ()
+  "Startup hook for the dashboard."
+  (interactive)
+  (with-current-buffer (get-buffer "*Dashboard*")
+    (let ((buffer-read-only nil)
+	  (head (make-string 3 ? )))
+      (goto-char (point-max))
+      (insert head (propertize (concat " >  Loaded in " (emacs-init-time) ".\n")
+			       'face 'font-lock-comment-face))
+      (set-buffer-modified-p nil))))
 
 (defun dashboard-show ()
   "Show the dashboard."
+  (interactive)
   (with-current-buffer (get-buffer-create "*Dashboard*")
     (erase-buffer)
     (dashboard-mode)
     (dashboard-make)
-    (setq buffer-read-only t)
+    (linum-mode -1)
     (switch-to-buffer (current-buffer))
-    ))
+    (if after-init-time
+	(insert (propertize " > Loaded in " (emacs-init-time) ".\n"
+			    'face 'font-lock-comment-face))
+      (add-hook 'emacs-startup-hook 'dashboard--startup-hook t))
+    (setq buffer-read-only t)
+    (set-buffer-modified-p nil)))
 
 (provide 'dashboard)
 ;;; dashboard.el ends here
