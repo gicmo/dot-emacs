@@ -555,12 +555,12 @@
 
 ;(use-package leuven-theme)
 
-(let ((default-directory "~/.emacs.d/themes/"))
-  (normal-top-level-add-subdirs-to-load-path))
-(add-to-list 'custom-theme-load-path "~/.emacs.d/themes/doom/")
-(load-theme 'doom-one t)
-
-
+(use-package doom-themes
+  :init
+  (load-theme 'doom-one t)
+  (add-hook 'find-file-hook 'doom-buffer-mode)
+  (add-hook 'minibuffer-setup-hook 'doom-buffer-mode)
+  (require 'doom-neotree))
 
 ;; all done, pheww
 ;;; init.el ends here
