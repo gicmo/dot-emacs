@@ -493,20 +493,7 @@
   (setq neo-vc-integration nil
 	neo-banner-message nil
 	neo-show-updir-line nil
-	projectile-switch-project-action 'neotree-projectile-action)
-
-  ;; shamelessly 'borrowed' from doom color theme
-  (defun ck*neo-insert-root-entry (node)
-    "Pretty-print pwd in neotree"
-    (list (concat "  " (projectile-project-name))))
-  (defun ck*neo-insert-fold-symbol (name)
-    "Custom hybrid unicode theme with leading whitespace."
-    (or (and (eq name 'open)  (neo-buffer--insert-with-face " -  " 'neo-expand-btn-face))
-	(and (eq name 'close) (neo-buffer--insert-with-face " +  " 'neo-expand-btn-face))
-	(and (eq name 'leaf)  (neo-buffer--insert-with-face "   " 'neo-expand-btn-face))))
-  (advice-add 'neo-buffer--insert-fold-symbol :override 'ck*neo-insert-fold-symbol)
-  (advice-add 'neo-buffer--insert-root-entry :filter-args 'ck*neo-insert-root-entry))
-
+	projectile-switch-project-action 'neotree-projectile-action))
 ;; -=[ fonts
 (defconst ck-fonts
       '(("Hasklig" 12)
