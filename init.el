@@ -547,7 +547,10 @@
   (load-theme 'doom-one t)
   (add-hook 'find-file-hook 'doom-buffer-mode)
   (add-hook 'minibuffer-setup-hook 'doom-buffer-mode)
-  (require 'doom-neotree))
+  (require 'doom-neotree)
+  :config
+  (diminish 'doom-buffer-mode)
+  )
 
 ;; all done, pheww
 ;;; init.el ends here
