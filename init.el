@@ -236,7 +236,7 @@
 
 ; == recent files ==
 (recentf-mode 1)
-(global-set-key (kbd "C-c r") 'recentf-open-files)
+(global-set-key (kbd "C-x r") 'recentf-open-files)
 
 ; == uniquify ==
 (require 'uniquify)
