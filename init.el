@@ -325,7 +325,9 @@
 
 (use-package rtags
   :bind (:map c-mode-base-map
-	      ("M-." . rtags-find-symbol-at-point)))
+	      ("M-." . rtags-find-symbol-at-point))
+  :config
+  (rtags-enable-standard-keybindings))
 
 (use-package cmake-ide
   :commands cmake-ide-setup
