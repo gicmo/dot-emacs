@@ -260,6 +260,14 @@
               (linum-mode -1)
               )))
 
+;; -=[ goto-address, makes links click-able
+
+(use-package goto-addr
+  :commands (goto-address-mode goto-address-prog-mode)
+  :init
+  (add-hook 'text-mode-hook #'goto-address-mode)
+  (add-hook 'prog-mode-hook #'goto-address-prog-mode))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Programming mode customizations
 (setq-default show-trailing-whitespace t)
