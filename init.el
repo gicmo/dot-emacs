@@ -429,21 +429,30 @@
   (add-hook 'rust-mode-hock 'rustfmt-enable-on-save)
   (use-package flycheck-rust
     :after flycheck
-    :config
-    (flycheck-rust-setup)))
+    :commands flycheck-rust-setup
+    :init
+    (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)))
 
 (use-package racer
   :commands racer-mode
   :init
   (add-hook 'rust-mode-hook 'racer-mode)
   :bind (:map rust-mode-map
-	 ("M-." . racer-find-definition)
-	 ("TAB" . racer-complete-or-indent))
+	 ("M-." . racer-find-definition))
   :config
   (racer-turn-on-eldoc)
   (use-package company-racer
     :config
-    (add-to-list 'company-backends 'company-racer)))
+    (add-to-list 'company-backends 'company-racer)
+    (setq company-tooltip-align-annotations t)
+    :bind (:map rust-mode-map
+		("M-." . racer-find-definition)))
+  )
+
+(use-package cargo
+  :commands cargo-minor-mode
+  :init
+  (add-hook 'rust-mode-hook 'cargo-minor-mode))
 
 
 ;; -=[ web stuff
