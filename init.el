@@ -236,8 +236,15 @@
    (file-name-directory filename)))
 
 ; == recent files ==
-(recentf-mode 1)
-(global-set-key (kbd "C-x r") 'recentf-open-files)
+(use-package recentf
+  :init
+  (setq recentf-exclude '("/\\.git/.*\\'"
+                          "/elpa/.*\\'"
+                          "/cache/.*\\'"
+                          ".*\\.gz\\'")
+        recentf-max-saved-items 50
+        recentf-max-menu-items 35)
+  (recentf-mode 1))
 
 ; == uniquify ==
 (require 'uniquify)
