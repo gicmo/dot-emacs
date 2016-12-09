@@ -12,9 +12,8 @@
 (setq inhibit-startup-message t)
 (setq make-backup-files nil)
 (fset 'yes-or-no-p 'y-or-n-p)
-(tooltip-mode -1)
-(tool-bar-mode -1)
-(scroll-bar-mode -1)
+(dolist (m '(tooltip-mode tool-bar-mode scroll-bar-mode))
+    (when (fboundp m) (funcall m -1)))
 (line-number-mode 1)
 (column-number-mode 1)
 (show-paren-mode 1)
@@ -183,6 +182,7 @@
 
 ;; -=[ git
 (use-package git-gutter-fringe
+  :if window-system
   :diminish (git-gutter-mode . "")
   :config
   (setq git-gutter-fr:side 'right-fringe)
