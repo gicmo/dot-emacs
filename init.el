@@ -123,8 +123,9 @@
 ; -=[ EditorConfig
 
 (use-package editorconfig
-    :init
-    (editorconfig-mode 1))
+  :diminish ""
+  :init
+  (editorconfig-mode 1))
 
 ; -=[ interactively do things
 
