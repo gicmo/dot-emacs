@@ -554,7 +554,7 @@
   "Set the default font from the ck-fonts list."
   (set-face-attribute 'default nil :font (ck-first-font ck-fonts)))
 
-(defun daemon-new-frames (frame)
+(defun new-frames-setup (frame)
   "Called for each new FRAME in daemon mode."
   (let ((have-gui (memq (framep frame) '(x w32 ns mac)))
 	(is-mac (eq system-type 'darwin)))
@@ -565,9 +565,9 @@
       )))
 
 
-(add-hook 'after-make-frame-functions 'daemon-new-frames)
+(add-hook 'after-make-frame-functions 'new-frames-setup)
 (unless (daemonp)
-  (daemon-new-frames (selected-frame)))
+  (new-frames-setup (selected-frame)))
 
 ;; -=[ mode-line
 (eval-when-compile
