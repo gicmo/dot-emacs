@@ -564,9 +564,10 @@
 	(ck-set-font))
       )))
 
-(if (daemonp)
-    (add-hook 'after-make-frame-functions 'daemon-new-frames)
-    (daemon-new-frames (selected-frame)))
+
+(add-hook 'after-make-frame-functions 'daemon-new-frames)
+(unless (daemonp)
+  (daemon-new-frames (selected-frame)))
 
 ;; -=[ mode-line
 (eval-when-compile
