@@ -455,6 +455,9 @@
   :init
   (add-hook 'rust-mode-hook 'cargo-minor-mode))
 
+;; -=[ packaging
+(use-package rpm-spec-mode
+  :mode "\\.spec\\'")
 
 ;; -=[ web stuff
 (use-package web-mode
