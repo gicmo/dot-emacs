@@ -470,6 +470,7 @@
 
 ;; -=[ documentation
 (use-package dash-at-point
+  :if (eq system-type 'darwin)
   :bind (("C-c d" . dash-at-point)))
 
 (use-package eldoc
