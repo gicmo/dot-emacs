@@ -473,6 +473,11 @@
   :if (eq system-type 'darwin)
   :bind (("C-c d" . dash-at-point)))
 
+(use-package devhelp
+  :ensure f
+  :if (eq system-type 'gnu/linux)
+  :bind (("C-c d" . devhelp-word-at-point)))
+
 (use-package eldoc
   :commands eldoc-mode
   :diminish eldoc-mode)
