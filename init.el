@@ -591,6 +591,7 @@
   (load-theme 'doom-one t)
   (add-hook 'find-file-hook 'doom-buffer-mode)
   (add-hook 'minibuffer-setup-hook 'doom-brighten-minibuffer)
+  (add-hook 'ediff-prepare-buffer-hook 'doom-buffer-mode)
   (require 'doom-neotree)
   :config
   (diminish 'doom-buffer-mode)
