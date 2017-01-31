@@ -14,13 +14,10 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 (dolist (m '(tooltip-mode tool-bar-mode scroll-bar-mode))
     (when (fboundp m) (funcall m -1)))
-(line-number-mode 1)
 (column-number-mode 1)
 (show-paren-mode 1)
 (delete-selection-mode t)
 (global-auto-revert-mode t)
-(global-linum-mode t)
-(setq-default linum-format "%4d ")
 (setq use-dialog-box nil)
 (prefer-coding-system 'utf-8)
 (setq mouse-wheel-scroll-amount '(1 ((shift) . 5)))
@@ -156,6 +153,12 @@
   :config
   (setq anzu-cons-mode-line-p nil))
 
+(use-package nlinum
+  :commands nlinum-mode
+  :init (add-hook 'prog-mode-hook 'nlinum-mode)
+  :config
+  (setq nlinum-format "%4d "))
+
 ; -=[ Projects via projectile
 
 (defun ck/projectile-commander-setup ()
@@ -263,11 +266,7 @@
 (use-package doc-view
   :defer t
   :config
-  (setq doc-view-continuous t)
-  (add-hook 'doc-view-mode-hook
-            (lambda ()
-              (linum-mode -1)
-              )))
+  (setq doc-view-continuous t))
 
 ;; -=[ goto-address, makes links click-able
 
