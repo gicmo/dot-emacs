@@ -153,6 +153,9 @@
   :config
   (setq anzu-cons-mode-line-p nil))
 
+(use-package ag
+  :commands (ag ag-project))
+
 (use-package nlinum
   :commands nlinum-mode
   :init (add-hook 'prog-mode-hook 'nlinum-mode)
