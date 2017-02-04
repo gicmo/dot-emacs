@@ -164,6 +164,24 @@
   :config
   (setq nlinum-format "%4d "))
 
+;; -=[ spell checking, because I will never learn how to spell
+(use-package flyspell
+  :commands (flyspell-prog-mode flyspell-mode flyspell-buffer)
+  :diminish (flyspell-mode flyspell-prog-mode)
+  :init
+  (add-hook 'prog-mode-hook #'flyspell-prog-mode)
+  :config
+  (setq flyspell-issue-message-flag nil
+	flyspell-issue-welcome-flag nil)
+  (cond
+   ((executable-find "aspell")
+    (setq ispell-program-name "aspell")
+    (setq ispell-extra-args '("--sug-mode=ultra" "--lang=en_US")))
+   ((executable-find "hunspell")
+    (setq ispell-program-name "hunspell")
+    (setq ispell-really-hunspell t)
+    (setq ispell-extra-args '("-d en_US")))))
+
 ; -=[ Projects via projectile
 
 (defun ck/projectile-commander-setup ()
@@ -492,7 +510,7 @@
   :commands eldoc-mode
   :diminish eldoc-mode)
 
-;; === I will never learn how to spell ===
+;; -=[ better writing
 (defun ck-find-langtool ()
   "Find the locations of all available langtool jar (sorted) or nil."
   (let ((basedir '"/usr/local/Cellar/languagetool")
@@ -520,22 +538,6 @@
   :bind ("C-c s l" . synosaurus-lookup)
   :config (setq synosaurus-backend 'synosaurus-backend-wordnet))
 
-(use-package flyspell
-  :commands (flyspell-prog-mode flyspell-mode flyspell-buffer)
-  :diminish (flyspell-mode flyspell-prog-mode)
-  :init
-  (add-hook 'prog-mode-hook #'flyspell-prog-mode)
-  :config
-  (setq flyspell-issue-message-flag nil
-	flyspell-issue-welcome-flag nil)
-  (cond
-   ((executable-find "aspell")
-    (setq ispell-program-name "aspell")
-    (setq ispell-extra-args '("--sug-mode=ultra" "--lang=en_US")))
-   ((executable-find "hunspell")
-    (setq ispell-program-name "hunspell")
-    (setq ispell-really-hunspell t)
-    (setq ispell-extra-args '("-d en_US")))))
 
 ;; -=[ UI
 ;; resize the initial emacs window
