@@ -44,10 +44,12 @@
 
 ;; -=[ custom - write custom's settings to separate file
 (setq custom-file "~/.emacs.d/custom.el")
-(load custom-file)
+(when (file-exists-p custom-file)
+  (load custom-file))
 
 (add-to-list 'load-path "~/.emacs.d/elisp/")
 
+;; -=[ Dashboard
 (eval-when-compile
   (progn
     (require 'dashboard)
