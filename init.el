@@ -244,6 +244,10 @@
   :config
   (setq magit-diff-refine-hunk t))
 
+(use-package magithub
+  :after magit
+  :config (magithub-feature-autoinject t))
+
 ;; -=[ yasnippet
 (use-package yasnippet
   :diminish (yas-minor-mode . " ⓨ")
