@@ -211,6 +211,13 @@
   :config
   (setq git-timemachine-abbreviation-length 6))
 
+(use-package git-commit
+  :commands global-git-commit-mode
+  :init
+  (setq git-commit-summary-max-length 50
+        git-commit-fill-column 72)
+  (add-hook 'git-commit-setup-hook 'git-commit-turn-on-flyspell))
+
 (use-package magit
   :bind (("C-x g" . magit-status))
   :init
