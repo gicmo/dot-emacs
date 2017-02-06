@@ -487,6 +487,9 @@
   :init
   (add-hook 'rust-mode-hook 'cargo-minor-mode))
 
+(use-package toml-mode
+  :mode (("\\.toml\\'" . toml-mode)))
+
 ;; -=[ packaging
 (use-package rpm-spec-mode
   :mode "\\.spec\\'")
