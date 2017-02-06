@@ -164,6 +164,9 @@
   :config
   (setq nlinum-format "%4d "))
 
+(use-package hl-line
+  :commands hl-line-mode)
+
 ;; -=[ spell checking, because I will never learn how to spell
 (use-package flyspell
   :commands (flyspell-prog-mode flyspell-mode flyspell-buffer)
@@ -614,6 +617,7 @@
   (add-hook 'minibuffer-setup-hook 'doom-brighten-minibuffer)
   (add-hook 'ediff-prepare-buffer-hook 'doom-buffer-mode)
   (require 'doom-neotree)
+;;  (require 'doom-nlinum)
   :config
   (diminish 'doom-buffer-mode)
   )
