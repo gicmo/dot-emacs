@@ -520,6 +520,14 @@
   :commands eldoc-mode
   :diminish eldoc-mode)
 
+;; -=[ config files
+
+(use-package ini-mode
+  :ensure f ; locally installed in elisp
+  :mode (("\\.ini\\'" . ini-mode)
+	 ("\\.desktop\\'" . ini-mode)))
+
+
 ;; -=[ better writing
 (defun ck-find-langtool ()
   "Find the locations of all available langtool jar (sorted) or nil."
