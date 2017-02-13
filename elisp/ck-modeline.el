@@ -9,7 +9,8 @@
 
 (! (progn
      (require 'f)
-     (require 'projectile)))
+     (require 'projectile)
+     (require 'all-the-icons)))
 
 (defvar mode-line-height 20)
 (defvar mode-line-bar          (! (pl/percent-xpm mode-line-height 100 0 100 0 3 "#00B3EF" nil)))
@@ -188,6 +189,23 @@
              (if anzu--overflow-p "+" ""))
      'face (if active 'mode-line-count-face))))
 
+(defun ck/icon-for-mode ()
+  "Get an icon from all-the-icons for the current mode."
+  (let ((icon (all-the-icons-icon-for-buffer)))
+    (unless (symbolp icon) ;; This implies it's the major mode
+        (propertize icon
+                    'help-echo (format "Major-mode: `%s`" major-mode)
+                    'display '(raise 0.0)
+                    'face `(:height 1.0 :family ,(all-the-icons-icon-family-for-buffer) :inherit)
+		    'mouse-face 'mode-line-highlight
+		    'local-map (let ((map (make-sparse-keymap)))
+				 (define-key map [mode-line down-mouse-1]
+				   `(menu-item ,(purecopy "Menu Bar") ignore
+					       :filter (lambda (_) (mouse-menu-major-mode-map))))
+				 (define-key map [mode-line mouse-2] 'describe-mode)
+				 (define-key map [mode-line down-mouse-3] mode-line-mode-menu)
+				 map)))))
+
 (defun ck/mode-line ()
   "Our custom mode line."
   '(:eval
@@ -211,7 +229,9 @@
 			(concat (*buffer-cwd) " "))
 		      (if process (concat process " "))
 		      " "
-		      (powerline-major-mode)
+		      (if window-system
+			  (ck/icon-for-mode)
+			(powerline-major-mode))
 		      "  "
 		      (powerline-minor-modes)
 		      "  "

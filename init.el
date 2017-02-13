@@ -609,6 +609,7 @@
   (new-frames-setup (selected-frame)))
 
 ;; -=[ mode-line
+(use-package all-the-icons)
 (eval-when-compile
   (progn
     (require 'ck-modeline)
