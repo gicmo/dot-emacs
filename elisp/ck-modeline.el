@@ -189,6 +189,14 @@
              (if anzu--overflow-p "+" ""))
      'face (if active 'mode-line-count-face))))
 
+(defun ck/have-all-the-iconsp ()
+  "Check if we have all-the-icons support."
+  (and (featurep 'all-the-icons)
+       (find-font (font-spec :family "all-the-icons"))))
+
+(defvar ck/use-icon-for-major-mode (ck/have-all-the-iconsp)
+  "Use and icon (from all the icons) for the major mode.")
+
 (defun ck/icon-for-mode ()
   "Get an icon from all-the-icons for the current mode."
   (let ((icon (all-the-icons-icon-for-buffer)))
@@ -229,7 +237,7 @@
 			(concat (*buffer-cwd) " "))
 		      (if process (concat process " "))
 		      " "
-		      (if window-system
+		      (if (and window-system ck/use-icon-for-major-mode)
 			  (ck/icon-for-mode)
 			(powerline-major-mode))
 		      "  "
