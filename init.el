@@ -614,20 +614,33 @@
 	neo-banner-message nil
 	neo-show-updir-line nil
 	projectile-switch-project-action 'neotree-projectile-action))
+
 ;; -=[ fonts
 (defconst ck-fonts
-      '(("Hasklig" 12)
-	("Source Code Pro" 12)
-	("Inconsolata" 12)
-	("Menlo" 12)
-	("Monospace" 12)))
+      '(("Hasklig")
+	("Source Code Pro")
+	("Inconsolata")
+	("Menlo")
+	("Monospace")))
 
-(defun font-existsp (name size)
-  "Check if a font with a given NAME (or is Powerline version) and SIZE exists."
+(defun ck/font-size-for-system ()
+  "Determine the optimal font size to use."
+    (cond ((eq system-type 'gnu/linux)
+	   11)
+	  ((eq system-type 'darwin)
+	   12)
+	  (t 12)))
+
+(defvar ck/default-font-size
+  (ck/font-size-for-system)
+  "The default font size to use.")
+
+(defun font-existsp (name)
+  "Check if a font with a given NAME (or its Powerline version)."
   (cond ((find-font (font-spec :name (concat name " for Powerline")))
-	 (format "%s for Powerline-%d" name size))
+	 (format "%s for Powerline-%d" name ck/default-font-size))
 	((find-font (font-spec :name name))
-	 (format "%s-%d" name size))))
+	 (format "%s-%d" name ck/default-font-size))))
 
 (defun ck-first-font (lst)
   "Return the first valid font from LST."
