@@ -527,6 +527,8 @@
   :mode (("\\.ini\\'" . ini-mode)
 	 ("\\.desktop\\'" . ini-mode)))
 
+(use-package nginx-mode
+  :mode ("nginx.conf$" "/etc/nginx/.*"))
 
 ;; -=[ better writing
 (defun ck-find-langtool ()
