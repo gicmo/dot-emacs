@@ -522,6 +522,12 @@
 
 ;; -=[ config files
 
+(use-package apache-mode
+  :mode (("apache\\.conf\\'" . apache-mode)
+	 ("\\.htaccess\\'" . apache-mode)
+         ("httpd\\.conf\\'" . apache-mode)
+	 ("sites-\\(available\\|enabled\\)/" . apache-mode)))
+
 (use-package ini-mode
   :ensure f ; locally installed in elisp
   :mode (("\\.ini\\'" . ini-mode)
