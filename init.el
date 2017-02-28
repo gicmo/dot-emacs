@@ -185,6 +185,24 @@
     (setq ispell-really-hunspell t)
     (setq ispell-extra-args '("-d en_US")))))
 
+; -=[ Org
+(use-package org
+  :commands org-mode
+  :mode (("\\.org\\'" . org-mode))
+  :config
+  (setq org-fontify-whole-heading-line t
+	org-fontify-done-headline t
+	org-fontify-quote-and-verse-blocks t
+	org-src-fontify-natively t
+	org-src-tab-acts-natively t
+	org-src-window-setup 'current-window)
+  (use-package org-bullets
+    :init
+    (add-hook 'org-mode-hook
+	      (lambda ()
+		(org-bullets-mode t)))))
+
+
 ; -=[ Projects via projectile
 
 (defun ck/projectile-commander-setup ()
