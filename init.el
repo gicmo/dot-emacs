@@ -216,7 +216,7 @@
   :diminish ""
   :config
   (projectile-global-mode t)
-  (setq projectile-switch-project-action 'projectile-commander)
+  (setq projectile-switch-project-action 'projectile-dired)
   (ck/projectile-commander-setup))
 
 ; -=[ flycheck
