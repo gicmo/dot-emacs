@@ -196,6 +196,10 @@
 	org-src-fontify-natively t
 	org-src-tab-acts-natively t
 	org-src-window-setup 'current-window)
+  (use-package org-journal
+    :init
+    (setq org-journal-dir "~/Documents/Notes/journal"
+	  org-journal-file-format "%Y-%B.org"))
   (use-package org-bullets
     :init
     (add-hook 'org-mode-hook
