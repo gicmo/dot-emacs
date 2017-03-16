@@ -286,6 +286,7 @@
 
 ;; -=[ yasnippet
 (use-package yasnippet
+  :commands yas-minor-mode
   :diminish (yas-minor-mode . " ⓨ")
   :config
   (add-hook 'prog-mode-hook #'yas-minor-mode))
