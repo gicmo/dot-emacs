@@ -101,7 +101,8 @@
   :config
   (exec-path-from-shell-initialize)
   (exec-path-from-shell-copy-env "GOPATH")
-  (exec-path-from-shell-copy-env "RUST_SRC_PATH"))
+  (exec-path-from-shell-copy-env "RUST_SRC_PATH")
+  (exec-path-from-shell-copy-env "WORKON_HOME"))
 
 (use-package reveal-in-osx-finder
   :commands (reveal-in-osx-finder))
