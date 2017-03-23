@@ -538,7 +538,9 @@
 (use-package web-mode
   :mode (("\\.html?\\'" . web-mode)
 	 ("\\.xhtml$"   . web-mode)
-	 ("\\.vue\\'"   . web-mode)))
+	 ("\\.vue\\'"   . web-mode))
+  :config
+  (setq web-mode-enable-engine-detection t))
 
 (use-package yaml-mode
   :mode (("\\.yml\\'" . yaml-mode)))
