@@ -194,8 +194,19 @@
     (setq ispell-extra-args '("--sug-mode=ultra" "--lang=en_US")))
    ((executable-find "hunspell")
     (setq ispell-program-name "hunspell")
-    (setq ispell-really-hunspell t)
-    (setq ispell-extra-args '("-d en_US")))))
+    (setq ispell-really-hunspell t
+	  ispell-extra-args '("-i" "utf-8")
+	  ispell-local-dictionary-alist
+	  '(("deutsch"
+	     "[A-Za-zöäüß]" "[^A-Za-zöäüß]" "[']" nil
+	     ("-d" "de_DE")
+	     nil utf-8)
+	    ("english"
+	     "[A-Za-z]" "[^A-Za-z]" "[']" nil
+	     ("-d" "en_US")
+	     nil utf-8))
+	  ispell-dictionary "english"))
+   (t (setq ispell-program-name nil))))
 
 ; -=[ Org
 (use-package org
