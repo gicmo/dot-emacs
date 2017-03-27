@@ -94,6 +94,10 @@
     (global-set-key (kbd "M-`") 'other-frame))
   )
 
+(when (eq system-type 'gnu/linux)
+  (let ((default-directory "/usr/share/emacs/site-lisp/"))
+    (normal-top-level-add-subdirs-to-load-path)))
+
 ;; pick up the correct path from a login shell
 (use-package exec-path-from-shell
   :init
