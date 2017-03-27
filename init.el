@@ -432,6 +432,9 @@
      (add-hook 'irony-mode-hook 'irony-eldoc)))
 
 (use-package rtags
+  ;; we need to be in sync with the rtags daemon
+  ;; so lets use the one that is installed
+  :ensure f
   :bind (:map c-mode-base-map
 	      ("M-." . rtags-find-symbol-at-point))
   :config
