@@ -213,7 +213,10 @@
   :commands org-mode
   :mode (("\\.org\\'" . org-mode))
   :config
-  (setq org-fontify-whole-heading-line t
+  (setq org-directory "~/Documents/Notes/"
+	org-mobile-directory "~/Documents/Notes/.mobile"
+	org-mobile-inbox-for-pull  "~/Documents/Notes/todo.org"
+	org-fontify-whole-heading-line t
 	org-fontify-done-headline t
 	org-fontify-quote-and-verse-blocks t
 	org-src-fontify-natively t
