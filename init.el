@@ -625,6 +625,28 @@
   :bind ("C-c s l" . synosaurus-lookup)
   :config (setq synosaurus-backend 'synosaurus-backend-wordnet))
 
+;; -=[ Emacs as App
+
+;; mailer
+(defun ck/message-mode-setup()
+  "Adjustments for message mode"
+  (interactive)
+  (when (and buffer-file-name
+	     (string-match "gitsend" buffer-file-name))
+    (define-key (current-local-map) (kbd "C-c C-c") 'server-edit)))
+
+(use-package message
+  :ensure f
+  :commands (compose-mail message-mode)
+  :mode (("0000-cover-letter.patch" . message-mode))
+  :config
+  (setq  message-send-mail-function 'message-send-mail-with-sendmail
+	 sendmail-program "msmtp"
+	 message-sendmail-f-is-evil 't
+	 message-sendmail-extra-arguments '("--read-envelope-from")
+	 mail-host-address "kellner.me")
+  (add-hook 'message-mode-hook 'ck/message-mode-setup))
+
 
 ;; -=[ UI
 ;; resize the initial emacs window
