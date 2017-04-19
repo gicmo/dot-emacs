@@ -455,6 +455,9 @@
 (use-package cuda-mode
   :mode "\\.cu\\'")
 
+(use-package meson-mode
+  :mode "\\meson\\.build\\'")
+
 ;; -=[ docker
 (use-package dockerfile-mode
   :mode "Dockerfile\\'")
