@@ -641,7 +641,8 @@
 (use-package message
   :ensure f
   :commands (compose-mail message-mode)
-  :mode (("0000-cover-letter.patch" . message-mode))
+  :mode (("0000-cover-letter.patch" . message-mode)
+	 (".*/\.git/\.gitsendemail.msg.*" . message-mode))
   :config
   (setq  message-send-mail-function 'message-send-mail-with-sendmail
 	 sendmail-program "msmtp"
