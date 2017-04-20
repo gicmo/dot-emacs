@@ -218,6 +218,7 @@
   :mode (("\\.org\\'" . org-mode))
   :config
   (setq org-directory "~/Documents/Notes/"
+	org-agenda-files '("~/Documents/Notes/")
 	org-mobile-directory "~/Documents/Notes/.mobile"
 	org-mobile-inbox-for-pull  "~/Documents/Notes/todo.org"
 	org-fontify-whole-heading-line t
