@@ -466,7 +466,7 @@
 (use-package docker
   :defer t)
 
-; -=[ clojure
+; -=[ jvm: java, clojure, scala
 (use-package clojure-mode
   :mode "\\.clj"
   :config
@@ -474,6 +474,12 @@
   (add-hook 'clojure-mode-hook 'subword-mode)
   (add-hook 'clojure-mode-hook 'rainbow-delimiters-mode)
   (use-package clojure-mode-extra-font-locking))
+
+(use-package jdee
+  :mode ("\\.java\\'" . jdee-mode)
+  :config
+  (setq jdee-server-dir "~/.emacs.d/jdee-server/target"
+        jdee-mode-line-format (ck/mode-line)))
 
 ; -=[ Fortran
 (use-package f90
