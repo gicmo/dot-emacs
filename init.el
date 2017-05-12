@@ -754,11 +754,11 @@
   :init
   (load-theme 'doom-one t)
   (add-hook 'find-file-hook 'doom-buffer-mode)
+  (add-hook 'after-revert-hook 'doom-buffer-mode-maybe)
   (add-hook 'minibuffer-setup-hook 'doom-brighten-minibuffer)
   (add-hook 'ediff-prepare-buffer-hook 'doom-buffer-mode)
-  (require 'doom-neotree)
-;;  (require 'doom-nlinum)
-  :config
+  (doom-themes-neotree-config)
+  (doom-themes-nlinum-config)
   (diminish 'doom-buffer-mode)
   )
 
