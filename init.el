@@ -272,8 +272,8 @@
   :diminish (git-gutter-mode . "")
   :config
   (setq git-gutter-fr:side 'right-fringe)
-  ;;(setq-default right-fringe-width 22)
-  (add-hook 'prog-mode-hook #'git-gutter-mode)
+  (add-hook 'prog-mode-hook 'git-gutter-mode)
+  (add-hook 'focus-in-hook 'git-gutter:update-all-windows)
   (setq-default fringes-outside-margins t)
   (fringe-helper-define 'git-gutter-fr:added '(center repeated)
     "XXX.....")
