@@ -261,7 +261,11 @@
   :init
   (add-hook 'after-init-hook #'global-flycheck-mode)
   :config
-  (use-package flycheck-pos-tip)
+  (use-package flycheck-pos-tip
+    :config
+    (setq flycheck-pos-tip-timeout 7
+	  flycheck-display-errors-delay 0.5)
+    (flycheck-pos-tip-mode +1))
   (define-fringe-bitmap 'flycheck-fringe-bitmap-double-arrow
     [0 0 0 0 0 256 384 448 480 496 480 448 384 256 0 0 0 0 0]
     ))
