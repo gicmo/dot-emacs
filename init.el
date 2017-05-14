@@ -749,6 +749,10 @@
 (unless (daemonp)
   (new-frames-setup (selected-frame)))
 
+(let ((fr-size 4))
+  (push (cons 'left-fringe  fr-size) default-frame-alist)
+  (push (cons 'right-fringe fr-size) default-frame-alist))
+
 ;; -=[ mode-line
 (use-package all-the-icons)
 (eval-when-compile
