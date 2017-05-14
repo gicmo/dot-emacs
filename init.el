@@ -273,7 +273,14 @@
   :config
   (setq git-gutter-fr:side 'right-fringe)
   ;;(setq-default right-fringe-width 22)
-  (add-hook 'prog-mode-hook #'git-gutter-mode))
+  (add-hook 'prog-mode-hook #'git-gutter-mode)
+  (setq-default fringes-outside-margins t)
+  (fringe-helper-define 'git-gutter-fr:added '(center repeated)
+    "XXX.....")
+  (fringe-helper-define 'git-gutter-fr:modified '(center repeated)
+    "XXX.....")
+  (fringe-helper-define 'git-gutter-fr:deleted  '(center repeated)
+    "XXX....."))
 
 (use-package gitconfig-mode
   :mode (("\\.gitconfig\\'" . gitconfig-mode)
