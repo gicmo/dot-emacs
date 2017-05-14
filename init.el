@@ -454,14 +454,6 @@
   :config
   (rtags-enable-standard-keybindings))
 
-(use-package cmake-ide
-  :commands cmake-ide-setup
-  :init
-  (add-hook 'c-mode-common-hook 'cmake-ide-setup)
-  :config
-  (message "cmake ide starting")
-  (require 'rtags))
-
 (use-package cmake-mode
   :mode (("CMakeLists\\.txt\\'" . cmake-mode)
 	 ("\\.cmake\\'" . cmake-mode)))
