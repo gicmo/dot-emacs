@@ -418,14 +418,6 @@
 					  magic-mode-regexp-match-limit t)))
 	       . objc-mode))
 
-(defconst cc-style-nix
-  '("cc-mode"
-    (c-offsets-alist . ((innamespace . [0])))))
-
-(add-hook 'cc-mode-hook
-	  (lambda ()
-	    (c-add-style "cc-style-nix" cc-style-nix)))
-
 (use-package irony
   :commands irony-mode
   :diminish " ⓘ"
