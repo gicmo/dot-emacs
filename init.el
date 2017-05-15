@@ -183,6 +183,11 @@
 (use-package hl-line
   :commands hl-line-mode)
 
+(use-package back-button
+  :diminish ""
+  :config
+  (back-button-mode 1))
+
 ;; -=[ spell checking, because I will never learn how to spell
 (use-package flyspell
   :commands (flyspell-prog-mode flyspell-mode flyspell-buffer)
