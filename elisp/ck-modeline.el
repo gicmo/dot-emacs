@@ -17,9 +17,23 @@
 (defvar mode-line-eldoc-bar    (! (pl/percent-xpm mode-line-height 100 0 100 0 3 "#B3EF00" nil)))
 (defvar mode-line-inactive-bar (! (pl/percent-xpm mode-line-height 100 0 100 0 3 nil nil)))
 
+(defface doom-modeline-highlight
+  '((t (:inherit mode-line)))
+  "Face for bright segments of the mode-line."
+  :group '+doom-modeline)
+
+(defgroup +ck-modeline nil
+  ""
+  :group 'ck)
+
 (defface mode-line-is-modified nil "Face for mode-line modified symbol")
 (defface mode-line-buffer-path nil "Face for mode-line buffer file path")
-(defface mode-line-highlight nil "")
+
+(defface ck-modeline-highlight
+  '((t (:inherit doom-modeline-highlight)))
+  "Face for bright segments of the mode-line."
+  :group '+ck-modeline)
+
 (defface mode-line-2 nil "")
 
 (defface mode-line-vcs-info nil '((t (:inherit warning))))
@@ -64,7 +78,7 @@
   (when (*project-root-safe)
     (propertize
      (format "%s" (projectile-project-name))
-     'mouse-face 'mode-line-highlight
+     'mouse-face 'ck-modeline-highlight
      'face (if active 'mode-line-buffer-path)
      'help-echo (format "@ %s" (*project-root-safe)))))
 
@@ -113,7 +127,7 @@
   "Prepare PATH for mode-line: shorten, COLORIZE and add help text."
   (let ((short (*shorten-path path)))
     (propertize short
-		'mouse-face 'mode-line-highlight
+		'mouse-face 'ck-modeline-highlight
 		'face (if colorize 'mode-line-buffer-path)
 		'help-echo path)))
 
@@ -205,7 +219,7 @@
                     'help-echo (format "Major-mode: `%s`" major-mode)
                     'display '(raise 0.0)
                     'face `(:height 1.0 :family ,(all-the-icons-icon-family-for-buffer) :inherit)
-		    'mouse-face 'mode-line-highlight
+		    'mouse-face 'ck-modeline-highlight
 		    'local-map (let ((map (make-sparse-keymap)))
 				 (define-key map [mode-line down-mouse-1]
 				   `(menu-item ,(purecopy "Menu Bar") ignore
