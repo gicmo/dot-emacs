@@ -356,7 +356,8 @@
                           "/cache/.*\\'"
                           ".*\\.gz\\'")
         recentf-max-saved-items 50
-        recentf-max-menu-items 35)
+        recentf-max-menu-items 35
+	recentf-auto-cleanup 'never)
   (recentf-mode 1))
 
 ; == uniquify ==
