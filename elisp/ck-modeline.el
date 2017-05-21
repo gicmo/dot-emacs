@@ -34,13 +34,21 @@
   "Face for bright segments of the mode-line."
   :group '+ck-modeline)
 
+(defface doom-modeline-panel
+  '((t (:inherit mode-line-highlight)))
+  "Face for 'X out of Y' segments."
+  :group '+doom-modeline)
+
+(defface ck-modeline-panel
+  '((t (:inherit doom-modeline-panel)))
+  "Face for 'X out of Y' segments"
+  :group '+ck-modeline)
+
 (defface mode-line-2 nil "")
 
 (defface mode-line-vcs-info nil '((t (:inherit warning))))
 (defface mode-line-vcs-warning nil '((t (:inherit warning))))
 
-; use for anzu-mode
-(defface mode-line-count-face nil "")
 
 (defun *shorten-directory (dir &optional max-length)
   "Show directory name of `DIR', reduced to `MAX-LENGTH' characters."
@@ -201,7 +209,7 @@
      (format " %s/%d%s "
              anzu--current-position anzu--total-matched
              (if anzu--overflow-p "+" ""))
-     'face (if active 'mode-line-count-face))))
+     'face (if active 'ck-modeline-panel))))
 
 (defun ck/have-all-the-iconsp ()
   "Check if we have all-the-icons support."
