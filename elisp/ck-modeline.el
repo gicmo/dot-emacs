@@ -44,8 +44,6 @@
   "Face for 'X out of Y' segments"
   :group '+ck-modeline)
 
-(defface mode-line-2 nil "")
-
 (defface ck-modeline-info
   `((t (:inherit success)))
   "Face for info-level messages in the modeline."
@@ -59,6 +57,11 @@
 (defface ck-modeline-urgent
   `((t (:inherit error)))
   "Face for errors in the modeline."
+  :group '+ck-modeline)
+
+(defface ck-modeline-dimmed
+  `((t (:inherit shadow)))
+  "Face for less important information in the modeline"
   :group '+ck-modeline)
 
 
@@ -180,7 +183,7 @@
   "Displays `default-directory'."
   (propertize
    (concat "[" (*shorten-directory (abbreviate-file-name default-directory)) "]")
-   'face (if active 'mode-line-2)))
+   'face (if active 'ck-modeline-dimmed)))
 
 (defun *buffer-encoding-abbrev ()
   "The line ending convention used in the buffer."
@@ -281,7 +284,7 @@
 		      ))
 	   (rhs (list (*buffer-encoding-abbrev)
                       (*vc)
-                      (propertize (concat " (%l,%c) " (*buffer-position)) 'face (if active 'mode-line-2))
+                      (propertize (concat " (%l,%c) " (*buffer-position)) 'face (if active 'ck-modeline-dimmed))
 		      ))
 	   (center (propertize
                     " " 'display `((space :align-to (- (+ right right-fringe right-margin)
