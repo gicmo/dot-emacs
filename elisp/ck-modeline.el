@@ -46,8 +46,20 @@
 
 (defface mode-line-2 nil "")
 
-(defface mode-line-vcs-info nil '((t (:inherit warning))))
-(defface mode-line-vcs-warning nil '((t (:inherit warning))))
+(defface ck-modeline-info
+  `((t (:inherit success)))
+  "Face for info-level messages in the modeline."
+  :group '+ck-modeline)
+
+(defface ck-modeline-warning
+  `((t (:inherit warning)))
+  "Face for warnings in the modeline."
+  :group '+ck-modeline)
+
+(defface ck-modeline-urgent
+  `((t (:inherit error)))
+  "Face for errors in the modeline."
+  :group '+ck-modeline)
 
 
 (defun *shorten-directory (dir &optional max-length)
@@ -182,9 +194,9 @@
     (let ((backend (concat " " (substring vc-mode (+ 2 (length (symbol-name (vc-backend buffer-file-name)))))))
           (face (let ((state (vc-state buffer-file-name)))
                   (cond ((memq state '(edited added))
-                         'mode-line-vcs-info)
+                         'ck-modeline-info)
                         ((memq state '(removed needs-merge needs-update conflict removed unregistered))
-                         'mode-line-vcs-warning)))))
+                         'ck-modeline-warning)))))
       (if active
           (propertize backend 'face face)
         backend))))
