@@ -168,6 +168,7 @@
    ([remap isearch-query-replace-regexp] . anzu-isearch-query-replace-regexp))
   :init
   (global-anzu-mode 1)
+  (diminish 'isearch-mode)
   :config
   (setq anzu-cons-mode-line-p nil))
 
