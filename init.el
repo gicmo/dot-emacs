@@ -543,6 +543,7 @@
 
 (use-package racer
   :commands racer-mode
+  :diminish racer-mode
   :init
   (add-hook 'rust-mode-hook 'racer-mode)
   :bind (:map rust-mode-map
@@ -559,6 +560,7 @@
 
 (use-package cargo
   :commands cargo-minor-mode
+  :diminish cargo-minor-mode
   :init
   (add-hook 'rust-mode-hook 'cargo-minor-mode))
 
