@@ -25,6 +25,7 @@
 (global-set-key (kbd "<mouse-7>") 'scroll-left)
 (put 'scroll-left 'disabled nil)
 (fset 'display-startup-echo-area-message #'ignore)
+(setq mode-line-default-help-echo nil)
 
 ;; Disable Ctrl-Z minimization/suspension of emacs.
 (global-set-key [C-z] nil)
