@@ -187,9 +187,22 @@
 
 (defun *buffer-encoding-abbrev ()
   "The line ending convention used in the buffer."
-  (if (memq buffer-file-coding-system '(utf-8 utf-8-unix))
-      ""
-    (concat (symbol-name buffer-file-coding-system) " ")))
+  (when buffer-file-name
+    (let* ((eol-type (coding-system-eol-type buffer-file-coding-system))
+	   (eol-str (cond ((eq eol-type 0) "LF")
+			  ((eq eol-type 1) "CRLF")
+			  ((eq eol-type 2) "CR")))
+	   (sys (coding-system-plist buffer-file-coding-system))
+	   (sys-name (plist-get sys :name))
+	   (sys-cat (plist-get sys :category)))
+      (propertize
+       (cond ((memq sys-cat '(coding-category-undecided coding-category-utf-8))
+	      "utf-8")
+	     (t (downcase (symbol-name sys-name))))
+       'mouse-face 'ck-modeline-highlight
+       'face (if active 'ck-modeline-dimmed)
+       'help-echo eol-str
+       ))))
 
 (defun *vc ()
   "Displays the current branch, colored based on its state."
@@ -282,8 +295,8 @@
 		      "  "
 		      (*anzu)
 		      ))
-	   (rhs (list (*buffer-encoding-abbrev)
-                      (*vc)
+	   (rhs (list (*vc)
+		      (concat " " (*buffer-encoding-abbrev))
                       (propertize (concat " (%l,%c) " (*buffer-position)) 'face (if active 'ck-modeline-dimmed))
 		      ))
 	   (center (propertize
