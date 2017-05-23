@@ -3,12 +3,18 @@ elpa/*
 auto-save-list
 *~
 .DS_Store
+session.*
+
+# I use custom for per host overwrites
+custom.el
 
 # mode related temp files
 ido.last
 recentf
 irony/
 request/
+var/
+tramp
 
 #multiple cursors
 .mc-lists.el
