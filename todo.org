@@ -1,0 +1,9 @@
+* General
+* Modline
+** TODO colorize with doom-theme
+** TODO jdee mode integration
+* Dashboard
+** TODO projectile switch to project key
+* Languages
+** rust
+*** TODO experimental rsp integration
