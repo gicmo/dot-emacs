@@ -536,7 +536,7 @@
 (use-package rust-mode
   :mode "\\.rs\\'"
   :config
-  (add-hook 'rust-mode-hock 'rustfmt-enable-on-save)
+  (add-hook 'rust-mode-hook 'rustfmt-enable-on-save)
   (use-package flycheck-rust
     :after flycheck
     :commands flycheck-rust-setup
