@@ -176,6 +176,9 @@
 (use-package ag
   :commands (ag ag-project))
 
+(use-package fzf
+  :commands fzf)
+
 (use-package nlinum
   :commands nlinum-mode
   :init (add-hook 'prog-mode-hook 'nlinum-mode)
