@@ -322,7 +322,9 @@
 
 (use-package magithub
   :after magit
-  :config (magithub-feature-autoinject t))
+  :config
+  (magithub-feature-autoinject t)
+  (setq magithub-api-timeout 3))
 
 ;; -=[ yasnippet
 (use-package yasnippet
