@@ -1,4 +1,5 @@
 * General
+** flyspell for message mode
 * Modline
 ** TODO colorize with doom-theme
 ** TODO jdee mode integration
