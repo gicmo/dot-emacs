@@ -421,12 +421,17 @@
   :mode "\\.\\(nasm\\|s\\)$")
 
 ; -=[ C/C++/ObjC and friends
-(setq c-hungry-delete-key t)
+(use-package cc-mode
+  :bind (:map c-mode-base-map
+	      ("C-c o" . ff-find-other-file))
+  :config
+  (setq c-hungry-delete-key t
+	indent-tabs-mode nil
+	gdb-many-windows t
+	gdb-show-main t))
 
 (add-hook 'c-mode-common-hook
 	  (lambda ()
-	    (setq indent-tabs-mode nil)
-	    (setq c-indent-level 4)
 	    (font-lock-add-keywords nil
 				    '(("\\<\\(FIXME\\):" 1 font-lock-warning-face t)))
 	    (define-key c-mode-base-map (kbd "C-c o") 'ff-find-other-file)
