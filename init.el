@@ -186,7 +186,16 @@
   (setq nlinum-format "%4d "))
 
 (use-package hl-line
-  :commands hl-line-mode)
+  :after nlinum
+  :commands hl-line-mode
+  :init
+  (add-hook 'nlinum-mode-hook #'hl-line-mode))
+
+(use-package nlinum-hl
+  :after nlinum
+  :commands nlinum-hl-mode
+  :init
+  (add-hook 'nlinum-mode-hook #'nlinum-hl-mode))
 
 (use-package back-button
   :diminish ""
@@ -771,7 +780,6 @@
   (load-theme 'doom-one t)
   (doom-themes-neotree-config)
   (doom-themes-visual-bell-config)
-  (doom-themes-nlinum-config)
   (use-package solaire-mode
     :init
     (add-hook 'after-change-major-mode-hook #'turn-on-solaire-mode)
