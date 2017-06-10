@@ -436,14 +436,9 @@
 				    '(("\\<\\(FIXME\\):" 1 font-lock-warning-face t)))
 	    (define-key c-mode-base-map (kbd "C-c o") 'ff-find-other-file)
 	    ))
-
-; objc mode for header files
-(add-to-list 'magic-mode-alist
-	     `(,(lambda ()
-		  (and (string= (file-name-extension (or buffer-file-name "DEF-NAME")) "h")
-		       (re-search-forward "@\\<interface\\>"
-					  magic-mode-regexp-match-limit t)))
-	       . objc-mode))
+; detect major mode (objc, c++-mode) for header
+(use-package dummy-h-mode
+  :mode "\\.h$")
 
 (use-package irony
   :commands irony-mode
