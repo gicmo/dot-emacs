@@ -5,6 +5,8 @@
 ** TODO jdee mode integration
 * Dashboard
 ** TODO projectile switch to project key
-* Languages
+* Programming
+** general
+*** FIXME hl for all prog-modes
 ** rust
 *** TODO experimental rsp integration

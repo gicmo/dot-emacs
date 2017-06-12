@@ -430,12 +430,6 @@
 	gdb-many-windows t
 	gdb-show-main t))
 
-(add-hook 'c-mode-common-hook
-	  (lambda ()
-	    (font-lock-add-keywords nil
-				    '(("\\<\\(FIXME\\):" 1 font-lock-warning-face t)))
-	    (define-key c-mode-base-map (kbd "C-c o") 'ff-find-other-file)
-	    ))
 ; detect major mode (objc, c++-mode) for header
 (use-package dummy-h-mode
   :mode "\\.h$")
