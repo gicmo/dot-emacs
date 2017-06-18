@@ -191,12 +191,6 @@
   :init
   (add-hook 'nlinum-mode-hook #'hl-line-mode))
 
-(use-package nlinum-hl
-  :after nlinum
-  :commands nlinum-hl-mode
-  :init
-  (add-hook 'nlinum-mode-hook #'nlinum-hl-mode))
-
 (use-package back-button
   :diminish ""
   :config
