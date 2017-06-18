@@ -194,7 +194,11 @@
   (add-hook 'nlinum-mode-hook #'hl-line-mode))
 
 (use-package back-button
+  :commands (back-button-mode)
+  :defer 2
   :diminish ""
+  :init
+  (setq back-button-show-toolbar-buttons nil)
   :config
   (back-button-mode 1))
 
