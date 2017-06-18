@@ -269,7 +269,7 @@
 (use-package projectile
   :diminish ""
   :config
-  (projectile-global-mode t)
+  (projectile-mode t)
   (setq projectile-switch-project-action 'projectile-dired)
   (ck/projectile-commander-setup))
 
