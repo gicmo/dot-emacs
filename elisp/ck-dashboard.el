@@ -1,4 +1,4 @@
-;;; dashboard.el --- My initial emacs buffer
+;;; ck-dashboard.el --- My initial emacs buffer
 
 ;; Copyright (C) 2016  Christian Kellner
 
@@ -95,6 +95,7 @@
 			       'face 'font-lock-comment-face))
       (set-buffer-modified-p nil))))
 
+;;;###autoload
 (defun dashboard-show ()
   "Show the dashboard."
   (interactive)
@@ -111,6 +112,6 @@
     (setq buffer-read-only t)
     (set-buffer-modified-p nil)))
 
-(provide 'dashboard)
-;;; dashboard.el ends here
+(provide 'ck-dashboard)
+;;; ck-dashboard.el ends here
 

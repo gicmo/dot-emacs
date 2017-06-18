@@ -50,12 +50,6 @@
 
 (add-to-list 'load-path "~/.emacs.d/elisp/")
 
-;; -=[ Dashboard
-(eval-when-compile
-  (progn
-    (require 'dashboard)
-    (dashboard-show)))
-
 
 ;; === package management
 (require 'package)
@@ -81,6 +75,14 @@
 (require 'bind-key)
 
 (setq use-package-always-ensure t)
+
+;; -=[ Dashboard
+(use-package ck-dashboard
+  :load-path "elisp"
+  :ensure f
+  :commands dashboard-show
+  :init
+  (dashboard-show))
 
 ;; -=[ OSX
 (when (eq system-type 'darwin)
