@@ -6,6 +6,15 @@ ifeq ($(UNAME_S),Darwin)
 	EMACS="/Applications/Emacs.app/Contents/MacOS/Emacs"
 endif
 
+FILES = elisp/ck-dashboard.elc elisp/ck-modeline.elc
+
+%.elc: %.el
+	emacs -l "$(HOME)/.emacs.d/init.el" -L . -batch -f batch-byte-compile $<
+
+compile: $(FILES)
+
+clean:
+	rm -f *.elc
 
 profile-dotemacs.el:
 	curl -O http://www.randomsample.de/profile-dotemacs.el
