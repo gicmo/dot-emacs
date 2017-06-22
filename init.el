@@ -469,6 +469,12 @@
 (use-package cuda-mode
   :mode "\\.cu\\'")
 
+(use-package glsl-mode
+  :mode (("\\.glsl\\'" . glsl-mode)
+	 ("\\.vert\\'" . glsl-mode)
+	 ("\\.geom\\'" . glsl-mode)
+	 ("\\.frag\\'" . glsl-mode)))
+
 (use-package meson-mode
   :mode "\\meson\\.build\\'")
 
