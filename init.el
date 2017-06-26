@@ -677,7 +677,8 @@
 	 message-sendmail-f-is-evil 't
 	 message-sendmail-extra-arguments '("--read-envelope-from")
 	 mail-host-address "kellner.me")
-  (add-hook 'message-mode-hook 'ck/message-mode-setup))
+  (add-hook 'message-mode-hook 'ck/message-mode-setup)
+  (add-hook 'message-mode-hook #'flyspell-mode))
 
 
 ;; -=[ UI
