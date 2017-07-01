@@ -428,7 +428,11 @@
   (setq c-hungry-delete-key t
 	indent-tabs-mode nil
 	gdb-many-windows t
-	gdb-show-main t))
+	gdb-show-main t)
+  (use-package flycheck-clang-analyzer
+    :after flycheck
+    :config
+    (flycheck-clang-analyzer-setup)))
 
 ; detect major mode (objc, c++-mode) for header
 (use-package dummy-h-mode
