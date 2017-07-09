@@ -23,8 +23,6 @@
 ;;
 
 ;;; Code:
-;;;###autoload
-
 (defconst ck-fonts
       '(("Hasklig")
 	("Source Code Pro")
@@ -72,6 +70,7 @@
   (or (apply 'font-existsp (car lst))
       (ck-first-font (cdr lst))))
 
+;;;###autoload
 (defun ck-set-font ()
   "Set the default font from the ck-fonts list."
   (set-face-attribute 'default nil :font (ck-first-font ck-fonts)))
