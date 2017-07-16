@@ -104,6 +104,7 @@
 
 ;; pick up the correct path from a login shell
 (use-package exec-path-from-shell
+  :if (memq system-type '(gnu gnu/linux darwin))
   :init
   (customize-set-variable 'exec-path-from-shell-arguments nil)
   :config
