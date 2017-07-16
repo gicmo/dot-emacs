@@ -24,56 +24,70 @@
 
 ;;; Code:
 (defconst ck-fonts
-      '(("Hasklig")
-	("Source Code Pro")
-	("Inconsolata")
-	("Menlo")
-	("Monospace")))
+  '("Hasklig"
+    "Source Code Pro"
+    "Inconsolata"
+    "Menlo"
+    "Monospace"))
 
-(defun ck/system-font ()
-  "Return the system's monospace font as a list with name and size."
-  (cond ((eq system-type 'gnu/linux)
-	 (let ((input (shell-command-to-string
-		       (mapconcat 'identity
-				  '("gsettings get org.gnome.desktop.interface"
-				    "monospace-font-name")
-				  " "))))
-	   (when (string-match "[ \t\"]*'\\(.*\\) \\([0-9]+\\)'[ \n\"]*$" input)
-	     (list (match-string 1 input)
-		   (string-to-number (match-string 2 input))))))))
+(defun ck/gnome-mono-font ()
+  "Return the 's monospace font as a list with name and size."
+  (let ((input (shell-command-to-string
+		 (mapconcat 'identity
+			    '("gsettings get org.gnome.desktop.interface"
+			      "monospace-font-name")
+			    " "))))
+    (when (string-match "[ \t\"]*'\\(.*\\) \\([0-9]+\\)'[ \n\"]*$" input)
+      (list (match-string 1 input)
+	    (string-to-number (match-string 2 input))))))
 
 (defun ck/font-size-for-system ()
   "Determine the optimal font size to use."
   (cond ((eq system-type 'gnu/linux)
-	 (let ((sys-font (ck/system-font)))
+	 (let ((sys-font (ck/gnome-mono-font)))
 	   (if sys-font
 	       (nth 1 sys-font)
-	     11
-	     )))
+	     11)))
 	  ((eq system-type 'darwin)
 	   12)
 	  (t 12)))
 
-(defvar ck/default-font-size
-  (ck/font-size-for-system)
-  "The default font size to use.")
-
 (defun font-existsp (name)
   "Check if a font with a given NAME (or its Powerline version)."
-  (cond ((find-font (font-spec :name (concat name " for Powerline")))
-	 (format "%s for Powerline-%d" name ck/default-font-size))
-	((find-font (font-spec :name name))
-	 (format "%s-%d" name ck/default-font-size))))
+  (if (find-font (font-spec :name name))
+      name))
+
+(defun ck/mk-font-checked (name size)
+  "Format NAME and SIZE if NAME is available."
+  (if (font-existsp name)
+      (format "%s-%d" name size)))
 
 (defun ck-first-font (lst)
   "Return the first valid font from LST."
-  (or (apply 'font-existsp (car lst))
+  (or (font-existsp (car lst))
       (ck-first-font (cdr lst))))
+
+
+(defcustom ck-font-size
+  (ck/font-size-for-system)
+  "The default font size to use."
+  :type 'number
+  :group 'ck)
+
+(defcustom ck-font
+  (ck-first-font ck-fonts)
+  "The default font to use."
+  :options ck-fonts
+  :type 'string
+  :group 'ck)
 
 ;;;###autoload
 (defun ck-set-font ()
   "Set the default font from the ck-fonts list."
-  (set-face-attribute 'default nil :font (ck-first-font ck-fonts)))
+  (let ((font (ck/mk-font-checked ck-font ck-font-size)))
+    (if font
+	(set-face-attribute 'default nil :font font)
+      (message "Could not apply font [%s]" font))))
 
 (provide 'ck-fonts)
 ;;; ck-fonts.el ends here
