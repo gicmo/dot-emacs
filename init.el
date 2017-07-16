@@ -159,7 +159,10 @@
       (ido-initiate-auto-merge (current-buffer))))
   (use-package flx-ido
     :init
-    (flx-ido-mode t)))
+    (flx-ido-mode t))
+  (use-package ido-vertical-mode
+    :init
+    (ido-vertical-mode 1)))
 
 (use-package anzu
   :diminish ""
