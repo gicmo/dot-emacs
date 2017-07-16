@@ -326,7 +326,7 @@
   :commands global-git-commit-mode
   :init
   (setq git-commit-summary-max-length 50
-        git-commit-fill-column 72)
+        fill-column 72)
   (add-hook 'git-commit-setup-hook 'git-commit-turn-on-flyspell))
 
 (use-package magit
