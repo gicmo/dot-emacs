@@ -121,9 +121,14 @@
   :bind (("C-x C-j" . dired-jump)))
 
 (use-package dired+
+  :defer t
   :init
-  (setq diredp-hide-details-initially-flag nil
-	global-dired-hide-details-mode -1)
+  (defun setup-dired ()
+    "Setup dired."
+     (setq diredp-hide-details-initially-flag nil
+	   global-dired-hide-details-mode -1)
+     (require 'dired+))
+  (add-hook 'dired-load-hook #'setup-dired)
   :config
   (diredp-toggle-find-file-reuse-dir 1)
   (define-key dired-mode-map [mouse-2] 'diredp-mouse-find-file)
