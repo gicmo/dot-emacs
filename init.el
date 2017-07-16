@@ -334,6 +334,7 @@
 
 (use-package magithub
   :after magit
+  :disabled
   :config
   (magithub-feature-autoinject t)
   (setq magithub-api-timeout 3))
