@@ -51,6 +51,8 @@
 	     11)))
 	  ((eq system-type 'darwin)
 	   12)
+	  ((eq system-type 'windows-nt)
+	   10)
 	  (t 12)))
 
 (defun font-existsp (name)
