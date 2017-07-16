@@ -69,6 +69,7 @@
 
 (eval-when-compile
   (require 'use-package)
+  (require 'fringe-helper)
   (use-package cl))
 
 (require 'diminish)
