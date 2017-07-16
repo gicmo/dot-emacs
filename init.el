@@ -570,17 +570,14 @@
   :diminish racer-mode
   :init
   (add-hook 'rust-mode-hook 'racer-mode)
+  (add-hook 'rust-mode-hook 'eldoc-mode)
   :bind (:map rust-mode-map
 	 ("M-." . racer-find-definition))
   :config
-  (racer-turn-on-eldoc)
   (use-package company-racer
     :config
     (add-to-list 'company-backends 'company-racer)
-    (setq company-tooltip-align-annotations t)
-    :bind (:map rust-mode-map
-		("M-." . racer-find-definition)))
-  )
+    (setq company-tooltip-align-annotations t)))
 
 (use-package cargo
   :commands cargo-minor-mode
