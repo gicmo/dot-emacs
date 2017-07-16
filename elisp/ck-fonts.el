@@ -27,6 +27,7 @@
   '("Hasklig"
     "Source Code Pro"
     "Inconsolata"
+    "Consolas"
     "Menlo"
     "Monospace"))
 
