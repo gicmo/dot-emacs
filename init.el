@@ -444,6 +444,7 @@
 	gdb-many-windows t
 	gdb-show-main t)
   (use-package flycheck-clang-analyzer
+    :disabled
     :after flycheck
     :config
     (flycheck-clang-analyzer-setup)))
