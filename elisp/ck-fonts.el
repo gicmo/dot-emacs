@@ -24,7 +24,8 @@
 
 ;;; Code:
 (defconst ck-fonts
-  '("Hasklig"
+  '("Fira Code"
+    "Hasklig"
     "Source Code Pro"
     "Inconsolata"
     "Consolas"
