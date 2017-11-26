@@ -16,7 +16,7 @@ if [[ "${system}" == "Darwin" ]]; then
 	svn export http://llvm.org/svn/llvm-project/cfe/trunk/include/clang-c/ irony/include/clang-c
     fi
     CLANG_INCDIR="irony/include"
-    CLANG_LIB=`xcode-select --print-path`/usr/lib/libclang.dylib
+    CLANG_LIB=`xcode-select --print-path`/Toolchains/XcodeDefault.xctoolchain/usr/lib/libclang.dylib
 else
     CLANG_INCDIR="/usr/include/clang-c"
     CLANG_LIB="/usr/lib64/libclang.so"
