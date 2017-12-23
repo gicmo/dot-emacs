@@ -201,9 +201,7 @@
 
 (use-package hl-line
   :after nlinum
-  :commands hl-line-mode
-  :init
-  (add-hook 'nlinum-mode-hook #'hl-line-mode))
+  :hook (nlinum-mode . hl-line-mode))
 
 (use-package back-button
   :commands (back-button-mode)
