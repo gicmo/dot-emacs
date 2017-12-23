@@ -478,6 +478,7 @@
   :ensure f
   :bind (:map c-mode-base-map
 	      ("M-." . rtags-find-symbol-at-point))
+  :hook ((c-mode c++-mode objc-mode) . rtags-start-process-unless-running)
   :config
   (rtags-enable-standard-keybindings))
 
