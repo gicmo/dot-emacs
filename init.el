@@ -477,7 +477,8 @@
   ;; so lets use the one that is installed
   :ensure f
   :bind (:map c-mode-base-map
-	      ("M-." . rtags-find-symbol-at-point))
+	      ("M-." . rtags-find-symbol-at-point)
+	      ("M-," . rtags-find-references-at-point))
   :hook ((c-mode c++-mode objc-mode) . rtags-start-process-unless-running)
   :config
   (rtags-enable-standard-keybindings))
