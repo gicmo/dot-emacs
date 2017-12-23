@@ -195,8 +195,7 @@
   :commands fzf)
 
 (use-package nlinum
-  :commands nlinum-mode
-  :init (add-hook 'prog-mode-hook 'nlinum-mode)
+  :hook (prog-mode . nlinum-mode)
   :config
   (setq nlinum-format "%4d "))
 
