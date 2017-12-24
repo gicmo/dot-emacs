@@ -216,8 +216,7 @@
 (use-package flyspell
   :commands (flyspell-prog-mode flyspell-mode flyspell-buffer)
   :diminish (flyspell-mode flyspell-prog-mode)
-  :init
-  (add-hook 'prog-mode-hook #'flyspell-prog-mode)
+  :hook (prog-mode . flyspell-prog-mode)
   :config
   (setq flyspell-issue-message-flag nil
 	flyspell-issue-welcome-flag nil)
