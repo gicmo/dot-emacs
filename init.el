@@ -260,10 +260,7 @@
     (setq org-journal-dir "~/Documents/Notes/journal"
 	  org-journal-file-format "%Y-%B.org"))
   (use-package org-bullets
-    :init
-    (add-hook 'org-mode-hook
-	      (lambda ()
-		(org-bullets-mode t)))))
+    :hook (org-mode . org-bullets-mode)))
 
 
 ; -=[ Projects via projectile
