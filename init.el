@@ -283,8 +283,7 @@
 (use-package flycheck
   :commands global-flycheck-mode
   :diminish " ⓕ"
-  :init
-  (add-hook 'after-init-hook #'global-flycheck-mode)
+  :hook (after-init . global-flycheck-mode)
   :config
   (use-package flycheck-pos-tip
     :config
