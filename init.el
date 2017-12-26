@@ -495,10 +495,10 @@
 ; -=[ jvm: java, clojure, scala
 (use-package clojure-mode
   :mode "\\.clj"
+  :hook ((clojure-mode . enable-paredit-mode)
+	 (clojure-mode . subword-mode)
+	 (clojure-mode . rainbow-delimiters-mode))
   :config
-  (add-hook 'clojure-mode-hook 'enable-paredit-mode)
-  (add-hook 'clojure-mode-hook 'subword-mode)
-  (add-hook 'clojure-mode-hook 'rainbow-delimiters-mode)
   (use-package clojure-mode-extra-font-locking))
 
 (use-package jdee
