@@ -539,6 +539,15 @@
   :init
   (add-hook 'go-mode-hook 'go-eldoc-setup))
 
+;; -=[ Haskell
+(use-package haskell-mode
+  :mode (("\\.hs$" . haskell-mode)
+         ("\\.lhs$" . literate-haskell-mode)
+	 ("\\.cabal\\'" . haskell-cabal-mode))
+  :config
+  (use-package intero
+    :hook (haskell-mode . intero-mode)))
+
 ;; -=[ Python
 (use-package elpy
   :commands elpy-enable
