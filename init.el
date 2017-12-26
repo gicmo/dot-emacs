@@ -353,8 +353,7 @@
 ; === autocompletion
 (use-package company
   :diminish " ⓒ"
-  :init
-  (add-hook 'after-init-hook 'global-company-mode)
+  :hook (after-init . global-company-mode)
   :config
   (setq company-tooltip-align-annotations t))
 
