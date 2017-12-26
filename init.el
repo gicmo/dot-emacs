@@ -567,9 +567,9 @@
 (use-package racer
   :commands racer-mode
   :diminish racer-mode
-  :init
-  (add-hook 'rust-mode-hook 'racer-mode)
-  (add-hook 'rust-mode-hook 'eldoc-mode)
+  :hook
+  ((rust-mode . racer-mode)
+   (rust-mode . eldoc-mode))
   :bind (:map rust-mode-map
 	 ("M-." . racer-find-definition))
   :config
@@ -581,8 +581,7 @@
 (use-package cargo
   :commands cargo-minor-mode
   :diminish cargo-minor-mode
-  :init
-  (add-hook 'rust-mode-hook 'cargo-minor-mode))
+  :hook (rust-mode . cargo-minor-mode))
 
 (use-package toml-mode
   :mode (("\\.toml\\'" . toml-mode)))
