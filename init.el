@@ -442,8 +442,7 @@
 (use-package irony
   :commands irony-mode
   :diminish " ⓘ"
-  :init
-  (add-hook 'c-mode-common-hook 'irony-mode)
+  :hook ((c-mode c++-mode objc-mode) . irony-mode)
   :config
   (add-to-list 'company-backends 'company-irony)
   (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
@@ -455,13 +454,14 @@
     :config
     (flycheck-irony-setup))
   (use-package irony-eldoc
-     :init
-     (add-hook 'irony-mode-hook 'irony-eldoc)))
+    :after irony
+    :hook irony-mode))
 
 (use-package rtags
   ;; we need to be in sync with the rtags daemon
   ;; so lets use the one that is installed
   :ensure f
+  :commands rtags-enable-standard-keybindings
   :bind (:map c-mode-base-map
 	      ("M-." . rtags-find-symbol-at-point)
 	      ("M-," . rtags-find-references-at-point))
