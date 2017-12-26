@@ -348,8 +348,7 @@
 (use-package yasnippet
   :commands yas-minor-mode
   :diminish (yas-minor-mode . " ⓨ")
-  :config
-  (add-hook 'prog-mode-hook #'yas-minor-mode))
+  :hook (prog-mode . yas-minor-mode))
 
 ; === autocompletion
 (use-package company
