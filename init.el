@@ -717,10 +717,12 @@
 
 ;; -=[ mode-line
 (use-package all-the-icons)
-(eval-when-compile
-  (progn
-    (require 'ck-modeline)
-    (setq-default mode-line-format (ck/mode-line))))
+(use-package ck-modeline
+  :commands ck/mode-line
+  :ensure f
+  :load-path "elisp"
+  :init
+  (setq-default mode-line-format (ck/mode-line)))
 
 ;; -=[ color themes
 
