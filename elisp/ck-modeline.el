@@ -325,7 +325,6 @@
   "Displays flycheck status if ACTIVE."
   (when (boundp 'flycheck-last-status-change)
     (let* ((state flycheck-last-status-change)
-	   (is-finished (eq state 'finished))
 	   (total-errors (flycheck-count-errors flycheck-current-errors))
 	   (errors (or (alist-get 'error total-errors) 0))
 	   (warnings (or (alist-get 'warning total-errors) 0))
