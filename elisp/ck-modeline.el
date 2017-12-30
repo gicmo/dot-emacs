@@ -264,6 +264,7 @@
 				 (define-key map [mode-line down-mouse-3] mode-line-mode-menu)
 				 map)))))
 
+;;;###autoload
 (defun ck/mode-line ()
   "Our custom mode line."
   '(:eval
