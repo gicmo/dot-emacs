@@ -248,37 +248,43 @@
 
 (defun ck/have-all-the-iconsp ()
   "Check if we have all-the-icons support."
-  (and (featurep 'all-the-icons)
+  (and (window-system)
+       (featurep 'all-the-icons)
        (find-font (font-spec :family "all-the-icons"))))
 
-(defvar ck/use-icon-for-major-mode (ck/have-all-the-iconsp)
+(defvar ck/use-icon-font (ck/have-all-the-iconsp)
   "Use and icon (from all the icons) for the major mode.")
 
 (defun ck/ml-icon (family name &rest args)
   "Get an icon for the FAMILY with the NAME and optionally a :fallback in ARGS."
-  (if ck/use-icon-for-major-mode
+  (if ck/use-icon-font
       (apply (cond
 	      ((equal family "octicon") 'all-the-icons-octicon)
 	      ((equal family "material") 'all-the-icons-material))
 	     (append (list name) args))
     (or (plist-get args :fallback) name)))
 
-(defun ck/icon-for-mode ()
-  "Get an icon from all-the-icons for the current mode."
-  (let ((icon (all-the-icons-icon-for-buffer)))
-    (unless (symbolp icon) ;; This implies it's the major mode
-        (propertize icon
-                    'help-echo (format "Major-mode: `%s` Minor-modes: `%s`" major-mode (format-mode-line minor-mode-alist))
-                    'display '(raise 0.1)
-                    'face `(:family ,(all-the-icons-icon-family-for-buffer) :height 0.8 :inherit)
-		    'mouse-face 'ck-modeline-highlight
-		    'local-map (let ((map (make-sparse-keymap)))
-				 (define-key map [mode-line down-mouse-1]
-				   `(menu-item ,(purecopy "Menu Bar") ignore
-					       :filter (lambda (_) (mouse-menu-major-mode-map))))
-				 (define-key map [mode-line mouse-2] 'describe-mode)
-				 (define-key map [mode-line down-mouse-3] mode-line-mode-menu)
-				 map)))))
+(defun ck/indicator-for-major-mode ()
+  "Get an indicator (icon or name) for the major mode."
+  (let* ((maybe-icon (and ck/use-icon-font (all-the-icons-icon-for-buffer)))
+	 (icon (if (not (symbolp maybe-icon)) maybe-icon))
+	 (face (if icon (list :family (all-the-icons-icon-family-for-buffer) :height 0.8)))
+	 (elevation (if icon 0.1 0.0))
+	 (the-mode (format-mode-line mode-name))
+	 (minor-modes (format-mode-line minor-mode-alist))
+	 (indicator (or icon the-mode)))
+    (propertize indicator
+		'help-echo (format "%s | %s" the-mode minor-modes)
+		'display `(raise ,elevation)
+		'face face
+		'mouse-face 'ck-modeline-highlight
+		'local-map (let ((map (make-sparse-keymap)))
+			     (define-key map [mode-line down-mouse-1]
+			       `(menu-item ,(purecopy "Menu Bar") ignore
+					   :filter (lambda (_) (mouse-menu-major-mode-map))))
+			     (define-key map [mode-line mouse-2] 'describe-mode)
+			     (define-key map [mode-line down-mouse-3] mode-line-mode-menu)
+			     map))))
 
 ;;
 (defun ck/ml-make-mm-mouse-map (mm)
@@ -362,9 +368,7 @@
 						   mode-line-bar
 						 mode-line-inactive-bar))
 		      " "
-		      (if (and window-system ck/use-icon-for-major-mode)
-			  (ck/icon-for-mode)
-			(powerline-major-mode))
+		      (ck/indicator-for-major-mode)
                       " "
 		      (cond (project-name
 			     (ck/ml-project-id project-root project-name filename active))
