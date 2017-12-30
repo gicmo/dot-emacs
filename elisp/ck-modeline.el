@@ -239,6 +239,13 @@
              (if anzu--overflow-p "+" ""))
      'face (if active 'ck-modeline-panel))))
 
+(defun ck/ml-num-cursors (ml-active)
+  "If more then one cursor is active, show how many; highlighted if ML-ACTIVE."
+  (when (fboundp 'mc/num-cursors)
+    (let ((n (mc/num-cursors)))
+      (when (> n 1)
+	(propertize (format " %d " n) 'face (if ml-active 'ck-modeline-panel))))))
+
 (defun ck/have-all-the-iconsp ()
   "Check if we have all-the-icons support."
   (and (featurep 'all-the-icons)
@@ -295,6 +302,7 @@
 		      (powerline-minor-modes)
 		      "  "
 		      (*anzu)
+		      (ck/ml-num-cursors active)
 		      ))
 	   (rhs (list (*vc)
 		      (concat " " (*buffer-encoding-abbrev))
