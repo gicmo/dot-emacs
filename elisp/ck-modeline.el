@@ -262,7 +262,7 @@
 	      ((equal family "octicon") 'all-the-icons-octicon)
 	      ((equal family "material") 'all-the-icons-material))
 	     (append (list name) args))
-    (or (plist-get args :fallback) name)))
+    (propertize (or (plist-get args :fallback) name) 'face (plist-get args :face))))
 
 (defun ck/indicator-for-major-mode ()
   "Get an indicator (icon or name) for the major mode."
