@@ -19,11 +19,6 @@
 (defvar mode-line-eldoc-bar    (! (pl/percent-xpm mode-line-height 100 0 100 0 3 "#B3EF00" nil)))
 (defvar mode-line-inactive-bar (! (pl/percent-xpm mode-line-height 100 0 100 0 3 nil nil)))
 
-(defface doom-modeline-highlight
-  '((t (:inherit mode-line)))
-  "Face for bright segments of the mode-line."
-  :group '+doom-modeline)
-
 (defgroup +ck-modeline nil
   ""
   :group 'ck)
@@ -32,7 +27,7 @@
 (defface mode-line-buffer-path nil "Face for mode-line buffer file path")
 
 (defface ck-modeline-highlight
-  '((t (:inherit doom-modeline-highlight)))
+  '((t (:inherit mode-line-highlight)))
   "Face for bright segments of the mode-line."
   :group '+ck-modeline)
 
