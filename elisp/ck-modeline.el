@@ -42,22 +42,22 @@
   :group '+ck-modeline)
 
 (defface ck-modeline-info
-  `((t (:inherit success)))
+  '((t (:inherit success)))
   "Face for info-level messages in the modeline."
   :group '+ck-modeline)
 
 (defface ck-modeline-warning
-  `((t (:inherit warning)))
+  '((t (:inherit warning)))
   "Face for warnings in the modeline."
   :group '+ck-modeline)
 
 (defface ck-modeline-urgent
-  `((t (:inherit error)))
+  '((t (:inherit error)))
   "Face for errors in the modeline."
   :group '+ck-modeline)
 
 (defface ck-modeline-dimmed
-  `((t (:inherit shadow)))
+  '((t (:inherit shadow)))
   "Face for less important information in the modeline"
   :group '+ck-modeline)
 
@@ -310,6 +310,14 @@
 	      'mouse-face 'ck-modeline-highlight
 	      'local-map (ck/ml-make-mm-mouse-map mm)))
 
+(defun ck/list-minor-modes (modes)
+  "Return the intersection of MODES and active minor modes."
+  (seq-filter (lambda (mm)
+		(let* ((name (car mm))
+		       (active (and (boundp name) (symbol-value name))))
+		(and active (seq-filter (lambda (x) (eq name x)) modes))))
+	      minor-mode-alist))
+
 ;; flycheck
 (defun ck/ml-flycheck-face (state warnings errors)
   "Face for flycheck based on STATE, WARNINGS and ERRORS."
@@ -403,3 +411,4 @@
 
 (provide 'ck-modeline)
 ;;; ck-modeline.el ends here
+
