@@ -276,6 +276,10 @@
            (lhs (list (propertize " " 'display (if active
 						   mode-line-bar
 						 mode-line-inactive-bar))
+		      " "
+		      (if (and window-system ck/use-icon-for-major-mode)
+			  (ck/icon-for-mode)
+			(powerline-major-mode))
                       " "
 		      (cond (project-name
 			     (*project-id project-root project-name filename))
@@ -286,10 +290,6 @@
 		      (unless (or project-name filename)
 			(concat (*buffer-cwd) " "))
 		      (if process (concat process " "))
-		      " "
-		      (if (and window-system ck/use-icon-for-major-mode)
-			  (ck/icon-for-mode)
-			(powerline-major-mode))
 		      "  "
 		      (powerline-minor-modes)
 		      "  "
