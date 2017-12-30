@@ -171,10 +171,13 @@
   "The state of the buffer (read-only, modified, new-file)."
   (when buffer-file-name
     (propertize
-     (concat (if (not (file-exists-p buffer-file-name))
-                 "∄"
-               (if (buffer-modified-p) "●"))
-             (if buffer-read-only ""))
+     (concat (if (buffer-modified-p)
+		 (if (file-exists-p buffer-file-name)
+		     "●"
+		   "◉")
+	       (if buffer-read-only
+		    ""
+		  "○")))
      'face 'mode-line-is-modified)))
 
 (defun *buffer-name ()
