@@ -93,8 +93,8 @@
 	(projectile-project-root)
       (error nil)))
 
-(defun *project-name ()
-  "Return the formatted name of an active project."
+(defun ck/ml-project-name (active)
+  "Return the formatted name of an active project (honor ACTIVE)."
   (when (*project-root-safe)
     (propertize
      (format "%s" (projectile-project-name))
@@ -151,8 +151,8 @@
 		'face (if colorize 'mode-line-buffer-path)
 		'help-echo path)))
 
-(defun *project-id (project-root project-name filename)
-  "Generate a project id based on PROJECT-ROOT, PROJECT-NAME and FILENAME."
+(defun ck/ml-project-id (project-root project-name filename active)
+  "Generate a project id based on PROJECT-ROOT, PROJECT-NAME and FILENAME (honor ACTIVE)."
   (let* ((sep (if filename ":" " • "))
 	 (filepath (or filename default-directory))
 	 (relname (file-relpath filepath project-root))
@@ -179,14 +179,14 @@
   "The buffer's name."
   (string-trim-left (format-mode-line "%b")))
 
-(defun *buffer-cwd ()
-  "Displays `default-directory'."
+(defun ck/ml-buffer-cwd (active)
+  "Displays `default-directory' (honoring ACTIVE)."
   (propertize
    (concat "[" (*shorten-directory (abbreviate-file-name default-directory)) "]")
    'face (if active 'ck-modeline-dimmed)))
 
-(defun *buffer-encoding-abbrev ()
-  "The line ending convention used in the buffer."
+(defun ck/ml-buffer-encoding-abbrev (active)
+  "The line ending convention used in the buffer (honour ACTIVE)."
   (when buffer-file-name
     (let* ((eol-type (coding-system-eol-type buffer-file-coding-system))
 	   (eol-str (cond ((eq eol-type 0) "LF")
@@ -204,8 +204,8 @@
        'help-echo eol-str
        ))))
 
-(defun *vc ()
-  "Displays the current branch, colored based on its state."
+(defun ck/ml-vc (active)
+  "Displays the current branch, colored based on its state (honoring ACTIVE)."
   (when vc-mode
     (let ((backend (concat " " (substring vc-mode (+ 2 (length (symbol-name (vc-backend buffer-file-name)))))))
           (face (let ((state (vc-state buffer-file-name)))
@@ -230,8 +230,8 @@
             (t (format ":%d%%%%" (/ end 0.01 pend)))))))
 
 (make-variable-buffer-local 'anzu--state)
-(defun *anzu ()
-  "Show the current match and the total number."
+(defun ck/ml-anzu (active)
+  "Show the current match and the total number (honoring ACTIVE)."
   (when (and (featurep 'anzu) anzu--state)
     (propertize
      (format " %s/%d%s "
@@ -355,7 +355,7 @@
   '(:eval
     (let* ((active (powerline-selected-window-active))
 	   (project-root (*project-root-safe))
-	   (project-name (and project-root (*project-name)))
+	   (project-name (and project-root (ck/ml-project-name active)))
 	   (filename buffer-file-name)
 	   (process (powerline-process))
 	   ;; now build the mode line
@@ -368,23 +368,23 @@
 			(powerline-major-mode))
                       " "
 		      (cond (project-name
-			     (*project-id project-root project-name filename))
+			     (ck/ml-project-id project-root project-name filename active))
 			    (filename filename)
 			    (t (*buffer-name)))
                       " "
                       (*buffer-state)
 		      (unless (or project-name filename)
-			(concat (*buffer-cwd) " "))
+			(concat (ck/ml-buffer-cwd active) " "))
 		      (if process (concat process " "))
 		      "  "
 		      (powerline-minor-modes)
 		      "  "
-		      (*anzu)
+		      (ck/ml-anzu active)
 		      (ck/ml-num-cursors active)
 		      ))
 	   (rhs (list (concat (ck/ml-flycheck active) " ")
-		      (*vc)
-		      (concat " " (*buffer-encoding-abbrev))
+		      (ck/ml-vc active)
+		      (concat " " (ck/ml-buffer-encoding-abbrev active))
                       (propertize (concat " (%l,%c) " (*buffer-position)) 'face (if active 'ck-modeline-dimmed))
 		      ))
 	   (center (propertize
