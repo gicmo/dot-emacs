@@ -254,6 +254,15 @@
 (defvar ck/use-icon-for-major-mode (ck/have-all-the-iconsp)
   "Use and icon (from all the icons) for the major mode.")
 
+(defun ck/ml-icon (family name &rest args)
+  "Get an icon for the FAMILY with the NAME and optionally a :fallback in ARGS."
+  (if ck/use-icon-for-major-mode
+      (apply (cond
+	      ((equal family "octicon") 'all-the-icons-octicon)
+	      ((equal family "material") 'all-the-icons-material))
+	     (append (list name) args))
+    (or (plist-get args :fallback) name)))
+
 (defun ck/icon-for-mode ()
   "Get an icon from all-the-icons for the current mode."
   (let ((icon (all-the-icons-icon-for-buffer)))
@@ -270,6 +279,75 @@
 				 (define-key map [mode-line mouse-2] 'describe-mode)
 				 (define-key map [mode-line down-mouse-3] mode-line-mode-menu)
 				 map)))))
+
+;;
+(defun ck/ml-make-mm-mouse-map (mm)
+  "Make a mouse map for minor mode MM."
+  (let ((map (make-sparse-keymap)))
+    (define-key map
+      [mode-line down-mouse-1]
+      `(lambda (event)
+	 (interactive "@e")
+	 (minor-mode-menu-from-indicator ,mm)))
+    map))
+
+(defun ck/ml-make-minor-mode (mm &optional str)
+  "Make a insertable string for the modeline MM replace with STR."
+  (propertize (or str mm)
+	      'mouse-face 'ck-modeline-highlight
+	      'local-map (ck/ml-make-mm-mouse-map mm)))
+
+(defun ck/ml-flycheck-face (state warnings errors)
+  "Face for flycheck based on STATE, WARNINGS and ERRORS."
+  (pcase state
+    ('finished (cond ((> errors 0) 'ck-modeline-urgent)
+		     ((> warnings 0) 'ck-modeline-warning)
+		     ('t 'ck-modeline-info)))
+    ('no-checker 'ck-modeline-warning)
+    ('errored 'ck-modeline-urgent)
+    (_ 'ck-modeline-dimmed)))
+
+(defvar ck--ml-flycheck-issues nil)
+(defun ck/ml-flycheck-mk-text (state issues)
+  "STATE with ISSUES."
+  (pcase state
+    ('finished (if (> issues 0)
+		   (number-to-string issues)
+		 (setq ck--ml-flycheck-issues nil)))
+    ('running (and ck--ml-flycheck-issues (number-to-string ck--ml-flycheck-issues)))
+    ('no-checker "-")
+    ('errored "Error")
+    ('interrupted "Interrupted")
+    ('not-checked nil)
+    (_ "?")))
+
+(defun ck/ml-flycheck (active)
+  "Displays flycheck status if ACTIVE."
+  (when (boundp 'flycheck-last-status-change)
+    (let* ((state flycheck-last-status-change)
+	   (is-finished (eq state 'finished))
+	   (total-errors (flycheck-count-errors flycheck-current-errors))
+	   (errors (or (alist-get 'error total-errors) 0))
+	   (warnings (or (alist-get 'warning total-errors) 0))
+	   (issues (+ errors warnings))
+	   (saved (not (buffer-modified-p)))
+	   (face (if (and active saved) (ck/ml-flycheck-face state warnings errors) 'ck-modeline-dimmed))
+	   (text (ck/ml-flycheck-mk-text state issues))
+	   (icon (pcase state
+		   ('finished (if (> issues 0)
+				  (list "material" "warning")
+				(list "material" "check")))
+		   ('running     (list "material" "access_time"))
+		   ('no-checker  (list "material" "error"))
+		   ('errored     (list "material" "error"))
+		   ('interrupted (list "material" "pause"))
+		   ('not-checked (list "material" "do_not_disturb_alt"))
+		   (_            (list "material" "do_not_disturb_alt")))))
+      (ck/ml-make-minor-mode
+       " ⓕ"
+       (concat (apply 'ck/ml-icon (append icon (list :face face :v-adjust -0.1 :height 0.8)))
+	       (if text " ")
+	       (if text (propertize text 'face face)))))))
 
 ;;;###autoload
 (defun ck/mode-line ()
@@ -304,7 +382,8 @@
 		      (*anzu)
 		      (ck/ml-num-cursors active)
 		      ))
-	   (rhs (list (*vc)
+	   (rhs (list (concat (ck/ml-flycheck active) " ")
+		      (*vc)
 		      (concat " " (*buffer-encoding-abbrev))
                       (propertize (concat " (%l,%c) " (*buffer-position)) 'face (if active 'ck-modeline-dimmed))
 		      ))
