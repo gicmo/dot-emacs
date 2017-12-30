@@ -4,13 +4,15 @@
 ;;;;  https://github.com/hlissner/.emacs.d/blob/master/core/core-ui.el
 ;;; Code:
 
-(use-package powerline)
 (defalias '! 'eval-when-compile)
 
-(! (progn
-     (require 'f)
-     (require 'projectile)
-     (require 'all-the-icons)))
+(eval-when-compile
+  (require 'f)
+  (require 'projectile)
+  (require 'all-the-icons)
+  (require 'use-package)
+  (use-package cl)
+  (use-package powerline))
 
 (defvar mode-line-height 20)
 (defvar mode-line-bar          (! (pl/percent-xpm mode-line-height 100 0 100 0 3 "#00B3EF" nil)))
