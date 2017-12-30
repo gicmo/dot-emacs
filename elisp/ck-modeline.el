@@ -1,4 +1,4 @@
-;;; ck-modeline.el --- custom modeline configuration
+;;; ck-modeline.el --- custom modeline configuration -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;;  Heavily based on the code of Emacs doom by @hlissner:
 ;;;;  https://github.com/hlissner/.emacs.d/blob/master/core/core-ui.el
