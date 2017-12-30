@@ -72,7 +72,6 @@
   (require 'fringe-helper)
   (use-package cl))
 
-(require 'diminish)
 (require 'bind-key)
 
 (setq use-package-always-ensure t)
@@ -151,7 +150,6 @@
 ; -=[ EditorConfig
 
 (use-package editorconfig
-  :diminish ""
   :init
   (editorconfig-mode 1))
 
@@ -175,7 +173,6 @@
     (ido-vertical-mode 1)))
 
 (use-package anzu
-  :diminish ""
   :bind
   (([remap query-replace] . anzu-query-replace)
    ([remap query-replace-regexp] . anzu-query-replace-regexp)
@@ -184,7 +181,6 @@
    ([remap isearch-query-replace-regexp] . anzu-isearch-query-replace-regexp))
   :init
   (global-anzu-mode 1)
-  (diminish 'isearch-mode)
   :config
   (setq anzu-cons-mode-line-p nil))
 
@@ -206,7 +202,6 @@
 (use-package back-button
   :commands (back-button-mode)
   :defer 2
-  :diminish ""
   :init
   (setq back-button-show-toolbar-buttons nil)
   :config
@@ -215,7 +210,6 @@
 ;; -=[ spell checking, because I will never learn how to spell
 (use-package flyspell
   :commands (flyspell-prog-mode flyspell-mode flyspell-buffer)
-  :diminish (flyspell-mode flyspell-prog-mode)
   :hook (prog-mode . flyspell-prog-mode)
   :config
   (setq flyspell-issue-message-flag nil
@@ -273,7 +267,6 @@
     (projectile-dired)))
 
 (use-package projectile
-  :diminish ""
   :config
   (projectile-mode t)
   (setq projectile-switch-project-action 'projectile-dired)
@@ -282,7 +275,6 @@
 ; -=[ flycheck
 (use-package flycheck
   :commands global-flycheck-mode
-  :diminish " ⓕ"
   :hook (after-init . global-flycheck-mode)
   :config
   (use-package flycheck-pos-tip
@@ -297,7 +289,6 @@
 ;; -=[ git
 (use-package git-gutter-fringe
   :if window-system
-  :diminish (git-gutter-mode . "")
   :config
   (setq git-gutter-fr:side 'right-fringe)
   (add-hook 'prog-mode-hook 'git-gutter-mode)
@@ -347,12 +338,10 @@
 ;; -=[ yasnippet
 (use-package yasnippet
   :commands yas-minor-mode
-  :diminish (yas-minor-mode . " ⓨ")
   :hook (prog-mode . yas-minor-mode))
 
 ; === autocompletion
 (use-package company
-  :diminish " ⓒ"
   :hook (after-init . global-company-mode)
   :config
   (setq company-tooltip-align-annotations t))
@@ -441,7 +430,6 @@
 
 (use-package irony
   :commands irony-mode
-  :diminish " ⓘ"
   :hook ((c-mode c++-mode objc-mode) . irony-mode)
   :config
   (add-to-list 'company-backends 'company-irony)
@@ -575,7 +563,6 @@
 
 (use-package racer
   :commands racer-mode
-  :diminish racer-mode
   :hook
   ((rust-mode . racer-mode)
    (rust-mode . eldoc-mode))
@@ -589,7 +576,6 @@
 
 (use-package cargo
   :commands cargo-minor-mode
-  :diminish cargo-minor-mode
   :hook (rust-mode . cargo-minor-mode))
 
 (use-package toml-mode
@@ -621,8 +607,7 @@
   :bind (("C-c d" . devhelp-word-at-point)))
 
 (use-package eldoc
-  :commands eldoc-mode
-  :diminish eldoc-mode)
+  :commands eldoc-mode)
 
 ;; -=[ config files
 
