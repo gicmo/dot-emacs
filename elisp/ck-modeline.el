@@ -7,12 +7,13 @@
 (defalias '! 'eval-when-compile)
 
 (eval-when-compile
-  (require 'f)
-  (require 'projectile)
   (require 'all-the-icons)
-  (require 'use-package)
-  (use-package cl)
-  (use-package powerline))
+  (require 'anzu)
+  (require 'cl)
+  (require 'f)
+  (require 'flycheck)
+  (require 'projectile)
+  (require 'powerline))
 
 (defvar mode-line-height 20)
 (defvar mode-line-bar          (! (pl/percent-xpm mode-line-height 100 0 100 0 3 "#00B3EF" nil)))
