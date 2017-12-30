@@ -252,9 +252,9 @@
   (let ((icon (all-the-icons-icon-for-buffer)))
     (unless (symbolp icon) ;; This implies it's the major mode
         (propertize icon
-                    'display '(raise 0.0)
-                    'face `(:height 1.0 :family ,(all-the-icons-icon-family-for-buffer) :inherit)
                     'help-echo (format "Major-mode: `%s` Minor-modes: `%s`" major-mode (format-mode-line minor-mode-alist))
+                    'display '(raise 0.1)
+                    'face `(:family ,(all-the-icons-icon-family-for-buffer) :height 0.8 :inherit)
 		    'mouse-face 'ck-modeline-highlight
 		    'local-map (let ((map (make-sparse-keymap)))
 				 (define-key map [mode-line down-mouse-1]
