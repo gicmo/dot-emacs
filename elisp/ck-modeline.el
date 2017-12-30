@@ -325,10 +325,8 @@
 (defun ck/ml-flycheck-mk-text (state issues)
   "STATE with ISSUES."
   (pcase state
-    ('finished (if (> issues 0)
-		   (number-to-string issues)
-		 (setq ck--ml-flycheck-issues nil)))
-    ('running (and ck--ml-flycheck-issues (number-to-string ck--ml-flycheck-issues)))
+    ('finished (setq ck--ml-flycheck-issues (and (> issues 0) (number-to-string issues))))
+    ('running ck--ml-flycheck-issues)
     ('no-checker "-")
     ('errored "Error")
     ('interrupted "Interrupted")
