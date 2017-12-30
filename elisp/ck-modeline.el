@@ -318,6 +318,32 @@
 		(and active (seq-filter (lambda (x) (eq name x)) modes))))
 	      minor-mode-alist))
 
+(defun ck/mm-fill-mode ()
+  "Indicator for fill mode."
+  (when (and (boundp 'auto-fill-function) (symbol-value 'auto-fill-function))
+    (propertize (ck/ml-icon "material" "line_style"
+			    :fallback "ⓕ"
+			    :v-adjust -0.1
+			    :height 0.8)
+		'help-echo (format "Auto-Fill: %d" fill-column)
+		'mouse-face 'ck-modeline-highlight)))
+
+(defun ck/mm-flyspell-mode ()
+  "Indicator for fill mode."
+  (when (and (boundp 'flyspell-mode) (symbol-value 'flyspell-mode))
+    (propertize (ck/ml-icon "material" "playlist_add_check"
+			    :fallback "ⓢ"
+			    :v-adjust -0.1
+			    :height 0.8)
+		'help-echo (format "Spell checker active")
+		'mouse-face 'ck-modeline-highlight)))
+
+(defun ck/ml-minor-modes ()
+  "Return the well-defined list of minor mode indicators (honor ACTIVE)."
+  (let ((modes (list (ck/mm-fill-mode)
+		     (ck/mm-flyspell-mode))))
+    (mapconcat #'identity (seq-filter 'identity modes) " ")))
+
 ;; flycheck
 (defun ck/ml-flycheck-face (state warnings errors)
   "Face for flycheck based on STATE, WARNINGS and ERRORS."
@@ -393,7 +419,7 @@
 			(concat (ck/ml-buffer-cwd active) " "))
 		      (if process (concat process " "))
 		      "  "
-		      (powerline-minor-modes)
+		      (ck/ml-minor-modes)
 		      "  "
 		      (ck/ml-anzu active)
 		      (ck/ml-num-cursors active)
