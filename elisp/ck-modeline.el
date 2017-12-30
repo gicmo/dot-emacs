@@ -287,22 +287,30 @@
 			     map))))
 
 ;;
+(defun ck/ml-mm-mouse-menu (mm)
+  "Get the mouse menu for the minor mode MM."
+  (let* ((map (cdr-safe (assoc mm minor-mode-map-alist)))
+	 (menu (and (keymapp map) (lookup-key map [menu-bar])))
+	 (mouse-menu (if menu (mouse-menu-non-singleton menu))))
+    (popup-menu mouse-menu)))
+
 (defun ck/ml-make-mm-mouse-map (mm)
   "Make a mouse map for minor mode MM."
-  (let ((map (make-sparse-keymap)))
-    (define-key map
+  (let ((my-map (make-sparse-keymap)))
+    (define-key my-map
       [mode-line down-mouse-1]
       `(lambda (event)
 	 (interactive "@e")
-	 (minor-mode-menu-from-indicator ,mm)))
-    map))
+	 (ck/ml-mm-mouse-menu (quote ,mm))))
+    my-map))
 
-(defun ck/ml-make-minor-mode (mm &optional str)
+(defun ck/ml-make-minor-mode (mm str)
   "Make a insertable string for the modeline MM replace with STR."
-  (propertize (or str mm)
+  (propertize str
 	      'mouse-face 'ck-modeline-highlight
 	      'local-map (ck/ml-make-mm-mouse-map mm)))
 
+;; flycheck
 (defun ck/ml-flycheck-face (state warnings errors)
   "Face for flycheck based on STATE, WARNINGS and ERRORS."
   (pcase state
@@ -348,8 +356,7 @@
 		   ('interrupted (list "material" "pause"))
 		   ('not-checked (list "material" "do_not_disturb_alt"))
 		   (_            (list "material" "do_not_disturb_alt")))))
-      (ck/ml-make-minor-mode
-       " ⓕ"
+      (ck/ml-make-minor-mode 'flycheck-mode
        (concat (apply 'ck/ml-icon (append icon (list :face face :v-adjust -0.1 :height 0.8)))
 	       (if text " ")
 	       (if text (propertize text 'face face)))))))
