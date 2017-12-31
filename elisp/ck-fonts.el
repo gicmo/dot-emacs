@@ -90,7 +90,11 @@
   "Set the default font from the ck-fonts list."
   (let ((font (ck/mk-font-checked ck-font ck-font-size)))
     (if font
-	(set-face-attribute 'default nil :font font)
+	(progn
+	  (set-face-attribute 'default nil :font font)
+	  (when (string-prefix-p "PragmataPro" font)
+	    (require 'ck-pragmata-pro)
+	    (ck/pragmata-pro-prettify-for '(prog-mode))))
       (message "Could not apply font [%s]" font))))
 
 (provide 'ck-fonts)
