@@ -204,18 +204,22 @@
        'help-echo eol-str
        ))))
 
+(defun ck/ml-vc-face (active)
+  "Face for current vc, honoring ACTIVE."
+  (when active
+    (let ((state (vc-state buffer-file-name)))
+      (cond ((memq state '(edited added))
+	     'ck-modeline-info)
+	    ((memq state '(removed needs-merge needs-update conflict removed unregistered))
+	     'ck-modeline-warning)))))
+
 (defun ck/ml-vc (active)
   "Displays the current branch, colored based on its state (honoring ACTIVE)."
   (when vc-mode
-    (let ((backend (concat " " (substring vc-mode (+ 2 (length (symbol-name (vc-backend buffer-file-name)))))))
-          (face (let ((state (vc-state buffer-file-name)))
-                  (cond ((memq state '(edited added))
-                         'ck-modeline-info)
-                        ((memq state '(removed needs-merge needs-update conflict removed unregistered))
-                         'ck-modeline-warning)))))
-      (if active
-          (propertize backend 'face face)
-        backend))))
+    (let* ((branch (substring vc-mode (+ 2 (length (symbol-name (vc-backend buffer-file-name))))))
+	   (face   (ck/ml-vc-face active))
+	   (icon   (ck/ml-icon "octicon" "git-branch" :fallback "" :v-adjust 0.1 :height 0.8 :face face)))
+      (concat icon " " (propertize branch 'face face)))))
 
 (defun *buffer-position ()
   "A more vim-like buffer position."
