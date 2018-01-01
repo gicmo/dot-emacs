@@ -343,6 +343,8 @@
 	     (append (list name) args))
     (propertize (or (plist-get args :fallback) name) 'face (plist-get args :face))))
 
+(ck-memoize 'ck/ml-icon)
+
 (defun ck/indicator-for-major-mode ()
   "Get an indicator (icon or name) for the major mode."
   (let* ((maybe-icon (and ck/use-icon-font (all-the-icons-icon-for-buffer)))
