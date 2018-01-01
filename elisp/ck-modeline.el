@@ -239,17 +239,17 @@
      ((listp mode-line-process) (format-mode-line mode-line-process))
      (t mode-line-process)))
 
-(defun *buffer-state ()
+(defun ck/ml-buffer-state (_)
   "The state of the buffer (read-only, modified, new-file)."
   (when buffer-file-name
     (propertize
-     (concat (if (buffer-modified-p)
-		 (if (file-exists-p buffer-file-name)
-		     "●"
-		   "◉")
-	       (if buffer-read-only
-		    ""
-		  "○")))
+     (if (buffer-modified-p)
+	 (if (file-exists-p buffer-file-name)
+	     "●"
+	   "◉")
+       (if buffer-read-only
+	   ""
+	 "○"))
      'face 'mode-line-is-modified)))
 
 (defun *buffer-name ()
@@ -504,9 +504,9 @@
                       " "
 		      (ck/ml-buffer-id active)
                       " "
-                      (*buffer-state)
+                      (ck/ml-buffer-state active)
 		      (if process (concat process " "))
-		      "  "
+		      " "
 		      (ck/ml-minor-modes)
 		      "  "
 		      (ck/ml-anzu active)
