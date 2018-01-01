@@ -114,6 +114,20 @@
 
 (ck-memoize 'ck/ml-make-xpm-bar)
 
+;; keep track of the current active window
+(defvar ck-modeline-current-window (frame-selected-window))
+
+(defun ck/ml-set-current-window (&rest _)
+  "Set `ck-modeline-current-window' appropriately."
+  (let ((win (frame-selected-window)))
+    (unless (or (not win) (minibuffer-window-active-p win))
+      (setq ck-modeline-current-window win))))
+
+(add-hook 'window-configuration-change-hook #'ck/ml-set-current-window)
+(add-hook 'focus-in-hook #'ck/ml-set-current-window)
+(advice-add #'handle-switch-frame :after #'ck/ml-set-current-window)
+(advice-add #'select-window :after #'ck/ml-set-current-window)
+
 ;; mode line segments
 (defun ck/ml-bar (active)
   "Show a bar, honoring ACTIVE."
@@ -462,11 +476,11 @@
 (defun ck/mode-line ()
   "Our custom mode line."
   '(:eval
-    (let* ((active (powerline-selected-window-active))
 	   (project-root (*project-root-safe))
 	   (project-name (and project-root (ck/ml-project-name active)))
 	   (filename buffer-file-name)
 	   (process (powerline-process))
+    (let* ((active (eq ck-modeline-current-window (selected-window)))
 	   ;; now build the mode line
            (lhs (list (ck/ml-bar active)
 		      " "
