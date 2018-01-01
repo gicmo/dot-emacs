@@ -298,17 +298,19 @@
 	   (icon   (ck/ml-icon "octicon" "git-branch" :fallback "" :v-adjust 0.1 :height 0.8 :face face)))
       (concat icon " " (propertize branch 'face face)))))
 
-(defun *buffer-position ()
-  "A more vim-like buffer position."
+(defun ck/ml-buffer-position (active)
+  "A more vim-like buffer position (honoring ACTIVE)."
   (let ((start (window-start))
         (end (window-end))
         (pend (point-max)))
-    (if (and (= start 1)
-             (= end pend))
-        ":All"
-      (cond ((= start 1) ":Top")
-            ((= end pend) ":Bot")
-            (t (format ":%d%%%%" (/ end 0.01 pend)))))))
+    (propertize
+     (if (and (= start 1)
+	      (= end pend))
+	 ":All"
+       (cond ((= start 1) ":Top")
+	     ((= end pend) ":Bot")
+	     (t (format ":%d%%%%" (/ end 0.01 pend)))))
+     'face (if active 'ck-modeline-dimmed))))
 
 (make-variable-buffer-local 'anzu--state)
 (defun ck/ml-anzu (active)
@@ -510,11 +512,13 @@
 		      (ck/ml-anzu active)
 		      (ck/ml-num-cursors active)
 		      ))
-	   (rhs (list (concat (ck/ml-flycheck active) " ")
+	   (rhs (list (ck/ml-flycheck active)
+		      " "
 		      (ck/ml-vc active)
-		      (concat " " (ck/ml-buffer-encoding-abbrev active))
+		      " "
+		      (ck/ml-buffer-encoding-abbrev active)
 		      (ck/ml-cursor-position active)
-                      (propertize (*buffer-position) 'face (if active 'ck-modeline-dimmed))
+                      (ck/ml-buffer-position active)
 		      ))
 	   (center (propertize
                     " " 'display `((space :align-to (- (+ right right-fringe right-margin)
