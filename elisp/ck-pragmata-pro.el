@@ -237,7 +237,6 @@
   "Install hook to actiave prettify symbols for MODES."
   (mapc
    (lambda (sym)
-     (print sym)
      (add-hook (intern (concat (symbol-name sym) "-hook"))
 	       #'ck/pragmata-pro-prettify))
    modes))
