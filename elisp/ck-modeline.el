@@ -485,6 +485,10 @@
 	  (filename      filename)
 	  (t            (concat (*buffer-name) " " (ck/ml-buffer-cwd active))))))
 
+(defun ck/ml-cursor-position (active)
+  "The current cursor position, honoring ACTIVE."
+  (propertize " (%l,%c) " 'face (if active 'ck-modeline-dimmed)))
+
 ;;;###autoload
 (defun ck/mode-line ()
   "Our custom mode line."
@@ -509,7 +513,8 @@
 	   (rhs (list (concat (ck/ml-flycheck active) " ")
 		      (ck/ml-vc active)
 		      (concat " " (ck/ml-buffer-encoding-abbrev active))
-                      (propertize (concat " (%l,%c) " (*buffer-position)) 'face (if active 'ck-modeline-dimmed))
+		      (ck/ml-cursor-position active)
+                      (propertize (*buffer-position) 'face (if active 'ck-modeline-dimmed))
 		      ))
 	   (center (propertize
                     " " 'display `((space :align-to (- (+ right right-fringe right-margin)
