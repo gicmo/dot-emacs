@@ -6,6 +6,10 @@
 
 (defalias '! 'eval-when-compile)
 
+(use-package ck-memoize
+  :commands ck-memoize
+  :ensure f)
+
 (eval-when-compile
   (require 'all-the-icons)
   (require 'anzu)
@@ -61,6 +65,63 @@
   "Face for less important information in the modeline"
   :group '+ck-modeline)
 
+;; Bar
+(defface ck-modeline-bar
+  '((t (:inherit highlight)))
+  "The face used for the left-most bar on the mode-line of an active window."
+  :group '+ck-modeline)
+
+(defface ck-modline-bar-eldoc
+  '((t (:inherit shadow)))
+  "The face used for the left-most bar on the mode-line when eldoc-eval is active."
+  :group '+ck-modeline)
+
+(defface ck-modeline-bar-inactive
+  '((t (:inherit warning :inverse-video t)))
+  "The face used for the left-most bar on the mode-line of an inactive window."
+  :group '+ck-modeline)
+
+(defvar ck-modeline-height 20)
+
+;; helper to create bar pixmap
+;; Adapted from @hlissner's version of `powerline's `pl/make-xpm'.
+(defun ck/ml-make-xpm-bar (color height width)
+  "Create an XPM bitmap for COLOR with HEIGHT x WIDTH dimensions."
+  (propertize
+   " " 'display
+   (let ((data (make-list height (make-list width 1)))
+         (color (or color "None")))
+     (create-image
+      (concat
+       "/* XPM */\nstatic char *bar[] = "
+       (format "{\n\"%i %i 2 1\",\n\". c %s\",\n\"  c %s\","
+               (length (car data))
+               (length data)
+               color
+               color)
+       (apply #'concat
+              (cl-loop with idx = 0
+                       with len = (length data)
+                       for dl in data
+                       do (cl-incf idx)
+                       collect
+                       (concat "\""
+                               (cl-loop for d in dl
+                                        if (= d 0) collect (string-to-char " ")
+                                        else collect (string-to-char "."))
+                               (if (eq idx len) "\"};" "\",\n")))))
+      'xpm t :ascent 'center))))
+
+(ck-memoize 'ck/ml-make-xpm-bar)
+
+;; mode line segments
+(defun ck/ml-bar (active)
+  "Show a bar, honoring ACTIVE."
+  (if (display-graphic-p)
+      (let* ((face  (if active 'ck-modeline-bar 'ck-modeline-bar-inactive))
+	     (color (face-background face nil 't)))
+	(ck/ml-make-xpm-bar color ck-modeline-height 3))
+    ""))
 
 (defun *shorten-directory (dir &optional max-length)
   "Show directory name of `DIR', reduced to `MAX-LENGTH' characters."
@@ -407,9 +468,7 @@
 	   (filename buffer-file-name)
 	   (process (powerline-process))
 	   ;; now build the mode line
-           (lhs (list (propertize " " 'display (if active
-						   mode-line-bar
-						 mode-line-inactive-bar))
+           (lhs (list (ck/ml-bar active)
 		      " "
 		      (ck/indicator-for-major-mode)
                       " "
