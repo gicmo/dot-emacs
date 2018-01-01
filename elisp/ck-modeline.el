@@ -16,12 +16,7 @@
   (require 'cl)
   (require 'f)
   (require 'flycheck)
-  (require 'projectile)
-  (require 'powerline))
-
-(defvar mode-line-height 20)
-(defvar mode-line-bar          (! (pl/percent-xpm mode-line-height 100 0 100 0 3 "#00B3EF" nil)))
-(defvar mode-line-inactive-bar (! (pl/percent-xpm mode-line-height 100 0 100 0 3 nil nil)))
+  (require 'projectile))
 
 (defgroup +ck-modeline nil
   ""
@@ -236,6 +231,13 @@
 	 (name (second path-filename))
 	 )
     (concat project-name sep (*ml-path path active) name)))
+
+(defun ck/ml-process ()
+    "Show the currently running process, if any."
+    (cond
+     ((symbolp mode-line-process) (symbol-value mode-line-process))
+     ((listp mode-line-process) (format-mode-line mode-line-process))
+     (t mode-line-process)))
 
 (defun *buffer-state ()
   "The state of the buffer (read-only, modified, new-file)."
@@ -481,8 +483,8 @@
 	   (project-root (*project-root-safe))
 	   (project-name (and project-root (ck/ml-project-name active)))
 	   (filename buffer-file-name)
-	   (process (powerline-process))
     (let* ((active (eq ck-modeline-current-window (selected-window)))
+	   (process (ck/ml-process))
 	   ;; now build the mode line
            (lhs (list (ck/ml-bar active)
 		      " "
