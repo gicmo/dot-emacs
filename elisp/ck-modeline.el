@@ -476,13 +476,19 @@
 	       (if text " ")
 	       (if text (propertize text 'face face)))))))
 
+(defun ck/ml-buffer-id (active)
+  "The identification of the buffer (honoring ACTIVE)."
+  (let* ((project-root (*project-root-safe))
+	 (project-name (and project-root (ck/ml-project-name active)))
+	 (filename buffer-file-name))
+    (cond (project-name (ck/ml-project-id project-root project-name filename active))
+	  (filename      filename)
+	  (t            (concat (*buffer-name) " " (ck/ml-buffer-cwd active))))))
+
 ;;;###autoload
 (defun ck/mode-line ()
   "Our custom mode line."
   '(:eval
-	   (project-root (*project-root-safe))
-	   (project-name (and project-root (ck/ml-project-name active)))
-	   (filename buffer-file-name)
     (let* ((active (eq ck-modeline-current-window (selected-window)))
 	   (process (ck/ml-process))
 	   ;; now build the mode line
@@ -490,14 +496,9 @@
 		      " "
 		      (ck/indicator-for-major-mode)
                       " "
-		      (cond (project-name
-			     (ck/ml-project-id project-root project-name filename active))
-			    (filename filename)
-			    (t (*buffer-name)))
+		      (ck/ml-buffer-id active)
                       " "
                       (*buffer-state)
-		      (unless (or project-name filename)
-			(concat (ck/ml-buffer-cwd active) " "))
 		      (if process (concat process " "))
 		      "  "
 		      (ck/ml-minor-modes)
