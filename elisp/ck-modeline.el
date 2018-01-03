@@ -87,7 +87,7 @@
   "Return the internal NAME for a segment."
   (intern (format "ck/ml--format-%s" name)))
 
-(defun ck/ml-prepare-segments (segments)
+(defsubst ck/ml-prepare-segments (segments)
   "Prepare modeline SEGMENTS."
   (when segments
     (let ((head (car segments))
@@ -96,6 +96,12 @@
 		head
 	      (ck/ml-segment-intern head))
       (ck/ml-prepare-segments tail)))))
+
+(defsubst ck/ml-form-to-body (forms active)
+  "Convert segments in FORMS to mode line body passing ACTIVE along."
+  (mapconcat (seq-filter 'identity
+			 (lambda (x) (if (stringp x) x (funcall x active))))
+	     forms " "))
 
 (defmacro def-ml-segment! (name args &body body)
   "Define a modeline segment with NAME, ARGS and BODY and byte compile it."
@@ -115,8 +121,8 @@
     `(progn
        (defun ,sym ()
 	 (let* ((active (eq ck-modeline-current-window (selected-window)))
-		(lhs-body (mapcar (lambda (x) (if (stringp x) x (funcall x active))) '(,@lhs-forms)))
-		(rhs-body (mapcar (lambda (x) (if (stringp x) x (funcall x active))) '(,@rhs-forms)))
+		(lhs-body (ck/ml-form-to-body '(,@lhs-forms) active))
+		(rhs-body (ck/ml-form-to-body '(,@rhs-forms) active))
 		(rhs-str  (format-mode-line rhs-body)))
 	   (list lhs-body
 		 (propertize
@@ -556,13 +562,13 @@ DEFAULT is non-nil, set the default mode-line for all buffers."
 
 (def-ml-segment! cursor-position (active)
   "The current cursor position, honoring ACTIVE."
-  (propertize " (%l,%c) " 'face (if active 'ck-modeline-dimmed)))
+  (propertize "(%l,%c)" 'face (if active 'ck-modeline-dimmed)))
 
 ;; the mode-lines
 
 (def-modeline! default
-  (bar " " indicator-for-major-mode " " buffer-id " " minor-modes " " process " " anzu " " num-cursors)
-  (flycheck " " buffer-encoding-abbrev cursor-position buffer-position))
+  (bar indicator-for-major-mode buffer-id minor-modes process anzu num-cursors)
+  (flycheck buffer-encoding-abbrev cursor-position buffer-position))
 
 
 (provide 'ck-modeline)
