@@ -79,23 +79,21 @@
 (defvar ck-modeline-height 20)
 
 ;; Helper to build modelines
-(defun ck/ml-segment-intern (name)
+(defsubst ck/ml-segment-intern (name)
   "Return the internal NAME for a segment."
   (intern (format "ck/ml--segment-%s" name)))
 
-(defun ck/ml-format-intern (name)
-  "Return the internal NAME for a segment."
+(defsubst ck/ml-format-intern (name)
+  "Return the internal NAME for a mode line format."
   (intern (format "ck/ml--format-%s" name)))
 
 (defsubst ck/ml-prepare-segments (segments)
   "Prepare modeline SEGMENTS."
-  (when segments
-    (let ((head (car segments))
-	  (tail (cdr segments)))
-      (cons (if (stringp head)
-		head
-	      (ck/ml-segment-intern head))
-      (ck/ml-prepare-segments tail)))))
+  (cl-loop for seg in segments
+           if (stringp seg)
+	     collect seg
+           else
+	     collect (ck/ml-segment-intern seg)))
 
 (defsubst ck/ml-form-to-body (forms active)
   "Convert segments in FORMS to mode line body passing ACTIVE along."
