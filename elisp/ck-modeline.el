@@ -78,6 +78,73 @@
 
 (defvar ck-modeline-height 20)
 
+;; Helper to build modelines
+(defun ck/ml-segment-intern (name)
+  "Return the internal NAME for a segment."
+  (intern (format "ck/ml--segment-%s" name)))
+
+(defun ck/ml-format-intern (name)
+  "Return the internal NAME for a segment."
+  (intern (format "ck/ml--format-%s" name)))
+
+(defun ck/ml-prepare-segments (segments)
+  "Prepare modeline SEGMENTS."
+  (when segments
+    (let ((head (car segments))
+	  (tail (cdr segments)))
+      (cons (if (stringp head)
+		head
+	      (ck/ml-segment-intern head))
+      (ck/ml-prepare-segments tail)))))
+
+(defmacro def-ml-segment! (name args &body body)
+  "Define a modeline segment with NAME, ARGS and BODY and byte compile it."
+  (declare (indent defun) (doc-string 3))
+  (let ((sym (ck/ml-segment-intern name)))
+    `(progn
+       (defun ,sym (,@args) (,@body))
+       ,(unless (bound-and-true-p byte-compile-current-file)
+          `(let (byte-compile-warnings)
+             (byte-compile #',sym))))))
+
+(defmacro def-modeline! (name lhs &optional rhs)
+  "Defines a modeline format with NAME, LHS and RHS and byte compiles it."
+  (let ((sym (ck/ml-format-intern name))
+	(lhs-forms (ck/ml-prepare-segments lhs))
+	(rhs-forms (ck/ml-prepare-segments rhs)))
+    `(progn
+       (defun ,sym ()
+	 (let* ((active (eq ck-modeline-current-window (selected-window)))
+		(lhs-body (mapcar (lambda (x) (if (stringp x) x (funcall x active))) '(,@lhs-forms)))
+		(rhs-body (mapcar (lambda (x) (if (stringp x) x (funcall x active))) '(,@rhs-forms)))
+		(rhs-str  (format-mode-line rhs-body)))
+	   (list lhs-body
+		 (propertize
+		  " " 'display
+		  `((space :align-to (- (+ right right-fringe right-margin)
+					,(+ 1 (string-width rhs-str))))))
+		 rhs-str)))
+       ,(when (bound-and-true-p byte-compile-current-file)
+	  `(let (byte-compile-warnings)
+	     (byte-compile #',sym))))))
+
+(defun ck/modeline (name)
+  "Return a mode line configuration associated with NAME."
+  (let ((fn (ck/ml-format-intern name)))
+    (when (functionp fn)
+      `(:eval (,fn)))))
+
+;;;###autoload
+(defun ck/modeline-set (name &optional default)
+  "Set the modeline format with NAME.
+DEFAULT is non-nil, set the default mode-line for all buffers."
+  (let ((modeline (ck/modeline name)))
+    (when modeline
+      (setf (if default
+		(default-value 'mode-line-format)
+	      (buffer-local-value 'mode-line-format (current-buffer)))
+	    modeline))))
+
 ;; helper to create bar pixmap
 ;; Adapted from @hlissner's version of `powerline's `pl/make-xpm'.
 (defun ck/ml-make-xpm-bar (color height width)
@@ -124,7 +191,7 @@
 (advice-add #'select-window :after #'ck/ml-set-current-window)
 
 ;; mode line segments
-(defun ck/ml-bar (active)
+(def-ml-segment! bar (active)
   "Show a bar, honoring ACTIVE."
   (if (display-graphic-p)
       (let* ((face  (if active 'ck-modeline-bar 'ck-modeline-bar-inactive))
@@ -232,14 +299,14 @@
 	 )
     (concat project-name sep (*ml-path path active) name)))
 
-(defun ck/ml-process ()
+(def-ml-segment! process (_)
     "Show the currently running process, if any."
     (cond
      ((symbolp mode-line-process) (symbol-value mode-line-process))
      ((listp mode-line-process) (format-mode-line mode-line-process))
      (t mode-line-process)))
 
-(defun ck/ml-buffer-state (_)
+(def-ml-segment! buffer-state (_)
   "The state of the buffer (read-only, modified, new-file)."
   (when buffer-file-name
     (propertize
@@ -262,7 +329,7 @@
    (concat "[" (*shorten-directory (abbreviate-file-name default-directory)) "]")
    'face (if active 'ck-modeline-dimmed)))
 
-(defun ck/ml-buffer-encoding-abbrev (active)
+(def-ml-segment! buffer-encoding-abbrev (active)
   "The line ending convention used in the buffer (honour ACTIVE)."
   (when buffer-file-name
     (let* ((eol-type (coding-system-eol-type buffer-file-coding-system))
@@ -290,7 +357,7 @@
 	    ((memq state '(removed needs-merge needs-update conflict removed unregistered))
 	     'ck-modeline-warning)))))
 
-(defun ck/ml-vc (active)
+(def-ml-segment! vc (active)
   "Displays the current branch, colored based on its state (honoring ACTIVE)."
   (when vc-mode
     (let* ((branch (substring vc-mode (+ 2 (length (symbol-name (vc-backend buffer-file-name))))))
@@ -298,7 +365,7 @@
 	   (icon   (ck/ml-icon "octicon" "git-branch" :fallback "" :v-adjust 0.1 :height 0.8 :face face)))
       (concat icon " " (propertize branch 'face face)))))
 
-(defun ck/ml-buffer-position (active)
+(def-ml-segment! buffer-position (active)
   "A more vim-like buffer position (honoring ACTIVE)."
   (let ((start (window-start))
         (end (window-end))
@@ -313,7 +380,7 @@
      'face (if active 'ck-modeline-dimmed))))
 
 (make-variable-buffer-local 'anzu--state)
-(defun ck/ml-anzu (active)
+(def-ml-segment! anzu (active)
   "Show the current match and the total number (honoring ACTIVE)."
   (when (and (featurep 'anzu) anzu--state)
     (propertize
@@ -322,7 +389,7 @@
              (if anzu--overflow-p "+" ""))
      'face (if active 'ck-modeline-panel))))
 
-(defun ck/ml-num-cursors (ml-active)
+(def-ml-segment! num-cursors (ml-active)
   "If more then one cursor is active, show how many; highlighted if ML-ACTIVE."
   (when (fboundp 'mc/num-cursors)
     (let ((n (mc/num-cursors)))
@@ -349,7 +416,7 @@
 
 (ck-memoize 'ck/ml-icon)
 
-(defun ck/indicator-for-major-mode ()
+(def-ml-segment! indicator-for-major-mode (_)
   "Get an indicator (icon or name) for the major mode."
   (let* ((maybe-icon (and ck/use-icon-font (all-the-icons-icon-for-buffer)))
 	 (icon (if (not (symbolp maybe-icon)) maybe-icon))
@@ -423,7 +490,7 @@
 		'help-echo (format "Spell checker active")
 		'mouse-face 'ck-modeline-highlight)))
 
-(defun ck/ml-minor-modes ()
+(def-ml-segment! minor-modes (_)
   "Return the well-defined list of minor mode indicators (honor ACTIVE)."
   (let ((modes (list (ck/mm-fill-mode)
 		     (ck/mm-flyspell-mode))))
@@ -452,7 +519,7 @@
     ('not-checked nil)
     (_ "?")))
 
-(defun ck/ml-flycheck (active)
+(def-ml-segment! flycheck (active)
   "Displays flycheck status if ACTIVE."
   (when (boundp 'flycheck-last-status-change)
     (let* ((state flycheck-last-status-change)
@@ -478,7 +545,7 @@
 	       (if text " ")
 	       (if text (propertize text 'face face)))))))
 
-(defun ck/ml-buffer-id (active)
+(def-ml-segment! buffer-id (active)
   "The identification of the buffer (honoring ACTIVE)."
   (let* ((project-root (*project-root-safe))
 	 (project-name (and project-root (ck/ml-project-name active)))
@@ -487,44 +554,16 @@
 	  (filename      filename)
 	  (t            (concat (*buffer-name) " " (ck/ml-buffer-cwd active))))))
 
-(defun ck/ml-cursor-position (active)
+(def-ml-segment! cursor-position (active)
   "The current cursor position, honoring ACTIVE."
   (propertize " (%l,%c) " 'face (if active 'ck-modeline-dimmed)))
 
-;;;###autoload
-(defun ck/mode-line ()
-  "Our custom mode line."
-  '(:eval
-    (let* ((active (eq ck-modeline-current-window (selected-window)))
-	   (process (ck/ml-process))
-	   ;; now build the mode line
-           (lhs (list (ck/ml-bar active)
-		      " "
-		      (ck/indicator-for-major-mode)
-                      " "
-		      (ck/ml-buffer-id active)
-                      " "
-                      (ck/ml-buffer-state active)
-		      (if process (concat process " "))
-		      " "
-		      (ck/ml-minor-modes)
-		      "  "
-		      (ck/ml-anzu active)
-		      (ck/ml-num-cursors active)
-		      ))
-	   (rhs (list (ck/ml-flycheck active)
-		      " "
-		      (ck/ml-vc active)
-		      " "
-		      (ck/ml-buffer-encoding-abbrev active)
-		      (ck/ml-cursor-position active)
-                      (ck/ml-buffer-position active)
-		      ))
-	   (center (propertize
-                    " " 'display `((space :align-to (- (+ right right-fringe right-margin)
-                                                       ,(1+ (string-width (format-mode-line rhs))))))))
-	   )
-      (list lhs center rhs))))
+;; the mode-lines
+
+(def-modeline! default
+  (bar " " indicator-for-major-mode " " buffer-id " " minor-modes " " process " " anzu " " num-cursors)
+  (flycheck " " buffer-encoding-abbrev cursor-position buffer-position))
+
 
 (provide 'ck-modeline)
 ;;; ck-modeline.el ends here

@@ -718,11 +718,11 @@
 ;; -=[ mode-line
 (use-package all-the-icons)
 (use-package ck-modeline
-  :commands ck/mode-line
+  :commands ck/modeline-set
   :ensure f
   :load-path "elisp"
   :init
-  (setq-default mode-line-format (ck/mode-line)))
+  (ck/modeline-set 'default 't))
 
 ;; -=[ color themes
 
