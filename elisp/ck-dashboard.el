@@ -28,6 +28,7 @@
 (defvar dashboard-mode-map
    (let ((map (make-sparse-keymap)))
      (define-key map "r" 'recentf-open-files)
+     (define-key map "b" 'bookmark-bmenu-list)
      (define-key map "p" 'projectile-switch-project)
      (define-key map "s" (lambda () (interactive) (switch-to-buffer (get-buffer "*scratch*"))))
      (define-key map "m" (lambda () (interactive) (switch-to-buffer (get-buffer "*Messages*"))))
@@ -79,6 +80,7 @@
     (dashboard-banner head)
     (insert "\n\n")
     (dashboard--insert-mnemonic head "r" "Recently opened files")
+    (dashboard--insert-mnemonic head "b" "Open bookmarked file")
     (dashboard--insert-mnemonic head "p" "Switch to project")
     (dashboard--insert-mnemonic head "m" "*Messages* buffer")
     (dashboard--insert-mnemonic head "s" "*scratch* buffer")
