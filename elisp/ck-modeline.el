@@ -10,13 +10,16 @@
   :commands ck-memoize
   :ensure f)
 
+(use-package all-the-icons
+  :commands (all-the-icons-icon-for-buffer
+	     all-the-icons-icon-family-for-buffer))
+
+(use-package f
+  :commands f-dirname)
+
 (eval-when-compile
-  (require 'all-the-icons)
-  (require 'anzu)
   (require 'cl)
-  (require 'f)
-  (require 'flycheck)
-  (require 'projectile))
+  (require 'subr-x))
 
 (defgroup +ck-modeline nil
   ""
@@ -78,6 +81,21 @@
 
 (defvar ck-modeline-height 20)
 
+;;; Forward declarations of Optional Dependencies
+(declare-function anzu--format-here-position "ext:anzu.el")
+(declare-function flycheck-count-errors  "ext:flycheck.el")
+(declare-function mc/num-cursors "ext:multiple-cursors.el")
+(declare-function projectile-project-root "ext:projectile.el")
+(declare-function projectile-project-name "ext:projectile.el")
+
+(defvar anzu--overflow-p)
+(defvar anzu--state)
+(defvar anzu--current-position)
+(defvar anzu--total-matched)
+(defvar flycheck-current-errors)
+(defvar flycheck-last-status-change)
+;(defvar org-clock-current-task)
+
 ;; Helper to build modelines
 (defsubst ck/ml-segment-intern (name)
   "Return the internal NAME for a segment."
@@ -98,7 +116,7 @@
 	     forms " "))
 
 (defmacro def-ml-segment! (name args &body body)
-  "Define a modeline segment with NAME, ARGS and BODY and byte compile it."
+  "Define a modeline segment with NAME, ARGS and &BODY and byte compile it."
   (declare (indent defun) (doc-string 3))
   (let ((sym (ck/ml-segment-intern name)))
     `(progn
