@@ -496,6 +496,27 @@ DEFAULT is non-nil, set the default mode-line for all buffers."
 		     (ck/mm-flyspell-mode))))
     (mapconcat #'identity (seq-filter 'identity modes) " ")))
 
+(defsubst ck/ml-find-bookmark (filename bm-list)
+  "Find the bookmark with FILENAME in BM-LIST."
+  (let ((needle-name (file-name-nondirectory filename)))
+    (seq-find
+     (lambda (x) (and (string= (car x) needle-name) ; names match
+		 (string= (expand-file-name filename)
+			  (expand-file-name (cdr (assq 'filename x))))))
+     bm-list)))
+
+(def-ml-segment! ibookmark (_)
+  "File indicator if the current file is bookmarked."
+  (when (and (buffer-file-name) (boundp 'bookmark-alist))
+    (let* ((bmark (ck/ml-find-bookmark (buffer-file-name) bookmark-alist)))
+      (if bmark
+	  (propertize (ck/ml-icon "material" "bookmark"
+				  :fallback "ⓢ"
+				  :v-adjust -0.1
+				  :height 0.8)
+		      'help-echo (format "File is bookmarked")
+		      'mouse-face 'ck-modeline-highlight)))))
+
 ;; flycheck
 (defun ck/ml-flycheck-face (state warnings errors)
   "Face for flycheck based on STATE, WARNINGS and ERRORS."
@@ -561,7 +582,7 @@ DEFAULT is non-nil, set the default mode-line for all buffers."
 ;; the mode-lines
 
 (def-modeline! default
-  (bar indicator-for-major-mode buffer-id minor-modes process anzu num-cursors)
+  (bar indicator-for-major-mode buffer-id minor-modes ibookmark process anzu num-cursors)
   (flycheck buffer-encoding-abbrev cursor-position buffer-position))
 
 
