@@ -89,11 +89,7 @@
 
 (defsubst ck/ml-prepare-segments (segments)
   "Prepare modeline SEGMENTS."
-  (cl-loop for seg in segments
-           if (stringp seg)
-	     collect seg
-           else
-	     collect (ck/ml-segment-intern seg)))
+  (mapcar (lambda (s) (if (stringp s) s (ck/ml-segment-intern s))) segments))
 
 (defsubst ck/ml-form-to-body (forms active)
   "Convert segments in FORMS to mode line body passing ACTIVE along."
