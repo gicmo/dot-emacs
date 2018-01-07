@@ -716,7 +716,6 @@
   (push (cons 'right-fringe fr-size) default-frame-alist))
 
 ;; -=[ mode-line
-(use-package all-the-icons)
 (use-package ck-modeline
   :commands ck/modeline-set
   :ensure f
