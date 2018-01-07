@@ -529,7 +529,7 @@ DEFAULT is non-nil, set the default mode-line for all buffers."
     (let* ((bmark (ck/ml-find-bookmark (buffer-file-name) bookmark-alist)))
       (if bmark
 	  (propertize (ck/ml-icon "material" "bookmark"
-				  :fallback "ⓢ"
+				  :fallback "ⓑ"
 				  :v-adjust -0.1
 				  :height 0.8)
 		      'help-echo (format "File is bookmarked")
