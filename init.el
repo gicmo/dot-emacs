@@ -69,7 +69,6 @@
 
 (eval-when-compile
   (require 'use-package)
-  (require 'fringe-helper)
   (use-package cl))
 
 (require 'bind-key)
@@ -290,6 +289,7 @@
 (use-package git-gutter-fringe
   :if window-system
   :config
+  (use-package fringe-helper)
   (setq git-gutter-fr:side 'right-fringe)
   (add-hook 'prog-mode-hook 'git-gutter-mode)
   (add-hook 'focus-in-hook 'git-gutter:update-all-windows)
