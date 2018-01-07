@@ -417,7 +417,6 @@ DEFAULT is non-nil, set the default mode-line for all buffers."
 (defun ck/have-all-the-iconsp ()
   "Check if we have all-the-icons support."
   (and (window-system)
-       (featurep 'all-the-icons)
        (find-font (font-spec :family "all-the-icons"))))
 
 (defvar ck/use-icon-font (ck/have-all-the-iconsp)
