@@ -737,12 +737,20 @@
 
 ;(use-package leuven-theme)
 
+(defcustom ck-theme 'doom-nord
+  "Which doom theme to load."
+  :type '(choice
+	  (const :tag "One" 'doom-one)
+	  (const :tag "Nord" 'doom-nord))
+  :group 'ck)
+
 (use-package doom-themes
   :init
-  (load-theme 'doom-one t)
+  (load-theme ck-theme t)
   (doom-themes-neotree-config)
   (doom-themes-visual-bell-config)
   (use-package solaire-mode
+    :if (not (eq ck-theme 'doom-nord))
     :init
     (add-hook 'after-change-major-mode-hook #'turn-on-solaire-mode)
     (add-hook 'after-revert-hook #'turn-on-solaire-mode)
