@@ -677,6 +677,16 @@
   (add-hook 'message-mode-hook 'ck/message-mode-setup)
   (add-hook 'message-mode-hook #'flyspell-mode))
 
+(use-package gnus-alias
+  :hook ('message-setup . gnus-alias-determine-identity)
+  :config
+  (use-package ck-mail
+    :commands ck/gnus-alias-setup
+    :ensure f
+    :load-path "elisp"
+    :init
+    (ck/gnus-alias-setup)))
+
 
 ;; -=[ UI
 ;; resize the initial emacs window
