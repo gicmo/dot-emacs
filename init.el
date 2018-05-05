@@ -360,6 +360,7 @@
 
 ; == recent files ==
 (use-package recentf
+  :defer 1
   :init
   (setq recentf-exclude '("/\\.git/.*\\'"
                           "/elpa/.*\\'"
