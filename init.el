@@ -427,6 +427,8 @@
 
 ; detect major mode (objc, c++-mode) for header
 (use-package dummy-h-mode
+  :load-path "ewiki"
+  :ensure f
   :mode "\\.h$")
 
 (use-package irony
