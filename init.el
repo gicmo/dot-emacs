@@ -120,6 +120,7 @@
   :bind (("C-x C-j" . dired-jump)))
 
 (use-package dired+
+  :load-path "ewiki"
   :defer t
   :init
   (defun setup-dired ()
