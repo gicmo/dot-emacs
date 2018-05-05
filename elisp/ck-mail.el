@@ -57,5 +57,44 @@
 	gnus-alias-override-user-mail-address t
 	gnus-alias-identity-rules '(("to-redhat" ("To" ".+@redhat\\.com" current) "redhat"))))
 
+
+
+(defun ck/mu4-gen-match-func (maildir)
+  "Generate a matching function for MAILDIR."
+    `(lambda (msg)
+	(when msg
+	  (s-starts-with-p ,maildir
+			   (mu4e-message-field msg :maildir)))))
+
+(defun ck/mu4e-context-from-js (js)
+  "Make one mail account from JS."
+  (let* ((id       (gethash "id"     js nil))
+	 (refers   (gethash "refers" js nil))
+	 (from     (gethash "from"   js nil))
+	 (orga     (gethash "orga"   js nil))
+	 (is-gmail (gethash "gmail"  js nil))
+	 (maildir  (concat "/" (file-name-as-directory id)))
+	)
+    (unless refers
+      (make-mu4e-context
+       :name id
+       :match-func (ck/mu4-gen-match-func maildir)
+       :vars `((user-mail-address . ,from)
+	       (mu4e-sent-folder . ,(concat maildir "Sent"))
+	       (mu4e-drafts-folder . ,(concat maildir "Drafts"))
+	       (mu4e-trash-folder .  ,(concat maildir "Trash"))
+	       (mu4e-refile-folder . ,(concat maildir "Archive"))
+	       (mu4e-sent-messages-behavior . ,(if is-gmail 'delete 'sent)))))))
+
+(defun ck/mail-mk-mu4e-contexts ()
+  "Create the gnus indenity list from a json file."
+  (let* ((json-object-type 'hash-table)
+	 (json-array-type 'list)
+	 (json-key-type 'string)
+	 (json (json-read-file "~/.config/gnus-alias.js"))
+	 (accounts (gethash "accounts" json)))
+    (delq nil
+	  (mapcar 'ck/mu4e-context-from-js accounts))))
+
 (provide 'ck-mail)
 ;;; mail.el ends here
