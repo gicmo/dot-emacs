@@ -267,6 +267,7 @@
     (projectile-dired)))
 
 (use-package projectile
+  :defer 1
   :config
   (projectile-mode t)
   (setq projectile-switch-project-action 'projectile-dired)
