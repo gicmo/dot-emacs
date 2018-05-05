@@ -752,8 +752,8 @@
   (doom-themes-neotree-config)
   (doom-themes-visual-bell-config)
   (use-package solaire-mode
-    :if (not (eq ck-theme 'doom-nord))
     :init
+    (setq solaire-mode-remap-modeline nil)
     (add-hook 'after-change-major-mode-hook #'turn-on-solaire-mode)
     (add-hook 'after-revert-hook #'turn-on-solaire-mode)
     (add-hook 'minibuffer-setup-hook #'solaire-mode-in-minibuffer)
