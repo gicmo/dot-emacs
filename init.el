@@ -6,7 +6,6 @@
 ;;; Code:
 
 ; -=[ sane defaults
-(setq gc-cons-threshold (* 128 1024 1024))
 (blink-cursor-mode 0)
 (setq inhibit-splash-screen t)
 (setq inhibit-startup-message t)
@@ -33,13 +32,8 @@
 ;; Title bar shows name of current buffer.
 (setq frame-title-format '("emacs: %*%+ %b"))
 
-;; -=[ custom - write custom's settings to separate file
-(setq custom-file "~/.emacs.d/custom.el")
-(when (file-exists-p custom-file)
-  (load custom-file))
-
-(add-to-list 'load-path "~/.emacs.d/elisp/")
-
+;; -=[ initialize the core
+(require 'ck-core (concat user-emacs-directory "elisp/ck-core"))
 
 ;; === package management
 (require 'package)
@@ -72,23 +66,6 @@
   :commands dashboard-show
   :init
   (dashboard-show))
-
-;; -=[ OSX
-(when (eq system-type 'darwin)
-  (let ((default-directory "/usr/local/share/emacs/site-lisp/"))
-    (normal-top-level-add-subdirs-to-load-path))
-  (setq mac-option-modifier 'meta)
-  (if (boundp 'mac-auto-operator-composition-mode)
-      (mac-auto-operator-composition-mode))
-  (setq-default locate-command "mdfind")
-  (when (display-graphic-p)
-    (setq-default mac-emulate-three-button-mouse t)
-    (global-set-key (kbd "M-`") 'other-frame))
-  )
-
-(when (eq system-type 'gnu/linux)
-  (let ((default-directory "/usr/share/emacs/site-lisp/"))
-    (normal-top-level-add-subdirs-to-load-path)))
 
 ;; pick up the correct path from a login shell
 (use-package exec-path-from-shell
