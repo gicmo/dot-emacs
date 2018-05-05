@@ -63,7 +63,7 @@
   "Generate a matching function for MAILDIR."
     `(lambda (msg)
 	(when msg
-	  (s-starts-with-p ,maildir
+	  (string-prefix-p ,maildir
 			   (mu4e-message-field msg :maildir)))))
 
 (defun ck/mu4e-context-from-js (js)
@@ -96,5 +96,24 @@
     (delq nil
 	  (mapcar 'ck/mu4e-context-from-js accounts))))
 
+;; Taken from https://github.com/fjl/dotemacs/lisp/init-mu4e.el
+;; Patch the trash mark action to not mark the message as trashed.
+;; mbsync interprets 'trashed' as 'deleted', so the messages are
+;; expunged. Move them to the trash folder instead.
+;;
+;; Also mark them as read when moving.
+
+(defvar ck/mu4e-trash-mark
+  `(trash :char "d"
+          :prompt "dtrash"
+          :dyn-target ,(lambda (target msg) (mu4e-get-trash-folder msg))
+          :action ,(lambda (docid msg target) (mu4e~proc-move docid (mu4e~mark-check-target target) "+S-N"))))
+
+(defun ck/mu4e-patch-trash (markslist)
+  "Patch MARKSLIST so the trash action does not set the T flag."
+  (mapcar (lambda (m)
+	    (if (eq (car m) 'trash) ck/mu4e-trash-mark m))
+	  markslist))
+
 (provide 'ck-mail)
-;;; mail.el ends here
+;;; ck-mail.el ends here

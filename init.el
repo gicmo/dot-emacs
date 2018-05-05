@@ -650,7 +650,9 @@
   (add-hook 'message-mode-hook #'flyspell-mode))
 
 (use-package ck-mail
-  :commands (ck/gnus-alias-setup)
+  :commands (ck/gnus-alias-setup
+	     ck/mail-mk-mu4e-contexts
+	     ck/mu4e-patch-trash)
   :ensure f
   :load-path "elisp")
 
@@ -658,6 +660,33 @@
   :hook ('message-setup . gnus-alias-determine-identity)
   :config
   (ck/gnus-alias-setup))
+
+(use-package mu4e
+  :commands mu4e
+  :defer t
+  :ensure f
+  :config
+  (setq mu4e-maildir (expand-file-name "~/.mail")
+	mu4e-get-mail-command "mbsync -a mu4e"
+	mu4e-headers-include-related t
+	mu4e-headers-skip-duplicates t
+	mu4e-compose-dont-reply-to-self t
+	mu4e-change-filenames-when-moving t
+	mu4e-view-show-images t
+	mu4e-view-show-addresses t
+	mu4e-context-policy 'pick-first
+	mu4e-contexts (ck/mail-mk-mu4e-contexts)
+	mu4e-marks (ck/mu4e-patch-trash mu4e-marks))
+
+  (when (fboundp 'imagemagick-register-types)
+    (imagemagick-register-types))
+
+  (use-package mu4e-maildirs-extension
+    :init
+    (mu4e-maildirs-extension)
+    :config
+    (setq mu4e-maildirs-extension-maildir-expanded-prefix "")
+    (setq mu4e-maildirs-extension-maildir-default-prefix "")))
 
 ;; -=[ UI
 ;; resize the initial emacs window
