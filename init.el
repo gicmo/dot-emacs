@@ -163,6 +163,7 @@
   (setq nlinum-format "%4d "))
 
 (use-package hl-line
+  :disabled
   :after nlinum
   :hook (nlinum-mode . hl-line-mode))
 
