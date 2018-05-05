@@ -160,7 +160,8 @@
 (use-package nlinum
   :hook (prog-mode . nlinum-mode)
   :config
-  (setq nlinum-format "%4d "))
+  (setq nlinum-format "%4d "
+	nlinum-highlight-current-line 't))
 
 (use-package hl-line
   :disabled
