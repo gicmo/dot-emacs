@@ -422,7 +422,8 @@
   (setq lsp-ui-sideline-show-hover nil)
   :bind (:map lsp-ui-mode-map
 	      ("C-c r d" . lsp-ui-peek-find-definitions)
-	      ("C-c r r" . lsp-ui-peek-find-references)))
+	      ("C-c r r" . lsp-ui-peek-find-references)
+	      ("C-c r i" . lsp-ui-imenu)))
 
 (use-package company-lsp
   :ensure t
