@@ -408,18 +408,21 @@
   :mode "\\.h$")
 
 (use-package cquery
+  :hook ((c-mode-common . lsp-cquery-enable))
   :config
   (setq cquery-extra-init-params
 	'(:index (:comments 2)
 		 :cacheFormat "msgpack"
 		 :completion (:detailedLabel t))
-	cquery-executable (expand-file-name "~/.local/bin/cquery"))
-  :hook ((c-mode-common . lsp-cquery-enable)))
+	cquery-executable (expand-file-name "~/.local/bin/cquery")))
 
 (use-package lsp-ui
   :hook (lsp-mode . lsp-ui-mode)
   :config
-  (setq lsp-ui-sideline-show-hover nil))
+  (setq lsp-ui-sideline-show-hover nil)
+  :bind (:map lsp-ui-mode-map
+	      ("C-c r d" . lsp-ui-peek-find-definitions)
+	      ("C-c r r" . lsp-ui-peek-find-references)))
 
 (use-package company-lsp
   :ensure t
