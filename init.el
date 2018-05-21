@@ -753,7 +753,9 @@
 
 (use-package doom-themes
   :init
-  (load-theme ck-theme t)
+  (if (daemonp)
+      (load-theme 'doom-vibrant t)
+    (load-theme ck-theme t))
   (doom-themes-neotree-config)
   (doom-themes-visual-bell-config)
   (use-package solaire-mode
