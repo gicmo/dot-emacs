@@ -139,6 +139,11 @@
     :init
     (ido-vertical-mode 1)))
 
+(use-package idomenu
+  :commands idomenu
+  :load-path "ewiki"
+  :ensure f)
+
 (use-package anzu
   :bind
   (([remap query-replace] . anzu-query-replace)
