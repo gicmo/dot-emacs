@@ -419,17 +419,25 @@
 	'(:index (:comments 2)
 		 :cacheFormat "msgpack"
 		 :completion (:detailedLabel t))
-	cquery-executable (expand-file-name "~/.local/bin/cquery")))
+	cquery-executable (expand-file-name "~/.local/bin/cquery"))
+  :bind (:map c-mode-base-map
+	      ("C-c r h" . cquery-inheritance-hierarchy)
+	      ("C-c r H" . cquery-call-hierarchy)
+	      ("C-c r L" . cquery-code-lens-mode)
+	      ("C-c r m" . cquery-member-hierarchy)))
 
 (use-package lsp-ui
   :hook (lsp-mode . lsp-ui-mode)
   :config
   (setq lsp-ui-sideline-show-hover nil)
   :bind (:map lsp-ui-mode-map
+	      ("C-c r ." . lsp-ui-peek-find-definitions)
+	      ("C-c r ?" . lsp-ui-peek-find-references)
 	      ("C-c r d" . lsp-ui-peek-find-definitions)
 	      ("C-c r r" . lsp-ui-peek-find-references)
 	      ("C-c r i" . lsp-ui-imenu)
-	      ("C-c r A" . lsp-ui-sideline-apply-code-actions)))
+	      ("C-c r F" . lsp-ui-sideline-apply-code-actions)
+	      ("C-c r R" . lsp-rename)))
 
 (use-package company-lsp
   :ensure t
