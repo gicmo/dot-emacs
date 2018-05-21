@@ -423,7 +423,8 @@
   :bind (:map lsp-ui-mode-map
 	      ("C-c r d" . lsp-ui-peek-find-definitions)
 	      ("C-c r r" . lsp-ui-peek-find-references)
-	      ("C-c r i" . lsp-ui-imenu)))
+	      ("C-c r i" . lsp-ui-imenu)
+	      ("C-c r A" . lsp-ui-sideline-apply-code-actions)))
 
 (use-package company-lsp
   :ensure t
