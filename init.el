@@ -695,6 +695,14 @@
     (setq mu4e-maildirs-extension-maildir-expanded-prefix "")
     (setq mu4e-maildirs-extension-maildir-default-prefix "")))
 
+;; -=[ server
+(use-package server
+  :defer 2
+  :ensure f
+  :commands (server-start server-running-p)
+  :init (unless (server-running-p)
+	  (server-start)))
+
 ;; -=[ UI
 ;; resize the initial emacs window
 ;;(add-to-list 'default-frame-alist '(height . 40))
