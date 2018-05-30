@@ -52,7 +52,9 @@
 
 (defun ck/init-linux ()
   "GNU/Linux specific global initialization."
-  (let ((default-directory "/usr/share/emacs/site-lisp/"))
+  (let* ((in-flatpak (file-exists-p "/.flatpak-info"))
+	 (prefix (if in-flatpak "/app" "/usr"))
+	 (default-directory (concat prefix "/share/emacs/site-lisp/")))
     (message "linux init")
     (normal-top-level-add-subdirs-to-load-path)))
 
