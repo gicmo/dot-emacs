@@ -18,7 +18,8 @@ such.
 + `guru`
 
 ### Markdown
-Markdown command is set to `multimarkdown`.
+Markdown command is set to `markdown`. On Fedora this is provided by the
+`discount` package.
 
 ### Python
 Python also uses the [python language server][pyls]. Install with:
