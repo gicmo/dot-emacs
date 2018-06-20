@@ -3,9 +3,9 @@
 ## Requirements
 
 ### C/C++/ObjC
-`Irony` is used for completion, synatx checking, documentation.
-For it to work the `irony-server` must be compiled via the
-provided `install_irony.sh` shell script (OSX).
+The [query][query] LSP server is used to provide IDE features, like
+auto-completion, diagnostics, code naviation, code actions, and
+such.
 
 ### Go
 `go-mode.el` relies heavily on tooling:
@@ -33,3 +33,4 @@ Python packages:
 ### Writing
 Synosaurus uses wordnet (`brew install wordnet`) and langtool needs the jar (`brew install langtool`).
 
+[query]: https://github.com/cquery-project/cquery
