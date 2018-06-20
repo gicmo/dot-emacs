@@ -528,15 +528,11 @@
     :hook (haskell-mode . intero-mode)))
 
 ;; -=[ Python
-(use-package elpy
-  :commands elpy-enable
-  :init
-  (with-eval-after-load 'python
-    (elpy-enable))
+(use-package lsp-python
+  :commands lsp-python-enable
+  :hook (python-mode . lsp-python-enable)
   :config
-  (setq-default flycheck-flake8-maximum-line-length 100)
-  (setq elpy-rpc-backend "jedi")
-  (setq elpy-modules (delq 'elpy-module-flymake elpy-modules)))
+  (setq-default flycheck-flake8-maximum-line-length 100))
 
 (use-package ein
   :defer t)
