@@ -36,6 +36,14 @@
           file-name-handler-alist ck--file-name-handler-alist)
     (message "initialization done"))
 
+
+;; -=[ small utility functions
+
+(defun ck/show-trailing-ws()
+  "Show trailing whitespaces."
+  (setq-local show-trailing-whitespace t))
+
+
 ;; -=[ OS specific setup
 
 (defun ck/init-osx ()
