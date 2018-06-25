@@ -361,7 +361,9 @@
 (use-package markdown-mode
   :mode (("README\\.md\\'" . gfm-mode)
          ("\\.md\\'" . markdown-mode)
-         ("\\.markdown\\'" . markdown-mode)))
+         ("\\.markdown\\'" . markdown-mode))
+  :hook ((markdown-mode . flyspell-mode)
+	 (markdown-mode . ck/show-trailing-ws)))
 
 ;; -=[ pdf viewing
 (use-package doc-view
