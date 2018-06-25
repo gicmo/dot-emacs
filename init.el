@@ -376,7 +376,10 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Programming mode customizations
-(setq-default show-trailing-whitespace t)
+
+(use-package prog-mode
+  :ensure f
+  :hook (prog-mode . ck/show-trailing-ws))
 
 ; -=[ common packages
 (use-package rainbow-delimiters
