@@ -667,7 +667,8 @@
 	 message-sendmail-extra-arguments '("--read-envelope-from")
 	 mail-host-address "kellner.me")
   (add-hook 'message-mode-hook 'ck/message-mode-setup)
-  (add-hook 'message-mode-hook #'flyspell-mode))
+  (add-hook 'message-mode-hook #'flyspell-mode)
+  (add-hook 'message-mode-hook 'ck/show-trailing-ws))
 
 (use-package ck-mail
   :commands (ck/gnus-alias-setup
