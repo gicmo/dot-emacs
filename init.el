@@ -599,6 +599,9 @@
   :commands eldoc-mode)
 
 ;; -=[ config files
+(use-package conf-mode
+  :ensure f
+  :hook (conf-mode . ck/show-trailing-ws))
 
 (use-package apache-mode
   :mode (("apache\\.conf\\'" . apache-mode)
