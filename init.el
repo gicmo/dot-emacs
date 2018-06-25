@@ -300,7 +300,8 @@
   :init
   (setq git-commit-summary-max-length 50
         fill-column 72)
-  (add-hook 'git-commit-setup-hook 'git-commit-turn-on-flyspell))
+  (add-hook 'git-commit-setup-hook 'git-commit-turn-on-flyspell)
+  (add-hook 'git-commit-setup-hook 'ck/show-trailing-ws))
 
 (use-package magit
   :bind (("C-x g" . magit-status))
