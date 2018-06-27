@@ -574,7 +574,8 @@
   :hook (rust-mode . cargo-minor-mode))
 
 (use-package toml-mode
-  :mode (("\\.toml\\'" . toml-mode)))
+  :mode (("\\.toml\\'" . toml-mode)
+	 ("/Pipfile\\'" . toml-mode)))
 
 ;; -=[ packaging
 (use-package rpm-spec-mode
