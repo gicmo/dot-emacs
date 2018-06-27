@@ -594,7 +594,8 @@
 
 ;; -=[ json
 (use-package json-mode
-  :mode (("\\.json\\'" . json-mode)))
+  :mode (("\\.json\\'" . json-mode)
+	 ("/Pipfile.lock\\'" . json-mode)))
 
 ;; -=[ documentation
 (use-package dash-at-point
