@@ -539,6 +539,9 @@
   :config
   (setq-default flycheck-flake8-maximum-line-length 100))
 
+(use-package pipenv
+  :hook (python-mode . pipenv-mode))
+
 (use-package ein
   :defer t)
 
