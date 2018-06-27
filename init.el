@@ -592,6 +592,10 @@
 (use-package yaml-mode
   :mode (("\\.yml\\'" . yaml-mode)))
 
+;; -=[ json
+(use-package json-mode
+  :mode (("\\.json\\'" . json-mode)))
+
 ;; -=[ documentation
 (use-package dash-at-point
   :if (eq system-type 'darwin)
