@@ -579,7 +579,9 @@
 
 ;; -=[ packaging
 (use-package rpm-spec-mode
-  :mode "\\.spec\\'")
+  :mode "\\.spec\\'"
+  :hook ((rpm-spec-mode . flyspell-prog-mode)
+	 (rpm-spec-mode . ck/show-trailing-ws)))
 
 ;; -=[ web stuff
 (use-package web-mode
