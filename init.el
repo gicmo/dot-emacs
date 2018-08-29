@@ -785,6 +785,7 @@
   "Which doom theme to load."
   :type '(choice
 	  (const :tag "One" 'doom-one)
+	  (const :tag "One-Light" 'doom-one-light)
 	  (const :tag "Nord" 'doom-nord))
   :group 'ck)
 
