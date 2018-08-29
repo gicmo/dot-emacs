@@ -248,6 +248,7 @@
 (use-package projectile
   :defer 1
   :config
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
   (projectile-mode t)
   (setq projectile-switch-project-action 'projectile-dired)
   (ck/projectile-commander-setup))
