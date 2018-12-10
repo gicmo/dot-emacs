@@ -392,6 +392,10 @@
 (use-package paredit
   :commands enable-paredit-mode)
 
+(use-package lsp-mode
+  :commands lsp
+  :config (require 'lsp-clients))
+
 ; -=[ Assembler modes
 
 (use-package nasm-mode
@@ -419,7 +423,7 @@
   :mode "\\.h$")
 
 (use-package cquery
-  :hook ((c-mode-common . lsp-cquery-enable))
+  :hook ((c-mode-common . (lambda () (require 'cquery) (lsp))))
   :config
   (setq cquery-extra-init-params
 	'(:index (:comments 2)
@@ -446,6 +450,7 @@
 	      ("C-c r R" . lsp-rename)))
 
 (use-package company-lsp
+  :commands company-lsp
   :ensure t
   :after (company lsp-mode)
   :config
@@ -796,6 +801,7 @@
     (load-theme ck-theme t))
   (doom-themes-neotree-config)
   (doom-themes-visual-bell-config)
+  (doom-themes-org-config)
   (use-package solaire-mode
     :init
     (setq solaire-mode-remap-modeline nil)
