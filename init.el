@@ -422,23 +422,20 @@
   :ensure f
   :mode "\\.h$")
 
-(use-package cquery
-  :hook ((c-mode-common . (lambda () (require 'cquery) (lsp))))
-  :config
-  (setq cquery-extra-init-params
-	'(:index (:comments 2)
-		 :cacheFormat "msgpack"
-		 :completion (:detailedLabel t))
-	cquery-executable (expand-file-name "~/.local/bin/cquery"))
+(use-package ccls
+  :hook ((c-mode-common . (lambda () (require 'ccls) (lsp))))
   :bind (:map c-mode-base-map
-	      ("C-c r h" . cquery-inheritance-hierarchy)
-	      ("C-c r H" . cquery-call-hierarchy)
-	      ("C-c r L" . cquery-code-lens-mode)
-	      ("C-c r m" . cquery-member-hierarchy)))
+	      ("C-c r h" . ccls-inheritance-hierarchy)
+	      ("C-c r H" . ccls-call-hierarchy)
+	      ("C-c r L" . ccls-code-lens-mode)
+	      ("C-c r m" . ccls-member-hierarchy)))
 
 (use-package lsp-ui
   :hook (lsp-mode . lsp-ui-mode)
   :config
+  (require 'lsp-ui-flycheck)
+  (with-eval-after-load 'lsp-mode
+    (add-hook 'lsp-after-open-hook (lambda () (lsp-ui-flycheck-enable 1))))
   (setq lsp-ui-sideline-show-hover nil)
   :bind (:map lsp-ui-mode-map
 	      ("C-c r ." . lsp-ui-peek-find-definitions)
