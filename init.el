@@ -394,7 +394,33 @@
 
 (use-package lsp-mode
   :commands lsp
-  :config (require 'lsp-clients))
+  :hook (python-mode . lsp)
+  :config
+  (require 'lsp-clients))
+
+(use-package lsp-ui
+  :hook ((lsp-mode . lsp-ui-mode)
+	 (lsp-after-open . (lambda () (lsp-ui-flycheck-enable 1))))
+  :config
+  (require 'lsp-ui-flycheck)
+  (setq lsp-ui-sideline-show-hover nil)
+  :bind (:map lsp-ui-mode-map
+	      ("C-c r ." . lsp-ui-peek-find-definitions)
+	      ("C-c r ?" . lsp-ui-peek-find-references)
+	      ("C-c r d" . lsp-ui-peek-find-definitions)
+	      ("C-c r r" . lsp-ui-peek-find-references)
+	      ("C-c r i" . lsp-ui-imenu)
+	      ("C-c r F" . lsp-ui-sideline-apply-code-actions)
+	      ("C-c r R" . lsp-rename)))
+
+(use-package company-lsp
+  :commands company-lsp
+  :ensure t
+  :config
+  (add-to-list 'company-backends 'company-lsp)
+  :custom
+  (company-lsp-async t)
+  (company-lsp-enable-snippet t))
 
 ; -=[ Assembler modes
 
@@ -416,12 +442,6 @@
     :config
     (flycheck-clang-analyzer-setup)))
 
-; detect major mode (objc, c++-mode) for header
-(use-package dummy-h-mode
-  :load-path "ewiki"
-  :ensure f
-  :mode "\\.h$")
-
 (use-package ccls
   :hook ((c-mode-common . (lambda () (require 'ccls) (lsp))))
   :bind (:map c-mode-base-map
@@ -430,31 +450,11 @@
 	      ("C-c r L" . ccls-code-lens-mode)
 	      ("C-c r m" . ccls-member-hierarchy)))
 
-(use-package lsp-ui
-  :hook (lsp-mode . lsp-ui-mode)
-  :config
-  (require 'lsp-ui-flycheck)
-  (with-eval-after-load 'lsp-mode
-    (add-hook 'lsp-after-open-hook (lambda () (lsp-ui-flycheck-enable 1))))
-  (setq lsp-ui-sideline-show-hover nil)
-  :bind (:map lsp-ui-mode-map
-	      ("C-c r ." . lsp-ui-peek-find-definitions)
-	      ("C-c r ?" . lsp-ui-peek-find-references)
-	      ("C-c r d" . lsp-ui-peek-find-definitions)
-	      ("C-c r r" . lsp-ui-peek-find-references)
-	      ("C-c r i" . lsp-ui-imenu)
-	      ("C-c r F" . lsp-ui-sideline-apply-code-actions)
-	      ("C-c r R" . lsp-rename)))
-
-(use-package company-lsp
-  :commands company-lsp
-  :ensure t
-  :after (company lsp-mode)
-  :config
-  (add-to-list 'company-backends 'company-lsp)
-  :custom
-  (company-lsp-async t)
-  (company-lsp-enable-snippet t))
+; detect major mode (objc, c++-mode) for header
+(use-package dummy-h-mode
+  :load-path "ewiki"
+  :ensure f
+  :mode "\\.h$")
 
 (use-package cmake-mode
   :mode (("CMakeLists\\.txt\\'" . cmake-mode)
@@ -536,12 +536,6 @@
     :hook (haskell-mode . intero-mode)))
 
 ;; -=[ Python
-(use-package lsp-python
-  :commands lsp-python-enable
-  :hook (python-mode . lsp-python-enable)
-  :config
-  (setq-default flycheck-flake8-maximum-line-length 100))
-
 (use-package pipenv
   :hook (python-mode . pipenv-mode))
 
