@@ -547,26 +547,15 @@
 ;; -=[ Rust
 (use-package rust-mode
   :mode "\\.rs\\'"
+  :hook (rust-mode . lsp)
   :config
+  (require 'lsp-clients)
   (setq rust-format-on-save t)
   (use-package flycheck-rust
     :after flycheck
     :commands flycheck-rust-setup
     :init
     (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)))
-
-(use-package racer
-  :commands racer-mode
-  :hook
-  ((rust-mode . racer-mode)
-   (rust-mode . eldoc-mode))
-  :bind (:map rust-mode-map
-	 ("M-." . racer-find-definition))
-  :config
-  (use-package company-racer
-    :config
-    (add-to-list 'company-backends 'company-racer)
-    (setq company-tooltip-align-annotations t)))
 
 (use-package cargo
   :commands cargo-minor-mode
