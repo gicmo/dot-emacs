@@ -394,9 +394,11 @@
 
 (use-package lsp-mode
   :commands lsp
-  :hook (python-mode . lsp)
+  :hook ((python-mode . lsp))
   :config
-  (require 'lsp-clients))
+  (require 'lsp-clients)
+  (setq lsp-auto-guess-root t
+	lsp-prefer-flymake nil))
 
 (use-package lsp-ui
   :hook ((lsp-mode . lsp-ui-mode)
