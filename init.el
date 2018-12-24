@@ -394,7 +394,6 @@
 
 (use-package lsp-mode
   :commands lsp
-  :hook ((python-mode . lsp))
   :config
   (require 'lsp-clients)
   (setq lsp-auto-guess-root t
@@ -538,6 +537,12 @@
     :hook (haskell-mode . intero-mode)))
 
 ;; -=[ Python
+(use-package python-mode
+  :ensure nil ;; builtin
+  :hook (rust-mode . lsp)
+  :config
+  (require 'lsp-clients))
+
 (use-package pipenv
   :hook (python-mode . pipenv-mode))
 
