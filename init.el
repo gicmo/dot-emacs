@@ -389,6 +389,9 @@
 (use-package rainbow-delimiters
   :hook (emacs-lisp-mode . rainbow-delimiters-mode))
 
+(use-package rainbow-mode
+  :hook (after-init . rainbow-mode))
+
 (use-package paredit
   :commands enable-paredit-mode)
 
