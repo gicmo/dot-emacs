@@ -587,6 +587,9 @@
 (use-package yaml-mode
   :mode (("\\.yml\\'" . yaml-mode)))
 
+(use-package fish-mode
+  :mode (("\\.fish\\'" . fish-mode)))
+
 ;; -=[ json
 (use-package json-mode
   :mode (("\\.json\\'" . json-mode)
