@@ -748,16 +748,25 @@
   :ensure f
   :commands ck-set-font)
 
+(defun set-dark-frame (frame)
+  "Make the FRAME's window decoration dark."
+  (let ((frame-name (cdr (assq 'name (frame-parameters frame)))))
+    (call-process-shell-command
+     (concat "xprop -f _GTK_THEME_VARIANT 8u -set _GTK_THEME_VARIANT \"dark\" -name \""
+             frame-name
+             "\""))))
+
 (defun new-frames-setup (frame)
   "Called for each new FRAME in daemon mode."
   (let ((have-gui (memq (framep frame) '(x w32 ns mac)))
-	(is-mac (eq system-type 'darwin)))
+	(is-mac (eq system-type 'darwin))
+	(is-linux (eq system-type 'gnu/linux)))
     (set-frame-parameter frame 'menu-bar-lines (if (and have-gui is-mac) 1 0))
     (when have-gui
       (with-selected-frame frame
 	(ck-set-font))
-      )))
-
+      (when is-linux
+	(set-dark-frame frame)))))
 
 (add-hook 'after-make-frame-functions 'new-frames-setup)
 (unless (daemonp)
