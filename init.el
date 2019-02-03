@@ -782,6 +782,7 @@
 (defcustom ck-theme 'doom-nord
   "Which doom theme to load."
   :type '(choice
+	  (const :tag "Vibrant" 'doom-vibrant)
 	  (const :tag "One" 'doom-one)
 	  (const :tag "One-Light" 'doom-one-light)
 	  (const :tag "Nord" 'doom-nord))
