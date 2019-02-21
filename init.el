@@ -492,11 +492,9 @@
   :config
   (use-package clojure-mode-extra-font-locking))
 
-(use-package jdee
-  :mode ("\\.java\\'" . jdee-mode)
-  :config
-  (setq jdee-server-dir "~/.emacs.d/jdee-server/target"
-        jdee-mode-line-format (ck/mode-line)))
+(use-package lsp-java
+  :after lsp
+  :hook ((java-mode . lsp)))
 
 ; -=[ Fortran
 (use-package f90
