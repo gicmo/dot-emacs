@@ -426,6 +426,12 @@
   (company-lsp-async t)
   (company-lsp-enable-snippet t))
 
+(use-package dap-mode
+  :after lsp-mode
+  :config
+  (dap-mode t)
+  (dap-ui-mode t))
+
 ; -=[ Assembler modes
 
 (use-package nasm-mode
