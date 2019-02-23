@@ -494,7 +494,7 @@
 
 (use-package lsp-java
   :after lsp
-  :hook ((java-mode . lsp)))
+  :hook ((java-mode . (lambda () (require 'lsp-java) (lsp)))))
 
 ; -=[ Fortran
 (use-package f90
