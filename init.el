@@ -311,12 +311,11 @@
   (add-hook 'magit-post-refresh-hook
 	    'git-gutter:update-all-windows))
 
-(use-package magithub
+(use-package forge
   :after magit
-  :disabled
   :config
-  (magithub-feature-autoinject t)
-  (setq magithub-api-timeout 3))
+  (dolist (url '("gitlab.freedesktop.org" "gitlab.gnome.org"))
+    (add-to-list 'forge-alist (list url (concat url "/api/v4") url forge-gitlab-repository))))
 
 ;; -=[ yasnippet
 (use-package yasnippet
