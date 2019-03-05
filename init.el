@@ -481,6 +481,15 @@
 (use-package meson-mode
   :mode "\\meson\\.build\\'")
 
+(use-package vala-mode
+  :mode (("\\.vala\\'" . vala-mode)
+         ("\\.vapi\\'" . vala-mode))
+  :config
+  (use-package vala-snippets)
+  (run-hooks 'prog-mode-hook)
+  (dolist (suffix '("\\.vala\\'" "\\.vapi\\'"))
+    (add-to-list 'file-coding-system-alist `(quote ,suffix . utf-8))))
+
 ;; -=[ docker
 (use-package dockerfile-mode
   :mode "Dockerfile\\'")
