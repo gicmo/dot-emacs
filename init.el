@@ -229,12 +229,15 @@
    '(
      (python . t)
      (sh     . t)))
-  (use-package org-journal
-    :init
-    (setq org-journal-dir "~/Documents/Notes/journal"
-	  org-journal-file-format "%Y-%B.org"))
   (use-package org-bullets
     :hook (org-mode . org-bullets-mode)))
+
+(use-package org-journal
+  :after org
+  :custom
+  (org-journal-dir "~/Documents/Notes/journal")
+  (org-journal-file-format "%G-w%V.org")
+  (org-journal-file-type 'weekly))
 
 ; -=[ Projects via projectile
 
