@@ -28,3 +28,17 @@ README.html
 
 #Network Security Manager
 network-security.data
+
+# magit
+forge-database.sqlite
+
+# LSP
+.lsp-session-v1
+.dap-breakpoints
+
+eclipse.jdt.ls/
+workspace/
+semanticdb/
+
+# locally installed / compiled
+vendor/
