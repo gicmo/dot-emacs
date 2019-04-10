@@ -175,7 +175,6 @@
 
 (use-package back-button
   :commands (back-button-mode)
-  :disabled
   :load-path "ewiki"
   :ensure f
   :defer 2
