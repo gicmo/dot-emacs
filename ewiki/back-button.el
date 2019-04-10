@@ -215,11 +215,9 @@
 (require 'smartrep     nil t)
 (require 'nav-flash    nil t)
 (require 'visible-mark nil t)
-(require 'ucs-utils    nil t)
 
 ;;; declarations
 
-(declare-function ucs-utils-char                    "ucs-utils.el")
 (declare-function smartrep-define-key               "smartrep.el")
 (declare-function visible-mark-initialize-overlays  "visible-mark.el")
 (declare-function visible-mark-move-overlays        "visible-mark.el")
@@ -412,9 +410,9 @@ The format for key sequences is as defined by `kbd'."
 (defvar back-button-spacer-char     ?.  "Character used to indicate marks available for navigation.")
 (defvar back-button-thumb-char      ?o  "Character used to indicate current mark.")
 
-(when (featurep 'ucs-utils)
-  (setq back-button-spacer-char (ucs-utils-char back-button-index-spacer-ucs-name back-button-spacer-char 'cdp))
-  (setq back-button-thumb-char  (ucs-utils-char back-button-index-thumb-ucs-name  back-button-thumb-char  'cdp)))
+(when (fboundp 'char-from-name)
+  (setq back-button-spacer-char (char-from-name (upcase back-button-index-spacer-ucs-name)))
+  (setq back-button-thumb-char  (char-from-name (upcase back-button-index-thumb-ucs-name))))
 
 (defvar back-button-lighter-menu-mouse-button 1
   "Which mouse button invokes the modeline context menu.")
