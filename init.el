@@ -228,7 +228,7 @@
    'org-babel-load-languages
    '(
      (python . t)
-     (sh     . t)))
+     (shell  . t)))
   (use-package org-bullets
     :hook (org-mode . org-bullets-mode)))
 
