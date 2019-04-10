@@ -176,6 +176,8 @@
 (use-package back-button
   :commands (back-button-mode)
   :disabled
+  :load-path "ewiki"
+  :ensure f
   :defer 2
   :init
   (setq back-button-show-toolbar-buttons nil)
