@@ -489,11 +489,19 @@
 (use-package vala-mode
   :mode (("\\.vala\\'" . vala-mode)
          ("\\.vapi\\'" . vala-mode))
+  :hook ((vala-mode . (lambda () (lsp))))
   :config
   (use-package vala-snippets)
   (run-hooks 'prog-mode-hook)
   (dolist (suffix '("\\.vala\\'" "\\.vapi\\'"))
-    (add-to-list 'file-coding-system-alist `(quote ,suffix . utf-8))))
+    (add-to-list 'file-coding-system-alist `(quote ,suffix . utf-8)))
+  (require 'lsp-mode)
+  (lsp-register-client
+   (make-lsp-client
+    :new-connection (lsp-stdio-connection "vala-language-server")
+    :major-modes '(vala-mode)
+    :server-id 'vala-langague-server))
+  )
 
 ;; -=[ docker
 (use-package dockerfile-mode
