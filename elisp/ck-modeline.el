@@ -559,7 +559,7 @@ DEFAULT is non-nil, set the default mode-line for all buffers."
 
 (def-ml-segment! flycheck (active)
   "Displays flycheck status if ACTIVE."
-  (when (boundp 'flycheck-last-status-change)
+  (when (and (not buffer-read-only) (boundp 'flycheck-last-status-change))
     (let* ((state flycheck-last-status-change)
 	   (total-errors (flycheck-count-errors flycheck-current-errors))
 	   (errors (or (alist-get 'error total-errors) 0))
