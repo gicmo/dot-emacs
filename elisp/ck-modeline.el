@@ -621,11 +621,30 @@ DEFAULT is non-nil, set the default mode-line for all buffers."
   "The current cursor position, honoring ACTIVE."
   (propertize "(%l,%c)" 'face (if active 'ck-modeline-dimmed)))
 
+(def-ml-segment! tabs-or-spaces (active)
+  "Show if we are using tabs or spaces."
+  (if (not buffer-read-only)
+      (if indent-tabs-mode
+	  (propertize (ck/ml-icon "material" "keyboard_tab"
+				  :fallback "⇥"
+				  :v-adjust -0.1
+				  :height 0.8
+				  :face (if active 'ck-modeline-dimmed))
+		      'help-echo (format "Tabs: %d" tab-width)
+		      'mouse-face 'ck-modeline-highlight)
+	(propertize (ck/ml-icon "material" "space_bar"
+				:fallback "⌴"
+				:v-adjust -0.1
+				:height 0.8
+				:face (if active 'ck-modeline-dimmed))
+		    'help-echo (format "Spaces: %d" tab-width)
+		    'mouse-face 'ck-modeline-highlight))))
+
 ;; the mode-lines
 
 (def-modeline! default
   (bar indicator-for-major-mode buffer-id minor-modes ibookmark process anzu num-cursors)
-  (flycheck buffer-encoding-abbrev cursor-position buffer-position))
+  (flycheck buffer-encoding-abbrev tabs-or-spaces cursor-position buffer-position))
 
 
 (provide 'ck-modeline)
