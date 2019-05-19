@@ -465,6 +465,9 @@
 	      ("C-c r L" . ccls-code-lens-mode)
 	      ("C-c r m" . ccls-member-hierarchy)))
 
+(use-package dtrt-indent
+  :hook (c-mode-common . dtrt-indent-mode))
+
 ; detect major mode (objc, c++-mode) for header
 (use-package dummy-h-mode
   :load-path "ewiki"
