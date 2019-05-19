@@ -414,6 +414,7 @@ DEFAULT is non-nil, set the default mode-line for all buffers."
       (when (> n 1)
 	(propertize (format " %d " n) 'face (if ml-active 'ck-modeline-panel))))))
 
+;; helper functions icons
 (defun ck/have-all-the-iconsp ()
   "Check if we have all-the-icons support."
   (and (window-system)
@@ -432,6 +433,30 @@ DEFAULT is non-nil, set the default mode-line for all buffers."
     (propertize (or (plist-get args :fallback) name) 'face (plist-get args :face))))
 
 (ck-memoize 'ck/ml-icon)
+
+(defun ck/charify (arg)
+  "Take ARG and try to make a char out of it."
+  (cond ((stringp arg) (string-to-char arg))
+	((listp arg) (ck/charify (apply arg)))
+	(t arg)))
+
+;; adapted from Emacs SO question 14420
+(defun ck/set-char-widths (alist)
+  "Adjust the length of chars in ALIST."
+  (while (char-table-parent char-width-table)
+    (setq char-width-table (char-table-parent char-width-table)))
+  (dolist (pair alist)
+    (let ((char (ck/charify (car pair)))
+	  (width (cdr pair))
+          (table (make-char-table nil)))
+      (set-char-table-range table char width)
+      (optimize-char-table table)
+      (set-char-table-parent table char-width-table)
+      (setq char-width-table table))))
+
+(ck/set-char-widths
+ '((58140 . 2)    ; material: keyboard_map
+   (57942 . 2)))  ; material: space_bar
 
 (def-ml-segment! indicator-for-major-mode (_)
   "Get an indicator (icon or name) for the major mode."
