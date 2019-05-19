@@ -186,7 +186,8 @@
 ;; -=[ spell checking, because I will never learn how to spell
 (use-package flyspell
   :commands (flyspell-prog-mode flyspell-mode flyspell-buffer)
-  :hook (prog-mode . flyspell-prog-mode)
+  :hook ((prog-mode . flyspell-prog-mode)
+	 (nxml-mode . flyspell-prog-mode))
   :config
   (setq flyspell-issue-message-flag nil
 	flyspell-issue-welcome-flag nil)
