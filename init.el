@@ -105,6 +105,9 @@
 
 ;; -=[ Editing
 
+;; Insert matching brackets.
+(electric-pair-mode t)
+
 ;; multiple cursors
 (use-package multiple-cursors
   :bind (("C->" . mc/mark-next-like-this)
