@@ -81,6 +81,11 @@
 (use-package reveal-in-osx-finder
   :commands (reveal-in-osx-finder))
 
+(use-package which-key
+  :init
+  (which-key-mode)
+  :config
+  (setq which-key-idle-delay 1.0))
 
 (use-package dired-x
   :ensure nil
