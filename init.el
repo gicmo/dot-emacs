@@ -82,6 +82,7 @@
   :commands (reveal-in-osx-finder))
 
 (use-package which-key
+  :defer t
   :init
   (which-key-mode)
   :config
