@@ -85,7 +85,17 @@
   :init
   (which-key-mode)
   :config
-  (setq which-key-idle-delay 1.0))
+  (setq which-key-idle-delay 1.0)
+  (dolist (pair '(("SPC" . "␣")
+		  ("TAB" . "↹")
+		  ("RET" . "⏎")
+		  ("DEL" . "⌫")
+		  ("ESC" . "⎋")
+		  ("deletechar" . "⌦")))
+    (let ((for-char  (car pair))
+	  (symbol (cdr pair)))
+      (push `((,for-char . nil) . (,symbol . nil))
+	    which-key-replacement-alist))))
 
 (use-package dired-x
   :ensure nil
