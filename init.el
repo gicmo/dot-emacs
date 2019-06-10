@@ -133,6 +133,9 @@
 (use-package smart-region
   :bind (("C-SPC" . smart-region)))
 
+(use-package iedit
+  :bind ("C-;" . iedit-mode))
+
 ; -=[ EditorConfig
 
 (use-package editorconfig
