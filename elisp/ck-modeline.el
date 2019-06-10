@@ -456,7 +456,8 @@ DEFAULT is non-nil, set the default mode-line for all buffers."
 
 (ck/set-char-widths
  '((58140 . 2)    ; material: keyboard_map
-   (57942 . 2)))  ; material: space_bar
+   (57942 . 2)    ; material: space_bar
+   (8633  . 2)))  ; utf-8 tabl char
 
 (def-ml-segment! indicator-for-major-mode (_)
   "Get an indicator (icon or name) for the major mode."
