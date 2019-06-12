@@ -414,6 +414,13 @@ DEFAULT is non-nil, set the default mode-line for all buffers."
       (when (> n 1)
 	(propertize (format " %d " n) 'face (if ml-active 'ck-modeline-panel))))))
 
+(def-ml-segment! iedit (ml-active)
+  "If iedit mode is active, shows the number of matches; highlighted if ML-ACTIVE."
+  (when (and (fboundp 'iedit-mode) (boundp 'iedit-occurrences-overlays))
+    (let ((n (length iedit-occurrences-overlays)))
+      (when (> n 1)
+	(propertize (format " %d " n) 'face (if ml-active 'ck-modeline-panel))))))
+
 ;; helper functions icons
 (defun ck/have-all-the-iconsp ()
   "Check if we have all-the-icons support."
@@ -644,7 +651,7 @@ DEFAULT is non-nil, set the default mode-line for all buffers."
 ;; the mode-lines
 
 (def-modeline! default
-  (bar indicator-for-major-mode buffer-id minor-modes ibookmark process anzu num-cursors)
+  (bar indicator-for-major-mode buffer-id minor-modes ibookmark process anzu num-cursors iedit)
   (flycheck buffer-encoding-abbrev tabs-or-spaces cursor-position buffer-position))
 
 
