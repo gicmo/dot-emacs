@@ -74,6 +74,7 @@
   (customize-set-variable 'exec-path-from-shell-arguments nil)
   :config
   (exec-path-from-shell-initialize)
+  (exec-path-from-shell-copy-env "EMAIL")
   (exec-path-from-shell-copy-env "GOPATH")
   (exec-path-from-shell-copy-env "RUST_SRC_PATH")
   (exec-path-from-shell-copy-env "WORKON_HOME"))
