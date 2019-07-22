@@ -511,6 +511,11 @@
 	 ("\\.geom\\'" . glsl-mode)
 	 ("\\.frag\\'" . glsl-mode)))
 
+(use-package cocci-mode
+  :load-path "ewiki"
+  :ensure f
+  :mode "\\.cocci$")
+
 (use-package meson-mode
   :mode "\\meson\\.build\\'")
 
