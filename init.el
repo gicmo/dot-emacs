@@ -747,7 +747,9 @@
 	     ck/mail-mk-mu4e-contexts
 	     ck/mu4e-patch-trash)
   :ensure f
-  :load-path "elisp")
+  :load-path "elisp"
+  :init
+  (setq user-mail-address (getenv "EMAIL")))
 
 (use-package gnus-alias
   :hook ('message-setup . gnus-alias-determine-identity)
