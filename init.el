@@ -38,9 +38,9 @@
 ;; === package management
 (require 'package)
 (add-to-list 'package-archives
-             '("melpa" . "http://melpa.org/packages/") t)
+             '("melpa" . "https://melpa.org/packages/") t)
 (add-to-list 'package-archives
-	     '("marmalade" . "http://marmalade-repo.org/packages/") t)
+	     '("marmalade" . "https://marmalade-repo.org/packages/") t)
 
 ;; no auto package loading,
 ;; loading is handled via use-package
