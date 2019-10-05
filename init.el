@@ -856,7 +856,8 @@
 	  (const :tag "Vibrant" 'doom-vibrant)
 	  (const :tag "One" 'doom-one)
 	  (const :tag "One-Light" 'doom-one-light)
-	  (const :tag "Nord" 'doom-nord))
+	  (const :tag "Nord" 'doom-nord)
+	  (const :tag "CityLights" 'doom-city-lights))
   :group 'ck)
 
 (use-package doom-themes
