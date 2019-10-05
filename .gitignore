@@ -10,11 +10,13 @@ custom.el
 
 # mode related temp files
 ido.last
+eshell/
 recentf
 irony/
 request/
 var/
 tramp
+transient/
 
 #multiple cursors
 .mc-lists.el
