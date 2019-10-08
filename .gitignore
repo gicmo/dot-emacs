@@ -4,6 +4,7 @@ auto-save-list
 *~
 .DS_Store
 session.*
+*.cache
 
 # I use custom for per host overwrites
 custom.el
@@ -33,6 +34,7 @@ network-security.data
 
 # magit
 forge-database.sqlite
+magithub/
 
 # LSP
 .lsp-session-v1
