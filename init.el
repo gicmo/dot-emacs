@@ -722,6 +722,9 @@
   :bind ("C-c s l" . synosaurus-lookup)
   :config (setq synosaurus-backend 'synosaurus-backend-wordnet))
 
+(use-package ck-dir-locals
+  :load-path "elisp")
+
 ;; -=[ Emacs as App
 
 ;; mailer
