@@ -357,6 +357,10 @@
   :config
   (setq company-tooltip-align-annotations t))
 
+(use-package company-box
+  :if window-system
+  :hook (company-mode . company-box-mode))
+
 (use-package restclient
   :mode ("\\.http\\'" . restclient-mode))
 
