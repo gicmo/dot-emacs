@@ -435,7 +435,8 @@
   (setq lsp-auto-guess-root t
 	lsp-prefer-flymake nil
 	lsp-enable-indentation nil
-	lsp-enable-on-type-formatting nil))
+	lsp-enable-on-type-formatting nil)
+  (add-to-list 'lsp-file-watch-ignored "\\.vscode$"))
 
 (use-package lsp-ui
   :hook ((lsp-mode . lsp-ui-mode)
