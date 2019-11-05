@@ -493,7 +493,9 @@
 	      ("C-c r h" . ccls-inheritance-hierarchy)
 	      ("C-c r H" . ccls-call-hierarchy)
 	      ("C-c r L" . ccls-code-lens-mode)
-	      ("C-c r m" . ccls-member-hierarchy)))
+	      ("C-c r m" . ccls-member-hierarchy))
+  :config
+  (add-to-list 'lsp-file-watch-ignored "\\.ccls-cache$"))
 
 (use-package dtrt-indent
   :hook (c-mode-common . dtrt-indent-mode))
