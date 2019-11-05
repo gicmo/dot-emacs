@@ -25,6 +25,7 @@
 (put 'scroll-left 'disabled nil)
 (fset 'display-startup-echo-area-message #'ignore)
 (setq mode-line-default-help-echo nil)
+(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 
 ;; Disable Ctrl-Z minimization/suspension of emacs.
 (global-set-key [C-z] nil)
