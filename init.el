@@ -864,7 +864,9 @@
 	  (const :tag "One" 'doom-one)
 	  (const :tag "One-Light" 'doom-one-light)
 	  (const :tag "Nord" 'doom-nord)
-	  (const :tag "CityLights" 'doom-city-lights))
+	  (const :tag "CityLights" 'doom-city-lights)
+	  (const :tag "Moonlight" 'doom-moonlight)
+	  (const :tag "Spacegrey" 'doom-spacegrey))
   :group 'ck)
 
 (use-package doom-themes
