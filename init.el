@@ -610,7 +610,7 @@
 ;; -=[ Python
 (use-package python-mode
   :ensure nil ;; builtin
-  :hook (rust-mode . lsp)
+  :hook (python-mode . lsp)
   :config
   (require 'lsp-clients))
 
