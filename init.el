@@ -679,6 +679,11 @@
 (use-package eldoc
   :commands eldoc-mode)
 
+(use-package gtk-doc
+  :ensure f
+  :bind (("C-x 4 s" . gtk-doc-insert-section)
+	 ("C-x 4 h" . gtk-doc-insert)))
+
 ;; -=[ config files
 (use-package conf-mode
   :ensure f
