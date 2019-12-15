@@ -608,11 +608,8 @@
     :hook (haskell-mode . intero-mode)))
 
 ;; -=[ Python
-(use-package python-mode
-  :ensure nil ;; builtin
-  :hook (python-mode . lsp)
-  :config
-  (require 'lsp-clients))
+(use-package lsp-python-ms
+  :hook (python-mode . (lambda () (require 'lsp-python-ms) (lsp))))
 
 (use-package pipenv
   :hook (python-mode . pipenv-mode))
