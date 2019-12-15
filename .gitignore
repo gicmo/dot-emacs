@@ -46,3 +46,4 @@ semanticdb/
 
 # locally installed / compiled
 vendor/
+mspyls/
