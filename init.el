@@ -429,7 +429,7 @@
   :commands enable-paredit-mode)
 
 (use-package lsp-mode
-  :commands lsp
+  :commands (lsp lsp-deferred)
   :config
   (require 'lsp-clients)
   (setq lsp-auto-guess-root t
