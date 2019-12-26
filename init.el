@@ -573,25 +573,17 @@
 ; -=[ Go
 (use-package go-mode
   :mode "\\.go\\'"
+  :hook (go-mode . lsp-deferred)
   :bind (:map go-mode-map
 	      ("M-." . godef-jump)
-	      ("M-," . godef-jump-back)
-	      ("C-c C-r" . go-rename))
+	      ("M-," . godef-jump-back))
   :config
-  (add-hook 'before-save-hook 'gofmt-before-save)
-  (setq gofmt-command "goreturns")
-  (use-package go-guru)
+  (add-hook 'before-save-hook 'lsp-organize-imports)
+  (add-hook 'before-save-hook 'lsp-format-buffer)
   (use-package go-stacktracer)
   (use-package go-playground)
   (use-package go-dlv)
-  (use-package company-go
-    :config
-    (add-to-list 'company-backends 'company-go))
-  (use-package go-projectile)
-  )
-
-(use-package go-rename
-  :commands (go-rename))
+  (use-package go-projectile))
 
 (use-package go-eldoc
   :commands (go-eldoc-setup)
