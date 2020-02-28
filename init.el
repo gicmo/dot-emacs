@@ -473,6 +473,9 @@
 (use-package nasm-mode
   :mode "\\.\\(nasm\\|s\\)$")
 
+(use-package bpftrace-mode
+  :mode "\\.bt$")
+
 ; -=[ C/C++/ObjC and friends
 (use-package cc-mode
   :bind (:map c-mode-base-map
@@ -885,3 +888,4 @@
 
 ;; all done, pheww
 ;;; init.el ends here
+(put 'narrow-to-region 'disabled nil)
