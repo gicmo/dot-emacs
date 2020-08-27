@@ -603,7 +603,10 @@
 
 ;; -=[ Python
 (use-package lsp-python-ms
-  :hook (python-mode . (lambda () (require 'lsp-python-ms) (lsp))))
+  :hook (python-mode . (lambda ()
+			 (require 'lsp-python-ms)
+			 (lsp)
+			 (setq-local flycheck-checker 'python-pylint))))
 
 (use-package pipenv
   :hook (python-mode . pipenv-mode))
