@@ -431,12 +431,12 @@
 (use-package lsp-mode
   :commands (lsp lsp-deferred)
   :config
-  (require 'lsp-clients)
-  (setq lsp-auto-guess-root t
-	lsp-prefer-flymake nil
-	lsp-enable-indentation nil
-	lsp-enable-on-type-formatting nil)
-  (add-to-list 'lsp-file-watch-ignored "\\.vscode$"))
+  (add-to-list 'lsp-file-watch-ignored "\\.vscode$")
+  :custom
+  (lsp-auto-guess-root t
+   lsp-prefer-flymake nil
+   lsp-enable-indentation nil
+   lsp-enable-on-type-formatting nil))
 
 (use-package lsp-ui
   :hook ((lsp-mode . lsp-ui-mode))
