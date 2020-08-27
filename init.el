@@ -452,15 +452,6 @@
 	      ("C-c r F" . lsp-ui-sideline-apply-code-actions)
 	      ("C-c r R" . lsp-rename)))
 
-(use-package company-lsp
-  :commands company-lsp
-  :ensure t
-  :config
-  (add-to-list 'company-backends 'company-lsp)
-  :custom
-  (company-lsp-async t)
-  (company-lsp-enable-snippet t))
-
 (use-package dap-mode
   :after lsp-mode
   :config
