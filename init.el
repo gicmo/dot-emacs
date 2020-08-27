@@ -439,8 +439,7 @@
   (add-to-list 'lsp-file-watch-ignored "\\.vscode$"))
 
 (use-package lsp-ui
-  :hook ((lsp-mode . lsp-ui-mode)
-	 (lsp-after-open . (lambda () (lsp-ui-flycheck-enable 1))))
+  :hook ((lsp-mode . lsp-ui-mode))
   :config
   (require 'lsp-ui-flycheck)
   (setq lsp-ui-sideline-show-hover nil)
