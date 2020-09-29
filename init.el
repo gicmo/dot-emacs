@@ -153,7 +153,8 @@
   (ivy-re-builders-alist '((t . ivy--regex-fuzzy)))
   :config
   (ivy-mode t)
-  (use-package flx))
+  (use-package flx)
+  (use-package ivy-hydra))
 
 (use-package counsel
   :bind (("C-x C-f" . counsel-find-file)
