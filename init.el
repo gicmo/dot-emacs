@@ -150,6 +150,7 @@
 (use-package ivy
   :custom
   (ivy-use-virtual-buffers t)
+  (ivy-re-builders-alist '((t . ivy--regex-fuzzy)))
   :config
   (ivy-mode t))
 
