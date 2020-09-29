@@ -152,7 +152,8 @@
   (ivy-use-virtual-buffers t)
   (ivy-re-builders-alist '((t . ivy--regex-fuzzy)))
   :config
-  (ivy-mode t))
+  (ivy-mode t)
+  (use-package flx))
 
 (use-package counsel
   :bind (("C-x C-f" . counsel-find-file)
