@@ -144,29 +144,24 @@
   :init
   (editorconfig-mode 1))
 
-; -=[ interactively do things
 
-(use-package ido
-  :init
-  (ido-mode t)
+; -=[ ivy completion
+
+(use-package ivy
+  :custom
+  (ivy-use-virtual-buffers t)
   :config
-  ;; prevent ido to globally search for files automatically
-  (setq ido-auto-merge-work-directories-length -1)
-  (define-key ido-file-dir-completion-map (kbd "C-c C-s")
-    (lambda()
-      (interactive)
-      (ido-initiate-auto-merge (current-buffer))))
-  (use-package flx-ido
-    :init
-    (flx-ido-mode t))
-  (use-package ido-vertical-mode
-    :init
-    (ido-vertical-mode 1)))
+  (ivy-mode t))
 
-(use-package idomenu
-  :commands idomenu
-  :load-path "ewiki"
-  :ensure f)
+(use-package counsel
+  :bind (("C-x C-f" . counsel-find-file)
+	 ("M-x" . counsel-M-x)))
+
+(use-package swiper
+  :bind (("C-s" . swiper-isearch)
+	 ("C-r" . swiper-backword)))
+
+; -=[ navigation and searching
 
 (use-package anzu
   :bind
