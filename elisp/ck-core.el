@@ -48,8 +48,6 @@
 
 (defun ck/init-osx ()
   "OS/X specific global initialization."
-  (let ((default-directory "/usr/local/share/emacs/site-lisp/"))
-    (normal-top-level-add-subdirs-to-load-path))
   (setq mac-option-modifier 'meta)
   (if (boundp 'mac-auto-operator-composition-mode)
       (mac-auto-operator-composition-mode))
