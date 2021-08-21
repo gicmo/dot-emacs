@@ -156,6 +156,18 @@
   (use-package flx)
   (use-package ivy-hydra))
 
+(use-package all-the-icons-ivy-rich
+  :after (ivy ivy-posframe counsel-projectile)
+  :init
+  (all-the-icons-ivy-rich-mode t)
+  (setq all-the-icons-ivy-rich-icon-size 0.8))
+
+(use-package ivy-rich
+  :after (all-the-icons-ivy-rich)
+  :init
+  (ivy-rich-mode t)
+  (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line))
+
 (use-package counsel
   :bind (("C-x C-f" . counsel-find-file)
 	 ("M-x" . counsel-M-x)))
@@ -165,9 +177,18 @@
   :init
   (counsel-projectile-mode 1))
 
-(use-package swiper
-  :bind (("C-s" . swiper-isearch)
-	 ("C-r" . swiper-backword)))
+(use-package ivy-posframe
+  :after ivy
+  :custom
+(ivy-posframe-display-functions-alist
+   '((swiper-isearch . ivy-posframe-display-at-window-bottom-left)
+     (t . ivy-posframe-display-at-frame-top-center)
+     ))
+  (ivy-posframe-parameters
+   '((left-fringe . 8)
+     (right-fringe . 8)))
+  :config
+  (ivy-posframe-mode 1))
 
 ; -=[ navigation and searching
 
