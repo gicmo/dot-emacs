@@ -44,6 +44,8 @@ eclipse.jdt.ls/
 workspace/
 semanticdb/
 
+gotools/
+
 # locally installed / compiled
 vendor/
 mspyls/
