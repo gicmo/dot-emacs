@@ -888,6 +888,10 @@
 	  (const :tag "Spacegrey" 'doom-spacegrey))
   :group 'ck)
 
+(use-package solaire-mode
+  :hook (after-init . solaire-global-mode))
+  :config (solaire-global-mode +1)
+
 (use-package doom-themes
   :init
   (if (daemonp)
@@ -895,14 +899,7 @@
     (load-theme ck-theme t))
   (doom-themes-neotree-config)
   (doom-themes-visual-bell-config)
-  (doom-themes-org-config)
-  (use-package solaire-mode
-    :init
-    (setq solaire-mode-remap-modeline nil)
-    (add-hook 'after-change-major-mode-hook #'turn-on-solaire-mode)
-    (add-hook 'after-revert-hook #'turn-on-solaire-mode)
-    (add-hook 'minibuffer-setup-hook #'solaire-mode-in-minibuffer)
-    (add-hook 'ediff-prepare-buffer-hook #'solaire-mode)))
+  (doom-themes-org-config))
 
 ;; all done, pheww
 ;;; init.el ends here
