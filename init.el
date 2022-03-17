@@ -618,11 +618,12 @@
     :hook (haskell-mode . intero-mode)))
 
 ;; -=[ Python
-(use-package lsp-python-ms
+(use-package lsp-pyright
+  :ensure t
   :hook (python-mode . (lambda ()
-			 (require 'lsp-python-ms)
-			 (lsp)
-			 (setq-local flycheck-checker 'python-pylint))))
+                          (require 'lsp-pyright)
+                          (lsp)
+			  (setq-local flycheck-checker 'python-pylint))))  ; or lsp-deferred
 
 (use-package pipenv
   :hook (python-mode . pipenv-mode))
