@@ -338,13 +338,11 @@
   (fringe-helper-define 'git-gutter-fr:deleted  '(center repeated)
     "XXX....."))
 
-(use-package gitconfig-mode
-  :mode (("\\.gitconfig\\'" . gitconfig-mode)
-	 ("\\.git/config\\'" . gitconfig-mode)
-	 ("\\.gitmodules\\'" . gitconfig-mode)))
-
-(use-package gitignore-mode
-  :mode ("\\.gitignore\\'" . gitignore-mode))
+(use-package git-modes
+   :mode ("\\.gitconfig\\'" . gitconfig-mode)
+ 	 ("\\.git/config\\'" . gitconfig-mode)
+ 	 ("\\.gitmodules\\'" . gitconfig-mode)
+	 ("\\.gitignore\\'" . gitignore-mode))
 
 (use-package git-timemachine
   :commands git-timemachine
