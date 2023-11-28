@@ -74,14 +74,17 @@
 ;; pick up the correct path from a login shell
 (use-package exec-path-from-shell
   :if (memq system-type '(gnu gnu/linux darwin))
+  :custom
+  (exec-path-from-shell-variables '("EMAIL"
+				    "GOPATH"
+				    "RUST_SRC_PATH"
+				    "WORKON_HOME"
+				    "MANPATH"
+				    "PATH"))
   :init
   (customize-set-variable 'exec-path-from-shell-arguments nil)
   :config
-  (exec-path-from-shell-initialize)
-  (exec-path-from-shell-copy-env "EMAIL")
-  (exec-path-from-shell-copy-env "GOPATH")
-  (exec-path-from-shell-copy-env "RUST_SRC_PATH")
-  (exec-path-from-shell-copy-env "WORKON_HOME"))
+  (exec-path-from-shell-initialize))
 
 (use-package reveal-in-osx-finder
   :commands (reveal-in-osx-finder))
