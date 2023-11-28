@@ -109,7 +109,6 @@
     (erase-buffer)
     (dashboard-mode)
     (dashboard-make)
-    (linum-mode -1)
     (switch-to-buffer (current-buffer))
     (if after-init-time
 	(insert (propertize " > Loaded in " (emacs-init-time) ".\n"
