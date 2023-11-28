@@ -160,7 +160,7 @@ DEFAULT is non-nil, set the default mode-line for all buffers."
     (when modeline
       (setf (if default
 		(default-value 'mode-line-format)
-	      (buffer-local-value 'mode-line-format (current-buffer)))
+	      (make-variable-buffer-local 'mode-line-format (current-buffer)))
 	    modeline))))
 
 ;; helper to create bar pixmap
