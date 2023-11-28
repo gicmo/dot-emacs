@@ -154,8 +154,8 @@
   :custom
   (ivy-use-virtual-buffers t)
   (ivy-re-builders-alist '((t . ivy--regex-fuzzy)))
+  :hook (after-init . ivy-mode)
   :config
-  (ivy-mode t)
   (use-package flx)
   (use-package ivy-hydra))
 
