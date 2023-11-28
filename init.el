@@ -180,8 +180,8 @@
 
 (use-package counsel-projectile
   :after projectile
-  :init
-  (counsel-projectile-mode 1))
+  :hook
+  (projectile-mode-hook . counsel-projectile-mode))
 
 (use-package ivy-posframe
   :after ivy
