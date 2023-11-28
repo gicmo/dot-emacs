@@ -27,6 +27,9 @@
 (setq mode-line-default-help-echo nil)
 (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 
+;; Line numbers in programming modes
+(add-hook 'prog-mode-hook #'display-line-numbers-mode)
+
 ;; Disable Ctrl-Z minimization/suspension of emacs.
 (global-set-key [C-z] nil)
 
@@ -209,12 +212,6 @@
 
 (use-package fzf
   :commands fzf)
-
-(use-package nlinum
-  :hook (prog-mode . nlinum-mode)
-  :config
-  (setq nlinum-format "%4d "
-	nlinum-highlight-current-line 't))
 
 (use-package hl-line
   :disabled
