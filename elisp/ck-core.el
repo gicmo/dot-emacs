@@ -53,6 +53,8 @@
       (mac-auto-operator-composition-mode))
   (setq-default locate-command "mdfind")
   (when (display-graphic-p)
+    (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
+    (add-to-list 'default-frame-alist '(ns-appearance . dark))
     (setq-default mac-emulate-three-button-mouse t)
     (global-set-key (kbd "M-`") 'other-frame)))
 
