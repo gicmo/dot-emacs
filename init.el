@@ -65,6 +65,7 @@
 (require 'bind-key)
 
 (setq use-package-always-ensure t)
+(setq use-package-compute-statistics t)
 
 ;; -=[ Dashboard
 (use-package ck-dashboard
