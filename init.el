@@ -27,6 +27,9 @@
 (setq mode-line-default-help-echo nil)
 (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 
+(setq split-width-threshold 160
+      split-height-threshold nil)
+
 ;; Line numbers in programming modes
 (add-hook 'prog-mode-hook #'display-line-numbers-mode)
 
