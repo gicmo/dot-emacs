@@ -48,7 +48,8 @@
 
 (defun ck/init-osx ()
   "OS/X specific global initialization."
-  (setq mac-option-modifier 'meta)
+  (setq mac-command-modifier 'meta)
+  (setq mac-option-modifier 'super)
   (if (boundp 'mac-auto-operator-composition-mode)
       (mac-auto-operator-composition-mode))
   (setq-default locate-command "mdfind")
