@@ -19,4 +19,6 @@
   (push (cons 'left-fringe  fr-size) default-frame-alist)
   (push (cons 'right-fringe fr-size) default-frame-alist))
 
+(setq-default fringes-outside-margins t)
+
 ;;; early-init.el ends here

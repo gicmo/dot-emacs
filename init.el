@@ -306,21 +306,17 @@
   (flycheck-pos-tip-mode +1))
 
 ;; -=[ git
-(use-package git-gutter-fringe
+(use-package diff-hl
   :if window-system
+  :hook ((prog-mode . diff-hl-mode)
+	 (magit-pre-refresh . diff-hl-magit-pre-refresh)
+	 (magit-post-refresh . diff-hl-magit-post-refresh))
+  :custom
+  (diff-hl-side 'right)
   :config
-  (require 'fringe-helper)
-  (setq git-gutter-fr:side 'right-fringe)
-  (add-hook 'prog-mode-hook 'git-gutter-mode)
-  (add-function :after after-focus-change-function
-		#'git-gutter:update-all-windows)
-  (setq-default fringes-outside-margins t)
-  (fringe-helper-define 'git-gutter-fr:added '(center repeated)
-    "XXX.....")
-  (fringe-helper-define 'git-gutter-fr:modified '(center repeated)
-    "XXX.....")
-  (fringe-helper-define 'git-gutter-fr:deleted  '(center repeated)
-    "XXX....."))
+  (define-fringe-bitmap 'ck/diff-hl-bar [224] nil nil '(center repeated))
+  (setq diff-hl-fringe-bmp-function (lambda (_type _pos) 'ck/diff-hl-bar))
+  (diff-hl-flydiff-mode 1))
 
 (use-package git-modes
   :defer t)
@@ -344,9 +340,7 @@
 (use-package magit
   :bind (("C-x g" . magit-status))
   :config
-  (setq magit-diff-refine-hunk t)
-  (add-hook 'magit-post-refresh-hook
-	    'git-gutter:update-all-windows))
+  (setq magit-diff-refine-hunk t))
 
 (use-package forge
   :after magit
