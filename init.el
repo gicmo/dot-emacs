@@ -879,8 +879,8 @@
   :group 'ck)
 
 (use-package solaire-mode
-  :hook (after-init . solaire-global-mode))
-  :config (solaire-global-mode +1)
+  :hook (after-init . solaire-global-mode)
+  :config (solaire-global-mode 1))
 
 (use-package doom-themes
   :init
