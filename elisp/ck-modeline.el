@@ -8,11 +8,9 @@
 
 (use-package ck-memoize
   :commands ck-memoize
-  :ensure f)
+  :ensure nil)
 
-(use-package all-the-icons
-  :commands (all-the-icons-icon-for-buffer
-	     all-the-icons-icon-family-for-buffer))
+(require 'nerd-icons)
 
 (use-package f
   :commands f-dirname)
@@ -381,7 +379,7 @@ DEFAULT is non-nil, set the default mode-line for all buffers."
   (when vc-mode
     (let* ((branch (substring vc-mode (+ 2 (length (symbol-name (vc-backend buffer-file-name))))))
 	   (face   (ck/ml-vc-face active))
-	   (icon   (ck/ml-icon "octicon" "git-branch" :fallback "" :v-adjust 0.1 :height 0.8 :face face)))
+	   (icon   (ck/ml-icon "octicon" "nf-oct-git_branch" :fallback "" :v-adjust 0.1 :height 0.8 :face face)))
       (concat icon " " (propertize branch 'face face)))))
 
 (def-ml-segment! buffer-position (active)
@@ -423,20 +421,20 @@ DEFAULT is non-nil, set the default mode-line for all buffers."
 	(propertize (format " %d " n) 'face (if ml-active 'ck-modeline-panel))))))
 
 ;; helper functions icons
-(defun ck/have-all-the-iconsp ()
-  "Check if we have all-the-icons support."
+(defun ck/have-nerd-iconsp ()
+  "Check if we have nerd-icons support."
   (and (window-system)
-       (find-font (font-spec :family "all-the-icons"))))
+       (find-font (font-spec :family nerd-icons-font-family))))
 
-(defvar ck/use-icon-font (ck/have-all-the-iconsp)
-  "Use and icon (from all the icons) for the major mode.")
+(defvar ck/use-icon-font (ck/have-nerd-iconsp)
+  "Use an icon (from nerd-icons) for the major mode.")
 
 (defun ck/ml-icon (family name &rest args)
   "Get an icon for the FAMILY with the NAME and optionally a :fallback in ARGS."
   (if ck/use-icon-font
       (apply (cond
-	      ((equal family "octicon") 'all-the-icons-octicon)
-	      ((equal family "material") 'all-the-icons-material))
+	      ((equal family "octicon") 'nerd-icons-octicon)
+	      ((equal family "mdicon") 'nerd-icons-mdicon))
 	     (append (list name) args))
     (propertize (or (plist-get args :fallback) name) 'face (plist-get args :face))))
 
@@ -463,15 +461,15 @@ DEFAULT is non-nil, set the default mode-line for all buffers."
       (setq char-width-table table))))
 
 (ck/set-char-widths
- '((58140 . 2)    ; material: keyboard_map
-   (57942 . 2)    ; material: space_bar
+ '((983826 . 2)    ; nf-md-keyboard_tab
+   (987216 . 2)    ; nf-md-keyboard_space
    (8633  . 2)))  ; utf-8 tabl char
 
 (def-ml-segment! indicator-for-major-mode (_)
   "Get an indicator (icon or name) for the major mode."
-  (let* ((maybe-icon (and ck/use-icon-font (all-the-icons-icon-for-buffer)))
+  (let* ((maybe-icon (and ck/use-icon-font (nerd-icons-icon-for-buffer)))
 	 (icon (if (not (symbolp maybe-icon)) maybe-icon))
-	 (face (if icon (list :family (all-the-icons-icon-family-for-buffer) :height 0.8)))
+	 (face (if icon (list :family nerd-icons-font-family :height 0.8)))
 	 (elevation (if icon 0.1 0.0))
 	 (the-mode (format-mode-line mode-name))
 	 (minor-modes (format-mode-line minor-mode-alist))
@@ -524,7 +522,7 @@ DEFAULT is non-nil, set the default mode-line for all buffers."
 (defun ck/mm-fill-mode ()
   "Indicator for fill mode."
   (when (and (boundp 'auto-fill-function) (symbol-value 'auto-fill-function))
-    (propertize (ck/ml-icon "material" "line_style"
+    (propertize (ck/ml-icon "mdicon" "nf-md-format_line_style"
 			    :fallback "ⓕ"
 			    :v-adjust -0.1
 			    :height 0.8)
@@ -534,7 +532,7 @@ DEFAULT is non-nil, set the default mode-line for all buffers."
 (defun ck/mm-flyspell-mode ()
   "Indicator for fill mode."
   (when (and (boundp 'flyspell-mode) (symbol-value 'flyspell-mode))
-    (propertize (ck/ml-icon "material" "playlist_add_check"
+    (propertize (ck/ml-icon "mdicon" "nf-md-playlist_check"
 			    :fallback "ⓢ"
 			    :v-adjust -0.1
 			    :height 0.8)
@@ -561,7 +559,7 @@ DEFAULT is non-nil, set the default mode-line for all buffers."
   (when (and (buffer-file-name) (boundp 'bookmark-alist))
     (let* ((bmark (ck/ml-find-bookmark (buffer-file-name) bookmark-alist)))
       (if bmark
-	  (propertize (ck/ml-icon "material" "bookmark"
+	  (propertize (ck/ml-icon "mdicon" "nf-md-bookmark"
 				  :fallback "ⓑ"
 				  :v-adjust -0.1
 				  :height 0.8)
@@ -604,14 +602,14 @@ DEFAULT is non-nil, set the default mode-line for all buffers."
 	   (text (ck/ml-flycheck-mk-text state issues))
 	   (icon (pcase state
 		   ('finished (if (> issues 0)
-				  (list "material" "warning" :fallback "⚠")
-				(list "material" "check" :fallback "✓")))
-		   ('running     (list "material" "access_time" :fallback "…"))
-		   ('no-checker  (list "material" "error" :fallback "!"))
-		   ('errored     (list "material" "error" :fallback "!"))
-		   ('interrupted (list "material" "pause"  :fallback "⏸"))
-		   ('not-checked (list "material" "do_not_disturb_alt" :fallback "□"))
-		   (_            (list "material" "do_not_disturb_alt" :fallback "?")))))
+				  (list "mdicon" "nf-md-alert" :fallback "⚠")
+				(list "mdicon" "nf-md-check" :fallback "✓")))
+		   ('running     (list "mdicon" "nf-md-clock_outline" :fallback "…"))
+		   ('no-checker  (list "mdicon" "nf-md-alert_circle" :fallback "!"))
+		   ('errored     (list "mdicon" "nf-md-alert_circle" :fallback "!"))
+		   ('interrupted (list "mdicon" "nf-md-pause"  :fallback "⏸"))
+		   ('not-checked (list "mdicon" "nf-md-minus_circle" :fallback "□"))
+		   (_            (list "mdicon" "nf-md-minus_circle" :fallback "?")))))
       (ck/ml-make-minor-mode 'flycheck-mode
        (concat (apply 'ck/ml-icon (append icon (list :face face :v-adjust -0.1 :height 0.8)))
 	       (if text " ")
@@ -634,14 +632,14 @@ DEFAULT is non-nil, set the default mode-line for all buffers."
   "Show if we are using tabs or spaces."
   (if (not buffer-read-only)
       (if indent-tabs-mode
-	  (propertize (ck/ml-icon "material" "keyboard_tab"
+	  (propertize (ck/ml-icon "mdicon" "nf-md-keyboard_tab"
 				  :fallback "⇥"
 				  :v-adjust -0.1
 				  :height 0.8
 				  :face (if active 'ck-modeline-dimmed))
 		      'help-echo (format "Tabs: %d" tab-width)
 		      'mouse-face 'ck-modeline-highlight)
-	(propertize (ck/ml-icon "material" "space_bar"
+	(propertize (ck/ml-icon "mdicon" "nf-md-keyboard_space"
 				:fallback "⌴"
 				:v-adjust -0.1
 				:height 0.8

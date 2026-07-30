@@ -146,14 +146,17 @@
 (use-package ivy-hydra
   :after ivy)
 
-(use-package all-the-icons-ivy-rich
+(use-package nerd-icons
+  :defer t)
+
+(use-package nerd-icons-ivy-rich
   :after (ivy ivy-posframe counsel-projectile)
   :init
-  (all-the-icons-ivy-rich-mode t)
-  (setq all-the-icons-ivy-rich-icon-size 0.8))
+  (nerd-icons-ivy-rich-mode t)
+  (setq nerd-icons-ivy-rich-icon-size 0.8))
 
 (use-package ivy-rich
-  :after (all-the-icons-ivy-rich)
+  :after (nerd-icons-ivy-rich)
   :init
   (ivy-rich-mode t)
   (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line))
@@ -426,6 +429,11 @@
   :config
   (dolist (dir '("\\.vscode$" "[/\\\\]\\.cache[/\\\\]clangd\\'"))
     (add-to-list 'lsp-file-watch-ignored-directories dir))
+  (setq lsp-headerline-arrow
+	(if ck/use-icon-font
+	    (nerd-icons-mdicon "nf-md-chevron_right"
+			       :face 'lsp-headerline-breadcrumb-separator-face)
+	  (propertize "›" 'face 'lsp-headerline-breadcrumb-separator-face)))
   :custom
   (lsp-auto-guess-root t)
   (lsp-enable-indentation nil)
@@ -478,7 +486,9 @@
 (use-package lsp-treemacs
   :commands (lsp-treemacs-call-hierarchy
 	     lsp-treemacs-type-hierarchy
-	     lsp-treemacs-symbols))
+	     lsp-treemacs-symbols)
+  :config
+  (treemacs-resize-icons 16))
 
 (use-package dtrt-indent
   :hook (c-mode-common . dtrt-indent-mode))
