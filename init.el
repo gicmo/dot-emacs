@@ -424,7 +424,8 @@
 (use-package lsp-mode
   :commands (lsp lsp-deferred)
   :config
-  (add-to-list 'lsp-file-watch-ignored "\\.vscode$")
+  (dolist (dir '("\\.vscode$" "[/\\\\]\\.cache[/\\\\]clangd\\'"))
+    (add-to-list 'lsp-file-watch-ignored-directories dir))
   :custom
   (lsp-auto-guess-root t)
   (lsp-enable-indentation nil)
@@ -460,23 +461,24 @@
 
 ; -=[ C/C++/ObjC and friends
 (use-package cc-mode
+  :ensure nil
+  :hook (c-mode-common . lsp-deferred)
   :bind (:map c-mode-base-map
-	      ("C-c o" . ff-find-other-file))
+	      ("C-c o" . ff-find-other-file)
+	      ("C-c r h" . lsp-treemacs-type-hierarchy)
+	      ("C-c r H" . lsp-treemacs-call-hierarchy)
+	      ("C-c r L" . lsp-lens-mode)
+	      ("C-c r m" . lsp-treemacs-symbols))
   :config
   (setq c-hungry-delete-key t
 	indent-tabs-mode nil
 	gdb-many-windows t
 	gdb-show-main t))
 
-(use-package ccls
-  :hook ((c-mode-common . (lambda () (require 'ccls) (lsp))))
-  :bind (:map c-mode-base-map
-	      ("C-c r h" . ccls-inheritance-hierarchy)
-	      ("C-c r H" . ccls-call-hierarchy)
-	      ("C-c r L" . ccls-code-lens-mode)
-	      ("C-c r m" . ccls-member-hierarchy))
-  :config
-  (add-to-list 'lsp-file-watch-ignored "\\.ccls-cache$"))
+(use-package lsp-treemacs
+  :commands (lsp-treemacs-call-hierarchy
+	     lsp-treemacs-type-hierarchy
+	     lsp-treemacs-symbols))
 
 (use-package dtrt-indent
   :hook (c-mode-common . dtrt-indent-mode))
