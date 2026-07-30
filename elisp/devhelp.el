@@ -1,4 +1,4 @@
-;; Emacs integration by Richard Hult <richard@imendio.com>
+;; Emacs integration by Richard Hult <richard@imendio.com>  -*- lexical-binding: t; -*-
 ;;
 
 (defun devhelp-word-at-point ()
@@ -10,9 +10,9 @@
 (defun devhelp-assistant-word-at-point ()
   "Searches for the current work in the Devhelp assistant"
   (interactive)
-  (setq w (current-word))
-  (start-process-shell-command "devhelp" nil "devhelp" "-a" w)
-  (set-process-query-on-exit-flag (get-process "devhelp") nil)
+  (let ((w (current-word)))
+    (start-process-shell-command "devhelp" nil "devhelp" "-a" w)
+    (set-process-query-on-exit-flag (get-process "devhelp") nil))
   )
 
 (defvar devhelp-timer nil)

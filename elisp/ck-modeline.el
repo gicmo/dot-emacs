@@ -18,7 +18,6 @@
   :commands f-dirname)
 
 (eval-when-compile
-  (require 'cl)
   (require 'subr-x))
 
 (defgroup +ck-modeline nil
@@ -111,16 +110,19 @@
 
 (defsubst ck/ml-form-to-body (forms active)
   "Convert segments in FORMS to mode line body passing ACTIVE along."
-  (mapconcat (seq-filter 'identity
-			 (lambda (x) (if (stringp x) x (funcall x active))))
-	     forms " "))
+  (mapconcat #'identity
+	     (seq-filter #'identity
+			 (mapcar (lambda (x)
+				   (if (stringp x) x (funcall x active)))
+				 forms))
+	     " "))
 
-(defmacro def-ml-segment! (name args &body body)
-  "Define a modeline segment with NAME, ARGS and &BODY and byte compile it."
+(defmacro def-ml-segment! (name args &rest body)
+  "Define a modeline segment with NAME, ARGS and BODY and byte compile it."
   (declare (indent defun) (doc-string 3))
   (let ((sym (ck/ml-segment-intern name)))
     `(progn
-       (defun ,sym (,@args) (,@body))
+       (defun ,sym ,args ,@body)
        ,(unless (bound-and-true-p byte-compile-current-file)
           `(let (byte-compile-warnings)
              (byte-compile #',sym))))))
@@ -158,10 +160,9 @@
 DEFAULT is non-nil, set the default mode-line for all buffers."
   (let ((modeline (ck/modeline name)))
     (when modeline
-      (setf (if default
-		(default-value 'mode-line-format)
-	      (make-variable-buffer-local 'mode-line-format (current-buffer)))
-	    modeline))))
+      (if default
+	  (setq-default mode-line-format modeline)
+	(setq-local mode-line-format modeline)))))
 
 ;; helper to create bar pixmap
 ;; Adapted from @hlissner's version of `powerline's `pl/make-xpm'.
@@ -204,7 +205,7 @@ DEFAULT is non-nil, set the default mode-line for all buffers."
       (setq ck-modeline-current-window win))))
 
 (add-hook 'window-configuration-change-hook #'ck/ml-set-current-window)
-(add-hook 'focus-in-hook #'ck/ml-set-current-window)
+(add-function :after after-focus-change-function #'ck/ml-set-current-window)
 (advice-add #'handle-switch-frame :after #'ck/ml-set-current-window)
 (advice-add #'select-window :after #'ck/ml-set-current-window)
 
@@ -312,8 +313,8 @@ DEFAULT is non-nil, set the default mode-line for all buffers."
 	 (filepath (or filename default-directory))
 	 (relname (file-relpath filepath project-root))
 	 (path-filename (split-filename relname))
-	 (path (first path-filename))
-	 (name (second path-filename))
+	 (path (car path-filename))
+	 (name (cadr path-filename))
 	 )
     (concat project-name sep (*ml-path path active) name)))
 

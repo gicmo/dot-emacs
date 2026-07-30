@@ -25,9 +25,12 @@
 
 ;;; Code:
 
+(eval-when-compile
+  (require 'cc-defs))
+
 ;; config for kernel dev
-(defun c-lineup-arglist-tabs-only (ignored)
-  "Line up argument lists by tabs, not spaces"
+(defun c-lineup-arglist-tabs-only (_ignored)
+  "Line up argument lists by tabs, not spaces."
   (let* ((anchor (c-langelem-pos c-syntactic-element))
          (column (c-langelem-2nd-pos c-syntactic-element))
          (offset (- (1+ column) anchor))

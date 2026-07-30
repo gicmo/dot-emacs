@@ -97,5 +97,7 @@
 	    (ck/pragmata-pro-prettify-for '(prog-mode))))
       (message "Could not apply font [%s]" font))))
 
+(declare-function ck/pragmata-pro-prettify-for "ck-pragmata-pro")
+
 (provide 'ck-fonts)
 ;;; ck-fonts.el ends here

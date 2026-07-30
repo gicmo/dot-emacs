@@ -1,4 +1,4 @@
-;;; init.el --- main Emacs initialization
+;;; init.el --- main Emacs initialization -*- lexical-binding: t; -*-
 ;;; Commentary:
 ;;; Setup Emacs, make it homely and cosy
 ;; Author: Christian Kellner <christian@kellner.me>
@@ -7,14 +7,11 @@
 
 ; -=[ sane defaults
 (blink-cursor-mode 0)
-(setq inhibit-splash-screen t)
-(setq inhibit-startup-message t)
+(setq inhibit-startup-screen t)
 (setq make-backup-files nil)
-(fset 'yes-or-no-p 'y-or-n-p)
-(dolist (m '(tooltip-mode tool-bar-mode scroll-bar-mode))
-    (when (fboundp m) (funcall m -1)))
+(setq use-short-answers t)
+(tooltip-mode -1)
 (column-number-mode 1)
-(show-paren-mode 1)
 (delete-selection-mode t)
 (global-auto-revert-mode t)
 (setq use-dialog-box nil)
@@ -25,7 +22,6 @@
 (put 'scroll-left 'disabled nil)
 (fset 'display-startup-echo-area-message #'ignore)
 (setq mode-line-default-help-echo nil)
-(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 
 (setq split-width-threshold 160
       split-height-threshold nil)
@@ -46,22 +42,11 @@
 (require 'package)
 (add-to-list 'package-archives
              '("melpa" . "https://melpa.org/packages/") t)
-(add-to-list 'package-archives
-	     '("marmalade" . "https://marmalade-repo.org/packages/") t)
 
-;; no auto package loading,
-;; loading is handled via use-package
-(setq package-enable-at-startup nil)
+;; package-enable-at-startup is set in early-init.el
 (package-initialize)
 
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
-
-(eval-when-compile
-  (require 'use-package)
-  (use-package cl))
-
+(require 'use-package)
 (require 'bind-key)
 
 (setq use-package-always-ensure t)
@@ -70,7 +55,7 @@
 ;; -=[ Dashboard
 (use-package ck-dashboard
   :load-path "elisp"
-  :ensure f
+  :ensure nil
   :commands dashboard-show
   :init
   (dashboard-show))
@@ -94,6 +79,7 @@
   :commands (reveal-in-osx-finder))
 
 (use-package which-key
+  :ensure nil
   :defer t
   :init
   (which-key-mode)
@@ -114,22 +100,13 @@
   :ensure nil
   :bind (("C-x C-j" . dired-jump)))
 
-(use-package dired+
-  :load-path "ewiki"
-  :defer t
-  :init
-  (defun setup-dired ()
-    "Setup dired."
-     (setq diredp-hide-details-initially-flag nil
-	   global-dired-hide-details-mode -1)
-     (require 'dired+))
-  (add-hook 'dired-load-hook #'setup-dired)
-  :config
-  (diredp-toggle-find-file-reuse-dir 1)
-  (define-key dired-mode-map [mouse-2] 'diredp-mouse-find-file)
-  (define-key dired-mode-map (kbd "C-<up>")
-    (lambda ()
-      (interactive) (find-alternate-file ".."))))
+(use-package dired
+  :ensure nil
+  :custom
+  (dired-kill-when-opening-new-dired-buffer t)
+  :bind (:map dired-mode-map
+	      ([mouse-2] . dired-mouse-find-file)
+	      ("C-<up>" . dired-up-directory)))
 
 ;; -=[ Editing
 
@@ -142,8 +119,8 @@
          ("C-<" . mc/mark-previous-like-this)
          ("C-c C-<" . mc/mark-all-like-this)))
 
-(use-package smart-region
-  :bind (("C-SPC" . smart-region)))
+(use-package expand-region
+  :bind (("C-=" . er/expand-region)))
 
 (use-package iedit
   :bind ("C-;" . iedit-mode))
@@ -161,10 +138,13 @@
   :custom
   (ivy-use-virtual-buffers t)
   (ivy-re-builders-alist '((t . ivy--regex-fuzzy)))
-  :hook (after-init . ivy-mode)
-  :config
-  (use-package flx)
-  (use-package ivy-hydra))
+  :hook (after-init . ivy-mode))
+
+(use-package flx
+  :after ivy)
+
+(use-package ivy-hydra
+  :after ivy)
 
 (use-package all-the-icons-ivy-rich
   :after (ivy ivy-posframe counsel-projectile)
@@ -220,11 +200,6 @@
 (use-package fzf
   :commands fzf)
 
-(use-package hl-line
-  :disabled
-  :after nlinum
-  :hook (nlinum-mode . hl-line-mode))
-
 (use-package back-button
   :commands (back-button-mode)
   :defer 2
@@ -234,7 +209,21 @@
   (back-button-mode 1))
 
 ;; -=[ spell checking, because I will never learn how to spell
+(defvar ck/have-spell-checker
+  (and (or (executable-find "aspell") (executable-find "hunspell")) t)
+  "Non-nil if a spell checker backend is installed.")
+
+(defun ck/flyspell-maybe ()
+  "Enable `flyspell-mode' when a spell checker is available."
+  (when ck/have-spell-checker (flyspell-mode 1)))
+
+(defun ck/flyspell-prog-maybe ()
+  "Enable `flyspell-prog-mode' when a spell checker is available."
+  (when ck/have-spell-checker (flyspell-prog-mode 1)))
+
 (use-package flyspell
+  :ensure nil
+  :if ck/have-spell-checker
   :commands (flyspell-prog-mode flyspell-mode flyspell-buffer)
   :hook ((prog-mode . flyspell-prog-mode)
 	 (nxml-mode . flyspell-prog-mode)
@@ -259,18 +248,15 @@
 	     "[A-Za-z]" "[^A-Za-z]" "[']" nil
 	     ("-d" "en_US")
 	     nil utf-8))
-	  ispell-dictionary "english"))
-   (t (setq ispell-program-name nil))))
+	  ispell-dictionary "english"))))
 
-					; -=[ Org
+;; -=[ Org
 (use-package org
   :commands org-mode
   :mode (("\\.org\\'" . org-mode))
   :config
   (setq org-directory "~/Documents/Notes/"
 	org-agenda-files '("~/Documents/Notes/")
-	org-mobile-directory "~/Documents/Notes/.mobile"
-	org-mobile-inbox-for-pull  "~/Documents/Notes/todo.org"
 	org-fontify-whole-heading-line t
 	org-fontify-done-headline t
 	org-fontify-quote-and-verse-blocks t
@@ -282,9 +268,10 @@
    'org-babel-load-languages
    '(
      (python . t)
-     (shell  . t)))
-  (use-package org-bullets
-    :hook (org-mode . org-bullets-mode)))
+     (shell  . t))))
+
+(use-package org-bullets
+  :hook (org-mode . org-bullets-mode))
 
 (use-package org-journal
   :after org
@@ -295,43 +282,38 @@
 
 ; -=[ Projects via projectile
 
-(defun ck/projectile-commander-setup ()
-  "Setup projectile commander shortcuts."
-  (require 'projectile)
-  (def-projectile-commander-method ?d
-    "Open project root in dired."
-    (projectile-dired)))
-
 (use-package projectile
   :defer 1
   :config
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
   (projectile-mode t)
-  (setq projectile-switch-project-action 'projectile-dired)
-  (ck/projectile-commander-setup))
+  (setq projectile-switch-project-action 'projectile-dired))
 
 ; -=[ flycheck
 (use-package flycheck
   :commands global-flycheck-mode
   :hook (after-init . global-flycheck-mode)
   :config
-  (use-package flycheck-pos-tip
-    :config
-    (setq flycheck-pos-tip-timeout 7
-	  flycheck-display-errors-delay 0.5)
-    (flycheck-pos-tip-mode +1))
   (define-fringe-bitmap 'flycheck-fringe-bitmap-double-arrow
     [0 0 0 0 0 256 384 448 480 496 480 448 384 256 0 0 0 0 0]
     ))
+
+(use-package flycheck-pos-tip
+  :after flycheck
+  :config
+  (setq flycheck-pos-tip-timeout 7
+	flycheck-display-errors-delay 0.5)
+  (flycheck-pos-tip-mode +1))
 
 ;; -=[ git
 (use-package git-gutter-fringe
   :if window-system
   :config
-  (use-package fringe-helper)
+  (require 'fringe-helper)
   (setq git-gutter-fr:side 'right-fringe)
   (add-hook 'prog-mode-hook 'git-gutter-mode)
-  (add-hook 'focus-in-hook 'git-gutter:update-all-windows)
+  (add-function :after after-focus-change-function
+		#'git-gutter:update-all-windows)
   (setq-default fringes-outside-margins t)
   (fringe-helper-define 'git-gutter-fr:added '(center repeated)
     "XXX.....")
@@ -341,10 +323,7 @@
     "XXX....."))
 
 (use-package git-modes
-   :mode ("\\.gitconfig\\'" . gitconfig-mode)
- 	 ("\\.git/config\\'" . gitconfig-mode)
- 	 ("\\.gitmodules\\'" . gitconfig-mode)
-	 ("\\.gitignore\\'" . gitignore-mode))
+  :defer t)
 
 (use-package git-timemachine
   :commands git-timemachine
@@ -352,12 +331,15 @@
   (setq git-timemachine-abbreviation-length 6))
 
 (use-package git-commit
+  :ensure nil ; ships with magit
   :commands global-git-commit-mode
   :init
-  (setq git-commit-summary-max-length 50
-        fill-column 72)
-  (add-hook 'git-commit-setup-hook 'git-commit-turn-on-flyspell)
-  (add-hook 'git-commit-setup-hook 'ck/show-trailing-ws))
+  (setq git-commit-summary-max-length 50)
+  (when ck/have-spell-checker
+    (add-hook 'git-commit-setup-hook 'git-commit-turn-on-flyspell))
+  (add-hook 'git-commit-setup-hook 'ck/show-trailing-ws)
+  (add-hook 'git-commit-setup-hook
+	    (lambda () (setq-local fill-column 72))))
 
 (use-package magit
   :bind (("C-x g" . magit-status))
@@ -369,7 +351,7 @@
 (use-package forge
   :after magit
   :config
-  (dolist (url '("gitlab.freedesktop.org" "gitlab.gnome.org"))
+  (dolist (url '("gitlab.freedesktop.org"))
     (add-to-list 'forge-alist (list url (concat url "/api/v4") url forge-gitlab-repository))))
 
 ;; -=[ yasnippet
@@ -389,14 +371,6 @@
 
 (use-package restclient
   :mode ("\\.http\\'" . restclient-mode))
-
-;; == backup ==
-(defun make-backup-file-name (filename)
-  (defvar backups-dir "~/.backups/")
-  (make-directory backups-dir t)
-  (expand-file-name
-   (concat backups-dir "."  (file-name-nondirectory filename) "~")
-   (file-name-directory filename)))
 
 ; == recent files ==
 (use-package recentf
@@ -421,7 +395,7 @@
   :mode (("README\\.md\\'" . gfm-mode)
          ("\\.md\\'" . markdown-mode)
          ("\\.markdown\\'" . markdown-mode))
-  :hook ((markdown-mode . flyspell-mode)
+  :hook ((markdown-mode . ck/flyspell-maybe)
 	 (markdown-mode . ck/show-trailing-ws)))
 
 ;; -=[ pdf viewing
@@ -440,7 +414,7 @@
 ;; Programming mode customizations
 
 (use-package prog-mode
-  :ensure f
+  :ensure nil
   :hook (prog-mode . ck/show-trailing-ws))
 
 ; -=[ common packages
@@ -459,7 +433,6 @@
   (add-to-list 'lsp-file-watch-ignored "\\.vscode$")
   :custom
   (lsp-auto-guess-root t)
-  (lsp-prefer-flymake nil)
   (lsp-enable-indentation nil)
   (lsp-enable-on-type-formatting nil))
 
@@ -499,12 +472,7 @@
   (setq c-hungry-delete-key t
 	indent-tabs-mode nil
 	gdb-many-windows t
-	gdb-show-main t)
-  (use-package flycheck-clang-analyzer
-    :disabled
-    :after flycheck
-    :config
-    (flycheck-clang-analyzer-setup)))
+	gdb-show-main t))
 
 (use-package ccls
   :hook ((c-mode-common . (lambda () (require 'ccls) (lsp))))
@@ -522,7 +490,7 @@
 ; detect major mode (objc, c++-mode) for header
 (use-package dummy-h-mode
   :load-path "ewiki"
-  :ensure f
+  :ensure nil
   :mode "\\.h$")
 
 (use-package cmake-mode
@@ -540,7 +508,7 @@
 
 (use-package cocci-mode
   :load-path "ewiki"
-  :ensure f
+  :ensure nil
   :mode "\\.cocci$")
 
 (use-package meson-mode
@@ -551,18 +519,19 @@
          ("\\.vapi\\'" . vala-mode))
   :hook ((vala-mode . (lambda () (lsp))))
   :config
-  (use-package vala-snippets)
   (run-hooks 'prog-mode-hook)
   (dolist (suffix '("\\.vala\\'" "\\.vapi\\'"))
-    (add-to-list 'file-coding-system-alist `(quote ,suffix . utf-8)))
+    (add-to-list 'file-coding-system-alist (cons suffix 'utf-8)))
   (require 'lsp-mode)
   (add-to-list 'lsp-language-id-configuration '(vala-mode . "vala"))
   (lsp-register-client
    (make-lsp-client
     :new-connection (lsp-stdio-connection "vala-language-server")
     :major-modes '(vala-mode)
-    :server-id 'vala))
-  )
+    :server-id 'vala)))
+
+(use-package vala-snippets
+  :after vala-mode)
 
 ;; -=[ docker
 (use-package dockerfile-mode
@@ -576,9 +545,10 @@
   :mode "\\.clj"
   :hook ((clojure-mode . enable-paredit-mode)
 	 (clojure-mode . subword-mode)
-	 (clojure-mode . rainbow-delimiters-mode))
-  :config
-  (use-package clojure-mode-extra-font-locking))
+	 (clojure-mode . rainbow-delimiters-mode)))
+
+(use-package clojure-mode-extra-font-locking
+  :after clojure-mode)
 
 (use-package lsp-java
   :after lsp
@@ -589,19 +559,30 @@
   :mode ("\\.[fF]\\(03\\|08\\)\\'" . f90-mode))
 
 ; -=[ Go
+(defun ck/go-mode-setup ()
+  "Organize imports and format on save, in this buffer only."
+  (add-hook 'before-save-hook #'lsp-organize-imports nil t)
+  (add-hook 'before-save-hook #'lsp-format-buffer nil t))
+
 (use-package go-mode
   :mode "\\.go\\'"
-  :hook (go-mode . lsp-deferred)
+  :hook ((go-mode . lsp-deferred)
+	 (go-mode . ck/go-mode-setup))
   :bind (:map go-mode-map
 	      ("M-." . godef-jump)
-	      ("M-," . godef-jump-back))
-  :config
-  (add-hook 'before-save-hook 'lsp-organize-imports)
-  (add-hook 'before-save-hook 'lsp-format-buffer)
-  (use-package go-stacktracer)
-  (use-package go-playground)
-  (use-package go-dlv)
-  (use-package go-projectile))
+	      ("M-," . godef-jump-back)))
+
+(use-package go-stacktracer
+  :after go-mode)
+
+(use-package go-playground
+  :after go-mode)
+
+(use-package go-dlv
+  :after go-mode)
+
+(use-package go-projectile
+  :after go-mode)
 
 (use-package go-eldoc
   :commands (go-eldoc-setup)
@@ -612,10 +593,7 @@
 (use-package haskell-mode
   :mode (("\\.hs$" . haskell-mode)
          ("\\.lhs$" . literate-haskell-mode)
-	 ("\\.cabal\\'" . haskell-cabal-mode))
-  :config
-  (use-package intero
-    :hook (haskell-mode . intero-mode)))
+	 ("\\.cabal\\'" . haskell-cabal-mode)))
 
 ;; -=[ Python
 
@@ -630,13 +608,13 @@
   :mode "\\.rs\\'"
   :hook (rust-mode . lsp)
   :config
-  (require 'lsp-clients)
-  (setq rust-format-on-save t)
-  (use-package flycheck-rust
-    :after flycheck
-    :commands flycheck-rust-setup
-    :init
-    (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)))
+  (setq rust-format-on-save t))
+
+(use-package flycheck-rust
+  :after flycheck
+  :commands flycheck-rust-setup
+  :init
+  (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
 
 (use-package cargo
   :commands cargo-minor-mode
@@ -649,7 +627,7 @@
 ;; -=[ packaging
 (use-package rpm-spec-mode
   :mode "\\.spec\\'"
-  :hook ((rpm-spec-mode . flyspell-prog-mode)
+  :hook ((rpm-spec-mode . ck/flyspell-prog-maybe)
 	 (rpm-spec-mode . ck/show-trailing-ws)))
 
 ;; -=[ web stuff
@@ -677,7 +655,7 @@
   :bind (("C-c d" . dash-at-point)))
 
 (use-package devhelp
-  :ensure f
+  :ensure nil
   :if (eq system-type 'gnu/linux)
   :bind (("C-c d" . devhelp-word-at-point)))
 
@@ -686,7 +664,9 @@
 
 ;; -=[ config files
 (use-package conf-mode
-  :ensure f
+  :ensure nil
+  :mode (("\\.ini\\'" . conf-unix-mode)
+	 ("\\.desktop\\'" . conf-desktop-mode))
   :hook (conf-mode . ck/show-trailing-ws))
 
 (use-package apache-mode
@@ -695,20 +675,17 @@
          ("httpd\\.conf\\'" . apache-mode)
 	 ("sites-\\(available\\|enabled\\)/" . apache-mode)))
 
-(use-package ini-mode
-  :ensure f ; locally installed in elisp
-  :mode (("\\.ini\\'" . ini-mode)
-	 ("\\.desktop\\'" . ini-mode)))
-
 (use-package nginx-mode
   :mode ("nginx.conf$" "/etc/nginx/.*"))
 
 ;; -=[ better writing
 (defun ck-find-langtool ()
   "Find the locations of all available langtool jar (sorted) or nil."
-  (let ((basedir '"/usr/local/Cellar/languagetool")
+  (let ((basedir (seq-find #'file-directory-p
+			   '("/opt/homebrew/Cellar/languagetool"
+			     "/usr/local/Cellar/languagetool")))
 	(suffix '"/libexec/languagetool-commandline.jar"))
-    (if (file-exists-p basedir)
+    (if basedir
 	(mapcar (lambda (d) (concat d suffix))
 		(reverse (sort
 			  (directory-files basedir t "[0-9].*" t)
@@ -745,7 +722,7 @@
     (define-key (current-local-map) (kbd "C-c C-c") 'server-edit)))
 
 (use-package message
-  :ensure f
+  :ensure nil
   :commands (compose-mail message-mode)
   :mode (("0000-cover-letter.patch" . message-mode)
 	 (".*/\.git/\.gitsendemail.msg.*" . message-mode))
@@ -756,14 +733,12 @@
 	 message-sendmail-extra-arguments '("--read-envelope-from")
 	 mail-host-address "kellner.me")
   (add-hook 'message-mode-hook 'ck/message-mode-setup)
-  (add-hook 'message-mode-hook #'flyspell-mode)
+  (add-hook 'message-mode-hook #'ck/flyspell-maybe)
   (add-hook 'message-mode-hook 'ck/show-trailing-ws))
 
 (use-package ck-mail
-  :commands (ck/gnus-alias-setup
-	     ck/mail-mk-mu4e-contexts
-	     ck/mu4e-patch-trash)
-  :ensure f
+  :commands (ck/gnus-alias-setup)
+  :ensure nil
   :load-path "elisp"
   :init
   (setq user-mail-address (getenv "EMAIL")))
@@ -773,45 +748,15 @@
   :config
   (ck/gnus-alias-setup))
 
-(use-package mu4e
-  :commands mu4e
-  :defer t
-  :ensure f
-  :config
-  (setq mu4e-maildir (expand-file-name "~/.mail")
-	mu4e-get-mail-command "mbsync -a mu4e"
-	mu4e-headers-include-related t
-	mu4e-headers-skip-duplicates t
-	mu4e-compose-dont-reply-to-self t
-	mu4e-change-filenames-when-moving t
-	mu4e-view-show-images t
-	mu4e-view-show-addresses t
-	mu4e-context-policy 'pick-first
-	mu4e-contexts (ck/mail-mk-mu4e-contexts)
-	mu4e-marks (ck/mu4e-patch-trash mu4e-marks))
-
-  (when (fboundp 'imagemagick-register-types)
-    (imagemagick-register-types))
-
-  (use-package mu4e-maildirs-extension
-    :init
-    (mu4e-maildirs-extension)
-    :config
-    (setq mu4e-maildirs-extension-maildir-expanded-prefix "")
-    (setq mu4e-maildirs-extension-maildir-default-prefix "")))
-
 ;; -=[ server
 (use-package server
   :defer 2
-  :ensure f
+  :ensure nil
   :commands (server-start server-running-p)
   :init (unless (server-running-p)
 	  (server-start)))
 
 ;; -=[ UI
-;; resize the initial emacs window
-;;(add-to-list 'default-frame-alist '(height . 40))
-;;(add-to-list 'default-frame-alist '(width . 150))
 
 (use-package neotree
   :bind (("<f8>" . neotree-toggle))
@@ -823,7 +768,7 @@
 
 ;; -=[ fonts
 (use-package ck-fonts
-  :ensure f
+  :ensure nil
   :commands ck-set-font)
 
 (defun set-dark-frame (frame)
@@ -850,14 +795,10 @@
 (unless (daemonp)
   (new-frames-setup (selected-frame)))
 
-(let ((fr-size 4))
-  (push (cons 'left-fringe  fr-size) default-frame-alist)
-  (push (cons 'right-fringe fr-size) default-frame-alist))
-
 ;; -=[ mode-line
 (use-package ck-modeline
   :commands ck/modeline-set
-  :ensure f
+  :ensure nil
   :load-path "elisp"
   :init
   (ck/modeline-set 'default 't))
@@ -877,10 +818,6 @@
 	  (const :tag "Moonlight" 'doom-moonlight)
 	  (const :tag "Spacegrey" 'doom-spacegrey))
   :group 'ck)
-
-(use-package solaire-mode
-  :hook (after-init . solaire-global-mode)
-  :config (solaire-global-mode 1))
 
 (use-package doom-themes
   :init
