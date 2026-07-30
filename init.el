@@ -132,56 +132,59 @@
   (editorconfig-mode 1))
 
 
-; -=[ ivy completion
+; -=[ vertico completion
 
-(use-package ivy
+(use-package vertico
   :custom
-  (ivy-use-virtual-buffers t)
-  (ivy-re-builders-alist '((t . ivy--regex-fuzzy)))
-  :hook (after-init . ivy-mode))
+  (vertico-cycle t)
+  :hook (after-init . vertico-mode))
 
-(use-package flx
-  :after ivy)
-
-(use-package ivy-hydra
-  :after ivy)
-
-(use-package nerd-icons
-  :defer t)
-
-(use-package nerd-icons-ivy-rich
-  :after (ivy ivy-posframe counsel-projectile)
-  :init
-  (nerd-icons-ivy-rich-mode t)
-  (setq nerd-icons-ivy-rich-icon-size 0.8))
-
-(use-package ivy-rich
-  :after (nerd-icons-ivy-rich)
-  :init
-  (ivy-rich-mode t)
-  (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line))
-
-(use-package counsel
-  :bind (("C-x C-f" . counsel-find-file)
-	 ("M-x" . counsel-M-x)))
-
-(use-package counsel-projectile
-  :after projectile
-  :hook
-  (projectile-mode-hook . counsel-projectile-mode))
-
-(use-package ivy-posframe
-  :after ivy
+(use-package orderless
   :custom
-(ivy-posframe-display-functions-alist
-   '((swiper-isearch . ivy-posframe-display-at-window-bottom-left)
-     (t . ivy-posframe-display-at-frame-top-center)
-     ))
-  (ivy-posframe-parameters
+  (completion-styles '(orderless basic))
+  (completion-category-overrides '((file (styles basic partial-completion)))))
+
+(use-package marginalia
+  :after vertico
+  :hook (after-init . marginalia-mode))
+
+(use-package nerd-icons-completion
+  :after marginalia
+  :hook (marginalia-mode . nerd-icons-completion-marginalia-setup)
+  :init
+  (nerd-icons-completion-mode))
+
+(use-package consult
+  :bind (("C-x C-f" . find-file)
+	 ("C-x b" . consult-buffer)
+	 ("M-y" . consult-yank-pop)
+	 ("M-g g" . consult-goto-line)
+	 ("M-g M-g" . consult-goto-line)
+	 ("M-s r" . consult-ripgrep)
+	 ("M-s g" . consult-grep)
+	 ("M-s l" . consult-line)))
+
+(use-package consult-projectile
+  :after (consult projectile)
+  :bind ("C-c p f" . consult-projectile))
+
+(use-package embark
+  :bind (("C-." . embark-act)
+	 ("M-." . embark-dwim)
+	 ("C-h B" . embark-bindings)))
+
+(use-package embark-consult
+  :after (embark consult)
+  :hook (embark-collect-mode . consult-preview-at-point-mode))
+
+(use-package vertico-posframe
+  :after vertico
+  :custom
+  (vertico-posframe-parameters
    '((left-fringe . 8)
      (right-fringe . 8)))
   :config
-  (ivy-posframe-mode 1))
+  (vertico-posframe-mode 1))
 
 ; -=[ navigation and searching
 
