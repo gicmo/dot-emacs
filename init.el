@@ -44,13 +44,46 @@
              '("melpa" . "https://melpa.org/packages/") t)
 
 ;; package-enable-at-startup is set in early-init.el
-(package-initialize)
-
 (require 'use-package)
 (require 'bind-key)
 
+(package-initialize)
+
 (setq use-package-always-ensure t)
 (setq use-package-compute-statistics t)
+
+;; -=[ color themes
+
+;(use-package leuven-theme)
+
+(defcustom ck-theme 'doom-nord
+  "Which doom theme to load."
+  :type '(choice
+	  (const :tag "Vibrant" 'doom-vibrant)
+	  (const :tag "One" 'doom-one)
+	  (const :tag "One-Light" 'doom-one-light)
+	  (const :tag "Nord" 'doom-nord)
+	  (const :tag "CityLights" 'doom-city-lights)
+	  (const :tag "Moonlight" 'doom-moonlight)
+	  (const :tag "Spacegrey" 'doom-spacegrey))
+  :group 'ck)
+
+(use-package doom-themes
+  :init
+  (if (daemonp)
+      (load-theme 'doom-vibrant t)
+    (load-theme ck-theme t))
+  (doom-themes-neotree-config)
+  (doom-themes-visual-bell-config)
+  (doom-themes-org-config))
+
+;; -=[ mode-line
+(use-package ck-modeline
+  :commands ck/modeline-set
+  :ensure nil
+  :load-path "elisp"
+  :init
+  (ck/modeline-set 'default 't))
 
 ;; -=[ Dashboard
 (use-package ck-dashboard
@@ -60,20 +93,19 @@
   :init
   (dashboard-show))
 
-;; pick up the correct path from a login shell
+;; -=[ shell variables
 (use-package exec-path-from-shell
-  :if (memq system-type '(gnu gnu/linux darwin))
-  :custom
-  (exec-path-from-shell-variables '("EMAIL"
-				    "GOPATH"
-				    "RUST_SRC_PATH"
-				    "WORKON_HOME"
-				    "MANPATH"
-				    "PATH"))
+  :defer t
   :init
-  (customize-set-variable 'exec-path-from-shell-arguments nil)
-  :config
-  (exec-path-from-shell-initialize))
+  (setq exec-path-from-shell-arguments nil))
+
+(use-package ck-env
+  :ensure nil
+  :load-path "elisp"
+  :if (memq system-type '(gnu gnu/linux darwin))
+  :commands (ck-env-load ck-env-refresh)
+  :init
+  (ck-env-load))
 
 (use-package reveal-in-osx-finder
   :commands (reveal-in-osx-finder))
@@ -108,25 +140,24 @@
   (evil-mode 1))
 
 (use-package evil-collection
-  :after evil
+  :defer 1
   :config
   (evil-collection-init))
 
 (use-package evil-surround
-  :after evil
+  :defer 1
   :config
   (global-evil-surround-mode 1))
 
 (use-package evil-commentary
-  :after evil
+  :defer 1
   :config
   (evil-commentary-mode))
 
 (use-package ck-evil
   :ensure nil
   :load-path "elisp"
-  :after (evil consult consult-projectile consult-lsp projectile
-	       lsp-mode lsp-ui flycheck diff-hl magit expand-region))
+  :after (evil which-key))
 
 (use-package dired-x
   :ensure nil
@@ -134,8 +165,8 @@
 
 (use-package dired
   :ensure nil
-  :custom
-  (dired-kill-when-opening-new-dired-buffer t)
+  :init
+  (setq dired-kill-when-opening-new-dired-buffer t)
   :bind (:map dired-mode-map
 	      ([mouse-2] . dired-mouse-find-file)
 	      ("C-<up>" . dired-up-directory)))
@@ -167,14 +198,14 @@
 ; -=[ vertico completion
 
 (use-package vertico
-  :custom
-  (vertico-cycle t)
+  :init
+  (setq vertico-cycle t)
   :hook (after-init . vertico-mode))
 
 (use-package orderless
-  :custom
-  (completion-styles '(orderless basic))
-  (completion-category-overrides '((file (styles basic partial-completion)))))
+  :init
+  (setq completion-styles '(orderless basic)
+	completion-category-overrides '((file (styles basic partial-completion)))))
 
 (use-package marginalia
   :after vertico
@@ -217,10 +248,10 @@
 
 (use-package vertico-posframe
   :after vertico
-  :custom
-  (vertico-posframe-parameters
-   '((left-fringe . 8)
-     (right-fringe . 8)))
+  :init
+  (setq vertico-posframe-parameters
+	'((left-fringe . 8)
+	  (right-fringe . 8)))
   :config
   (vertico-posframe-mode 1))
 
@@ -319,10 +350,10 @@
 
 (use-package org-journal
   :after org
-  :custom
-  (org-journal-dir "~/Documents/Notes/journal")
-  (org-journal-file-format "%G-w%V.org")
-  (org-journal-file-type 'weekly))
+  :init
+  (setq org-journal-dir "~/Documents/Notes/journal"
+	org-journal-file-format "%G-w%V.org"
+	org-journal-file-type 'weekly))
 
 ; -=[ Projects via projectile
 
@@ -355,8 +386,8 @@
   :hook ((prog-mode . diff-hl-mode)
 	 (magit-pre-refresh . diff-hl-magit-pre-refresh)
 	 (magit-post-refresh . diff-hl-magit-post-refresh))
-  :custom
-  (diff-hl-side 'right)
+  :init
+  (setq diff-hl-side 'right)
   :config
   (define-fringe-bitmap 'ck/diff-hl-bar [224] nil nil '(center repeated))
   (setq diff-hl-fringe-bmp-function (lambda (_type _pos) 'ck/diff-hl-bar))
@@ -852,39 +883,6 @@
 (add-hook 'after-make-frame-functions 'new-frames-setup)
 (unless (daemonp)
   (new-frames-setup (selected-frame)))
-
-;; -=[ mode-line
-(use-package ck-modeline
-  :commands ck/modeline-set
-  :ensure nil
-  :load-path "elisp"
-  :init
-  (ck/modeline-set 'default 't))
-
-;; -=[ color themes
-
-;(use-package leuven-theme)
-
-(defcustom ck-theme 'doom-nord
-  "Which doom theme to load."
-  :type '(choice
-	  (const :tag "Vibrant" 'doom-vibrant)
-	  (const :tag "One" 'doom-one)
-	  (const :tag "One-Light" 'doom-one-light)
-	  (const :tag "Nord" 'doom-nord)
-	  (const :tag "CityLights" 'doom-city-lights)
-	  (const :tag "Moonlight" 'doom-moonlight)
-	  (const :tag "Spacegrey" 'doom-spacegrey))
-  :group 'ck)
-
-(use-package doom-themes
-  :init
-  (if (daemonp)
-      (load-theme 'doom-vibrant t)
-    (load-theme ck-theme t))
-  (doom-themes-neotree-config)
-  (doom-themes-visual-bell-config)
-  (doom-themes-org-config))
 
 ;; all done, pheww
 ;;; init.el ends here

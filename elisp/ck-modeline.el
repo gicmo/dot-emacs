@@ -203,9 +203,8 @@ DEFAULT is non-nil, set the default mode-line for all buffers."
       (setq ck-modeline-current-window win))))
 
 (add-hook 'window-configuration-change-hook #'ck/ml-set-current-window)
+(add-hook 'window-selection-change-functions #'ck/ml-set-current-window)
 (add-function :after after-focus-change-function #'ck/ml-set-current-window)
-(advice-add #'handle-switch-frame :after #'ck/ml-set-current-window)
-(advice-add #'select-window :after #'ck/ml-set-current-window)
 
 ;; mode line segments
 (def-ml-segment! bar (active)

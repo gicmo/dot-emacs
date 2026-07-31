@@ -36,6 +36,11 @@
      map)
    "Keymap for `dashboard-mode'.")
 
+(declare-function evil-make-overriding-map "ext:evil-core.el")
+
+(with-eval-after-load 'evil
+  (evil-make-overriding-map dashboard-mode-map 'normal))
+
 ;;;###autoload
 (define-derived-mode dashboard-mode nil "Dashboard"
   "A major mode acting as a dashboard.
