@@ -177,6 +177,12 @@
   :after (embark consult)
   :hook (embark-collect-mode . consult-preview-at-point-mode))
 
+(use-package ck-quick-open
+  :ensure nil
+  :load-path "elisp"
+  :commands ck/quick-open
+  :bind ("M-O" . ck/quick-open))
+
 (use-package vertico-posframe
   :after vertico
   :custom
@@ -455,6 +461,9 @@
 	      ("C-c r i" . lsp-ui-imenu)
 	      ("C-c r F" . lsp-ui-sideline-apply-code-actions)
 	      ("C-c r R" . lsp-rename)))
+
+(use-package consult-lsp
+  :after (consult lsp-mode))
 
 (use-package dap-mode
   :after lsp-mode
