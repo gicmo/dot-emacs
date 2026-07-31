@@ -96,6 +96,38 @@
       (push `((,for-char . nil) . (,symbol . nil))
 	    which-key-replacement-alist))))
 
+;; -=[ evil mode
+
+(use-package evil
+  :init
+  (setq evil-want-integration t
+	evil-want-keybinding nil
+	evil-want-C-u-scroll t
+	evil-undo-system 'undo-redo)
+  :config
+  (evil-mode 1))
+
+(use-package evil-collection
+  :after evil
+  :config
+  (evil-collection-init))
+
+(use-package evil-surround
+  :after evil
+  :config
+  (global-evil-surround-mode 1))
+
+(use-package evil-commentary
+  :after evil
+  :config
+  (evil-commentary-mode))
+
+(use-package ck-evil
+  :ensure nil
+  :load-path "elisp"
+  :after (evil consult consult-projectile consult-lsp projectile
+	       lsp-mode lsp-ui flycheck diff-hl magit expand-region))
+
 (use-package dired-x
   :ensure nil
   :bind (("C-x C-j" . dired-jump)))
