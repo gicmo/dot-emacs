@@ -642,6 +642,14 @@
   :mode (("\\.toml\\'" . toml-mode)
 	 ("/Pipfile\\'" . toml-mode)))
 
+;; -=[ Swift
+(use-package swift-mode
+  :mode "\\.swift\\'"
+  :hook (swift-mode . lsp-deferred))
+
+(use-package lsp-sourcekit
+  :after (lsp-mode swift-mode))
+
 ;; -=[ packaging
 (use-package rpm-spec-mode
   :mode "\\.spec\\'"
