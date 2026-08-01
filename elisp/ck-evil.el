@@ -48,7 +48,6 @@
   "K"  #'lsp-ui-doc-glance)
 
 (evil-define-key 'normal 'global (kbd "C-k") #'lsp-signature-activate)
-(evil-define-key 'normal 'global "cd" #'lsp-rename)
 
 (ck/leader-def "rn" #'lsp-rename "Rename")
 (ck/leader-def "ca" #'lsp-execute-code-action "Code Action")
