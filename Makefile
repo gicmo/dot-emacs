@@ -6,7 +6,7 @@ ifeq ($(UNAME_S),Darwin)
 	EMACS="/Applications/Emacs.app/Contents/MacOS/Emacs"
 endif
 
-FILES = elisp/ck-dashboard.elc elisp/ck-modeline.elc
+FILES = elisp/ck-dashboard.elc elisp/ck-modeline.elc elisp/ck-env.elc
 
 %.elc: %.el
 	emacs -l "$(HOME)/.emacs.d/init.el" -L . -batch -f batch-byte-compile $<
