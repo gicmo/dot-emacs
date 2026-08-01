@@ -20,4 +20,4 @@ profile:
 	@echo $(EMACS)
 	$(EMACS) -Q --eval '(progn (profiler-start (quote cpu)) (load "$(HOME)/.emacs.d/init.el") (profiler-stop) (profiler-report))'
 
-.PHONY: profile
+.PHONY: profile compile
