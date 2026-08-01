@@ -56,7 +56,7 @@
 
 ;(use-package leuven-theme)
 
-(defcustom ck-theme 'doom-nord
+(defcustom ck-theme 'doom-one
   "Which doom theme to load."
   :type '(choice
 	  (const :tag "Vibrant" 'doom-vibrant)

@@ -21,8 +21,8 @@
 
 ;; Keep in sync with `ck-theme': the frame is mapped long before the theme
 ;; is loaded, and would otherwise be painted white until then.
-(push '(background-color . "#2E3440") default-frame-alist)
-(push '(foreground-color . "#ECEFF4") default-frame-alist)
+(push '(background-color . "#282C34") default-frame-alist)
+(push '(foreground-color . "#BBC2CF") default-frame-alist)
 
 (setq-default fringes-outside-margins t)
 
