@@ -135,6 +135,7 @@
   (setq evil-want-integration t
 	evil-want-keybinding nil
 	evil-want-C-u-scroll t
+	evil-mode-line-format nil
 	evil-undo-system 'undo-redo)
   :config
   (evil-mode 1))

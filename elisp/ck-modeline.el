@@ -60,6 +60,48 @@
   "Face for less important information in the modeline"
   :group '+ck-modeline)
 
+;; Evil states. Colour is the only signal,
+;; so these must resolve to distinct hues.
+(defface ck-modeline-evil-normal
+  '((t (:inherit success)))
+  "Face for the evil normal state indicator."
+  :group '+ck-modeline)
+
+(defface ck-modeline-evil-insert
+  '((t (:inherit font-lock-keyword-face)))
+  "Face for the evil insert state indicator."
+  :group '+ck-modeline)
+
+(defface ck-modeline-evil-visual
+  '((t (:inherit warning)))
+  "Face for the evil visual state indicator."
+  :group '+ck-modeline)
+
+(defface ck-modeline-evil-replace
+  '((t (:inherit error)))
+  "Face for the evil replace state indicator."
+  :group '+ck-modeline)
+
+(defface ck-modeline-evil-operator
+  '((t (:inherit font-lock-constant-face)))
+  "Face for the evil operator-pending state indicator."
+  :group '+ck-modeline)
+
+(defface ck-modeline-evil-motion
+  '((t (:inherit font-lock-number-face)))
+  "Face for the evil motion state indicator."
+  :group '+ck-modeline)
+
+(defface ck-modeline-evil-emacs
+  '((t (:inherit font-lock-builtin-face)))
+  "Face for the evil emacs state indicator."
+  :group '+ck-modeline)
+
+(defface ck-modeline-evil-user
+  '((t (:inherit shadow)))
+  "Face for evil states defined outside of evil itself."
+  :group '+ck-modeline)
+
 ;; Bar
 (defface ck-modeline-bar
   '((t (:inherit highlight)))
@@ -76,10 +118,37 @@
   "The face used for the left-most bar on the mode-line of an inactive window."
   :group '+ck-modeline)
 
-(defvar ck-modeline-height 20)
+(defun ck/ml-height ()
+  "Height for the mode-line bar."
+  (+ (window-font-height nil 'mode-line) 4))
+
+(defvar ck-modeline-icon-height 0.85)
+
+(defun ck/ml-icon-raise ()
+  "Vertical offset that centres a scaled icon on the surrounding text.
+Scaling happens about the baseline, so a smaller glyph loses part of
+its ascent; the text it sits next to also carries no ink in the
+descender, so the target is the middle of the ink rather than of the
+font box."
+  (let* ((info (ignore-errors (font-info (face-font 'mode-line))))
+	 (ascent (and info (aref info 8)))
+	 (descent (and info (aref info 9)))
+	 (h ck-modeline-icon-height))
+    (if (and info (> h 0) (> (+ ascent descent) 0))
+	(/ (+ (* (- 1.0 h) (- ascent descent)) descent)
+	   (* 2.0 h (+ ascent descent)))
+      0.0)))
 
 ;;; Forward declarations of Optional Dependencies
 (declare-function anzu--format-here-position "ext:anzu.el")
+(declare-function evil-emacs-state-p "ext:evil-states.el")
+(declare-function evil-insert-state-p "ext:evil-states.el")
+(declare-function evil-motion-state-p "ext:evil-states.el")
+(declare-function evil-normal-state-p "ext:evil-states.el")
+(declare-function evil-operator-state-p "ext:evil-states.el")
+(declare-function evil-replace-state-p "ext:evil-states.el")
+(declare-function evil-state-property "ext:evil-common.el")
+(declare-function evil-visual-state-p "ext:evil-states.el")
 (declare-function flycheck-count-errors  "ext:flycheck.el")
 (declare-function mc/num-cursors "ext:multiple-cursors.el")
 (declare-function projectile-project-root "ext:projectile.el")
@@ -89,6 +158,7 @@
 (defvar anzu--state)
 (defvar anzu--current-position)
 (defvar anzu--total-matched)
+(defvar evil-state)
 (defvar flycheck-current-errors)
 (defvar flycheck-last-status-change)
 ;(defvar org-clock-current-task)
@@ -198,8 +268,12 @@ DEFAULT is non-nil, set the default mode-line for all buffers."
 
 (defun ck/ml-set-current-window (&rest _)
   "Set `ck-modeline-current-window' appropriately."
-  (let ((win (frame-selected-window)))
-    (unless (or (not win) (minibuffer-window-active-p win))
+  (let ((win (selected-window)))
+    ;; popups (lsp-ui-doc, corfu, ...) live in child frames; keep
+    ;; pointing at the window the user came from while one has focus
+    (unless (or (not win)
+		(minibuffer-window-active-p win)
+		(frame-parent (window-frame win)))
       (setq ck-modeline-current-window win))))
 
 (add-hook 'window-configuration-change-hook #'ck/ml-set-current-window)
@@ -212,8 +286,48 @@ DEFAULT is non-nil, set the default mode-line for all buffers."
   (if (display-graphic-p)
       (let* ((face  (if active 'ck-modeline-bar 'ck-modeline-bar-inactive))
 	     (color (face-background face nil 't)))
-	(ck/ml-make-xpm-bar color ck-modeline-height 3))
+	(ck/ml-make-xpm-bar color (ck/ml-height) 3))
     ""))
+
+(defun ck/ml-evil-state-face ()
+  "Face for the current evil state."
+  (cond ((evil-normal-state-p)   'ck-modeline-evil-normal)
+	((evil-insert-state-p)   'ck-modeline-evil-insert)
+	((evil-visual-state-p)   'ck-modeline-evil-visual)
+	((evil-replace-state-p)  'ck-modeline-evil-replace)
+	((evil-operator-state-p) 'ck-modeline-evil-operator)
+	((evil-motion-state-p)   'ck-modeline-evil-motion)
+	((evil-emacs-state-p)    'ck-modeline-evil-emacs)
+	(t                       'ck-modeline-evil-user)))
+
+(defun ck/ml-evil-state-tag ()
+  "Return the tag of the current evil state, or nil."
+  (let ((tag (evil-state-property evil-state :tag t)))
+    ;; `evil-visual-tag' returns nil unless a selection is active, and
+    ;; a state defined elsewhere may carry a tag that is not a string
+    (when-let* ((tag (if (functionp tag) (funcall tag) tag))
+		((stringp tag)))
+      (string-trim tag))))
+
+(defun ck/ml-modal-state ()
+  "Return (FACE . HELP) for the current modal editing state, or nil."
+  (cond ((and (bound-and-true-p evil-local-mode) evil-state)
+	 (let ((tag  (ck/ml-evil-state-tag))
+	       (name (or (evil-state-property evil-state :name t)
+			 (symbol-name evil-state))))
+	   (cons (ck/ml-evil-state-face)
+		 (if tag (format "%s %s" name tag) name))))
+	(overwrite-mode
+	 (cons 'ck-modeline-evil-replace "Overwrite mode"))))
+
+(def-ml-segment! modal-state (active)
+  "Show the current modal editing state as a coloured dot (honoring ACTIVE)."
+  (when-let* ((state (ck/ml-modal-state)))
+    (propertize (ck/ml-icon "mdicon" "nf-md-record"
+			    :fallback "●"
+			    :face (if active (car state) 'ck-modeline-dimmed))
+		'help-echo (cdr state)
+		'mouse-face 'ck-modeline-highlight)))
 
 (defun *shorten-directory (dir &optional max-length)
   "Show directory name of `DIR', reduced to `MAX-LENGTH' characters."
@@ -378,7 +492,7 @@ DEFAULT is non-nil, set the default mode-line for all buffers."
   (when vc-mode
     (let* ((branch (substring vc-mode (+ 2 (length (symbol-name (vc-backend buffer-file-name))))))
 	   (face   (ck/ml-vc-face active))
-	   (icon   (ck/ml-icon "octicon" "nf-oct-git_branch" :fallback "" :v-adjust 0.1 :height 0.8 :face face)))
+	   (icon   (ck/ml-icon "octicon" "nf-oct-git_branch" :fallback "" :face face)))
       (concat icon " " (propertize branch 'face face)))))
 
 (def-ml-segment! buffer-position (active)
@@ -428,16 +542,27 @@ DEFAULT is non-nil, set the default mode-line for all buffers."
 (defvar ck/use-icon-font (ck/have-nerd-iconsp)
   "Use an icon (from nerd-icons) for the major mode.")
 
-(defun ck/ml-icon (family name &rest args)
-  "Get an icon for the FAMILY with the NAME and optionally a :fallback in ARGS."
+(defun ck/ml-icon-1 (family name &rest args)
+  "Get an icon for the FAMILY with the NAME and a :fallback in ARGS."
   (if ck/use-icon-font
       (apply (cond
 	      ((equal family "octicon") 'nerd-icons-octicon)
 	      ((equal family "mdicon") 'nerd-icons-mdicon))
-	     (append (list name) args))
+	     (cons name args))
     (propertize (or (plist-get args :fallback) name) 'face (plist-get args :face))))
 
-(ck-memoize 'ck/ml-icon)
+(ck-memoize 'ck/ml-icon-1)
+
+(defun ck/ml-icon (family name &rest args)
+  "Get an icon for the FAMILY with the NAME and optionally a :fallback in ARGS.
+Sizing and vertical alignment default to the modeline-wide values.
+Resolve them here so that they take part in the memoized key."
+  (apply #'ck/ml-icon-1 family name
+	 (append (unless (plist-member args :height)
+		   (list :height ck-modeline-icon-height))
+		 (unless (plist-member args :v-adjust)
+		   (list :v-adjust (ck/ml-icon-raise)))
+		 args)))
 
 (defun ck/charify (arg)
   "Take ARG and try to make a char out of it."
@@ -468,8 +593,9 @@ DEFAULT is non-nil, set the default mode-line for all buffers."
   "Get an indicator (icon or name) for the major mode."
   (let* ((maybe-icon (and ck/use-icon-font (nerd-icons-icon-for-buffer)))
 	 (icon (if (not (symbolp maybe-icon)) maybe-icon))
-	 (face (if icon (list :family nerd-icons-font-family :height 0.8)))
-	 (elevation (if icon 0.1 0.0))
+	 (face (if icon (list :family nerd-icons-font-family
+			      :height ck-modeline-icon-height)))
+	 (elevation (if icon (ck/ml-icon-raise) 0.0))
 	 (the-mode (format-mode-line mode-name))
 	 (minor-modes (format-mode-line minor-mode-alist))
 	 (indicator (or icon the-mode)))
@@ -522,9 +648,7 @@ DEFAULT is non-nil, set the default mode-line for all buffers."
   "Indicator for fill mode."
   (when (and (boundp 'auto-fill-function) (symbol-value 'auto-fill-function))
     (propertize (ck/ml-icon "mdicon" "nf-md-format_line_style"
-			    :fallback "ⓕ"
-			    :v-adjust -0.1
-			    :height 0.8)
+			    :fallback "ⓕ")
 		'help-echo (format "Auto-Fill: %d" fill-column)
 		'mouse-face 'ck-modeline-highlight)))
 
@@ -532,9 +656,7 @@ DEFAULT is non-nil, set the default mode-line for all buffers."
   "Indicator for fill mode."
   (when (and (boundp 'flyspell-mode) (symbol-value 'flyspell-mode))
     (propertize (ck/ml-icon "mdicon" "nf-md-playlist_check"
-			    :fallback "ⓢ"
-			    :v-adjust -0.1
-			    :height 0.8)
+			    :fallback "ⓢ")
 		'help-echo (format "Spell checker active")
 		'mouse-face 'ck-modeline-highlight)))
 
@@ -559,9 +681,7 @@ DEFAULT is non-nil, set the default mode-line for all buffers."
     (let* ((bmark (ck/ml-find-bookmark (buffer-file-name) bookmark-alist)))
       (if bmark
 	  (propertize (ck/ml-icon "mdicon" "nf-md-bookmark"
-				  :fallback "ⓑ"
-				  :v-adjust -0.1
-				  :height 0.8)
+				  :fallback "ⓑ")
 		      'help-echo (format "File is bookmarked")
 		      'mouse-face 'ck-modeline-highlight)))))
 
@@ -610,7 +730,7 @@ DEFAULT is non-nil, set the default mode-line for all buffers."
 		   ('not-checked (list "mdicon" "nf-md-minus_circle" :fallback "□"))
 		   (_            (list "mdicon" "nf-md-minus_circle" :fallback "?")))))
       (ck/ml-make-minor-mode 'flycheck-mode
-       (concat (apply 'ck/ml-icon (append icon (list :face face :v-adjust -0.1 :height 0.8)))
+       (concat (apply 'ck/ml-icon (append icon (list :face face)))
 	       (if text " ")
 	       (if text (propertize text 'face face)))))))
 
@@ -633,15 +753,11 @@ DEFAULT is non-nil, set the default mode-line for all buffers."
       (if indent-tabs-mode
 	  (propertize (ck/ml-icon "mdicon" "nf-md-keyboard_tab"
 				  :fallback "⇥"
-				  :v-adjust -0.1
-				  :height 0.8
 				  :face (if active 'ck-modeline-dimmed))
 		      'help-echo (format "Tabs: %d" tab-width)
 		      'mouse-face 'ck-modeline-highlight)
 	(propertize (ck/ml-icon "mdicon" "nf-md-keyboard_space"
 				:fallback "⌴"
-				:v-adjust -0.1
-				:height 0.8
 				:face (if active 'ck-modeline-dimmed))
 		    'help-echo (format "Spaces: %d" tab-width)
 		    'mouse-face 'ck-modeline-highlight))))
@@ -649,7 +765,7 @@ DEFAULT is non-nil, set the default mode-line for all buffers."
 ;; the mode-lines
 
 (def-modeline! default
-  (bar indicator-for-major-mode buffer-id minor-modes ibookmark process anzu num-cursors iedit)
+  (bar modal-state indicator-for-major-mode buffer-id minor-modes ibookmark process anzu num-cursors iedit)
   (flycheck buffer-encoding-abbrev tabs-or-spaces cursor-position buffer-position))
 
 
