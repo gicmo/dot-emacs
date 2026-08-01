@@ -16,13 +16,8 @@ compile: $(FILES)
 clean:
 	rm -f *.elc
 
-profile-dotemacs.el:
-	curl -O http://www.randomsample.de/profile-dotemacs.el
-
-profile: profile-dotemacs.el
+profile:
 	@echo $(EMACS)
-	$(EMACS) -Q -l "$(HOME)/.emacs.d/profile-dotemacs.el" \
-	         --eval '(setq profile-dotemacs-file "~/.emacs.d/init.el")' \
-		 -f profile-dotemacs
+	$(EMACS) -Q --eval '(progn (profiler-start (quote cpu)) (load "$(HOME)/.emacs.d/init.el") (profiler-stop) (profiler-report))'
 
 .PHONY: profile
